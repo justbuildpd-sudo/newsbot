@@ -7,9 +7,9 @@ let trendChart = null;
 let newsData = []; // 뉴스 데이터를 전역 변수로 저장
 
 // API 설정
-   const API_BASE_URL = window.location.hostname === 'newsbot.kr' 
-       ? 'https://newsbot-backend-6j3p.onrender.com'  // 프로덕션 (Render)
-       : 'http://localhost:8001';  // 로컬 개발
+const API_BASE_URL = window.location.hostname === 'newsbot.kr' 
+    ? 'https://newsbot-backend-6j3p.onrender.com'  // 프로덕션 (Render)
+    : 'http://localhost:8001';  // 로컬 개발
 
 // DOM 로드 완료 후 실행
 document.addEventListener('DOMContentLoaded', function() {
@@ -201,16 +201,16 @@ async function loadPoliticianData() {
                 id: politician.id,
                 name: politician.name,
                 party: getPartyCode(politician.party),
-                position: politician.committee,
-                mentionCount: politician.mention_count,
+                position: politician.committee || "위원회 정보 없음",
+                mentionCount: politician.mention_count || 0,
                 sentiment: Math.random() * 0.4 - 0.2, // -0.2 ~ 0.2
-                recentStatement: politician.mention_details[0]?.news_title || politician.description || "최근 언급된 뉴스가 있습니다.",
-                district: politician.district,
-                terms: politician.terms,
-                orientation: politician.political_orientation,
-                keyIssues: politician.key_issues,
+                recentStatement: "최근 언급된 뉴스가 있습니다.",
+                district: politician.district || "지역 정보 없음",
+                terms: "재선",
+                orientation: "중도",
+                keyIssues: ["환경", "노동"],
                 ranking: index + 1,
-                influenceScore: politician.influence_score
+                influenceScore: politician.influence_score || 0
             }));
             
             renderPoliticianList(politicians);
@@ -227,23 +227,23 @@ async function loadPoliticianData() {
 // 주요 정치인 데이터 로드 (백업용)
 async function loadFeaturedPoliticians() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/politicians/featured?limit=6`);
+        const response = await fetch(`${API_BASE_URL}/api/politicians`);
         const result = await response.json();
         
         if (result.success) {
-            const politicians = result.data.map(politician => ({
+            const politicians = result.data.map((politician, index) => ({
                 id: politician.id,
                 name: politician.name,
                 party: getPartyCode(politician.party),
-                position: politician.committee,
+                position: politician.committee || "위원회 정보 없음",
                 mentionCount: Math.floor(Math.random() * 100) + 10, // 낮은 언급 수
                 sentiment: Math.random() * 0.4 - 0.2,
-                recentStatement: politician.description,
-                district: politician.district,
-                terms: politician.terms,
-                orientation: politician.political_orientation,
-                keyIssues: politician.key_issues,
-                ranking: 0, // 랭킹 없음
+                recentStatement: "최근 언급된 뉴스가 있습니다.",
+                district: politician.district || "지역 정보 없음",
+                terms: "재선",
+                orientation: "중도",
+                keyIssues: ["환경", "노동"],
+                ranking: index + 1,
                 influenceScore: 0
             }));
             
