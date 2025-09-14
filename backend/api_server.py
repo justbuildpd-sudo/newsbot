@@ -344,3 +344,12 @@ async def get_ranking_stats():
 if __name__ == "__main__":
     import hashlib  # news_service에서 사용
     uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)
+   @app.post("/api/politicians/init")
+   async def initialize_politicians():
+       """정치인 데이터 초기화"""
+       try:
+           # 정치인 서비스 재초기화
+           politician_service.load_politicians()
+           return {"success": True, "message": "정치인 데이터 초기화 완료"}
+       except Exception as e:
+           raise HTTPException(status_code=500, detail=f"정치인 데이터 초기화 실패: {str(e)}")
