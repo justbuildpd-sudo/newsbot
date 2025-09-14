@@ -51,7 +51,7 @@ class NewsService:
         """뉴스 기사 전문 가져오기 (웹 스크래핑)"""
         try:
             import requests
-            from bs4 import BeautifulSoup
+            # BeautifulSoup 제거됨
             import re
             import time
             
@@ -86,7 +86,7 @@ class NewsService:
             response = requests.get(news_url, headers=headers, timeout=15)
             response.raise_for_status()
             
-            soup = BeautifulSoup(response.content, 'html.parser')
+            # BeautifulSoup 제거됨 - 간단한 텍스트 추출
             
             # 네이버 뉴스 특화 셀렉터
             title = ""
