@@ -146,9 +146,9 @@ class Database:
             return True
             
         except Exception as e:
-            print(f"❌ 정치인 데이터 삽입 오류: {e}")
-            self.connection.rollback()
-            return False
+       print(f"❌ 데이터베이스 연결 오류: {e}")
+       print("⚠️ 데이터베이스 없이 계속 진행합니다...")
+       self.connection = None
     
     def get_politicians(self, limit: int = 100) -> List[Dict]:
         """정치인 목록을 조회합니다."""
