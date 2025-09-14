@@ -147,3 +147,14 @@ class NewsService:
         self.cleanup_old_news()
         
         return list(self.news_cache.values())
+   def get_cached_news(self) -> List[Dict]:
+       """캐시된 뉴스 가져오기"""
+       return list(self.news_cache.values())
+   
+   def get_news_stats(self) -> Dict:
+       """뉴스 통계 정보"""
+       return {
+           'total_cached': len(self.news_cache),
+           'last_cleanup': self.last_cleanup.isoformat(),
+           'cache_size': len(self.news_cache)
+       }
