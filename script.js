@@ -33,6 +33,7 @@ function initializeApp() {
     
     // 이벤트 리스너 등록
     setupEventListeners();
+    
 }
 
 // 이벤트 리스너 설정
@@ -941,6 +942,7 @@ function showHotIssueDetail(keyword) {
 function showPoliticianDetail(politicianId) {
     alert(`정치인 ${politicianId} 상세 보기 기능은 구현 예정입니다.`);
 }
+
 
 function showNetworkNodeDetail(nodeId) {
     alert(`"${nodeId}" 네트워크 노드 상세 보기 기능은 구현 예정입니다.`);

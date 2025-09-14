@@ -329,7 +329,8 @@ class NewsService:
             'total_cached': len(self.news_cache),
             'last_cleanup': self.last_cleanup.isoformat(),
             'cache_size': len(self.news_cache)
-        }[:10]  # 상위 10개만 반환
+        }
+    
 
 # 테스트용
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ from rate_limiter import rate_limiter
 from monitoring import system_monitor
 from database import db
 from assembly_api_service import assembly_api
-from assembly_members_clean import get_assembly_members, get_members_by_party, get_member_by_id, search_members, get_top_influential_members, update_mention_count
+from processed_assembly_service import processed_assembly_service
 import json
 import time
 from datetime import datetime
@@ -109,6 +109,7 @@ async def refresh_news():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"뉴스 새로고침 실패: {str(e)}")
 
+
 @app.get("/api/news/stats")
 async def get_news_stats():
     """뉴스 통계 정보"""
@@ -206,14 +207,14 @@ async def reset_rate_limits():
 async def get_politicians():
     """모든 정치인 목록을 반환합니다."""
     try:
-        # 실시간 뉴스 언급 기반 객관적 평가를 위한 기본 데이터
-        politicians = get_assembly_members()
+        # 가공된 국회의원 데이터 사용
+        politicians = processed_assembly_service.get_all_members()
         
         return {
             "success": True,
             "data": politicians,
             "total_count": len(politicians),
-            "source": "실시간 뉴스 언급 기반 객관적 평가"
+            "source": "가공된 국회 공식 API 데이터"
         }
     except Exception as e:
         # 오류 발생 시 빈 배열 반환 (서비스 중단 방지)
@@ -229,13 +230,13 @@ async def get_politicians():
 async def get_featured_politicians(limit: int = 6):
     """주요 정치인 목록을 반환합니다."""
     try:
-        # 실시간 뉴스 언급 기반 영향력 높은 정치인들
-        politicians = get_top_influential_members(limit)
+        # 가공된 데이터에서 영향력 높은 의원들 가져오기
+        politicians = processed_assembly_service.get_top_influential_members(limit)
         return {
             "success": True,
             "data": politicians,
             "count": len(politicians),
-            "source": "실시간 뉴스 언급 기반 영향력 평가"
+            "source": "가공된 국회 공식 API 데이터"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"주요 정치인 조회 오류: {str(e)}")
@@ -367,14 +368,14 @@ async def initialize_politicians():
 
 @app.get("/api/assembly/members")
 async def get_assembly_members():
-    """국회의원 현황 조회 (실시간 언급 기반)"""
+    """국회의원 현황 조회 (가공된 데이터)"""
     try:
-        members = get_assembly_members()
+        members = processed_assembly_service.get_all_members()
         return {
             "success": True,
             "data": members,
             "total_count": len(members),
-            "source": "실시간 뉴스 언급 기반 객관적 평가"
+            "source": "가공된 국회 공식 API 데이터"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"국회의원 조회 실패: {str(e)}")
@@ -383,13 +384,13 @@ async def get_assembly_members():
 async def get_assembly_members_by_party(party_name: str):
     """소속정당별 국회의원 목록 조회"""
     try:
-        members = get_members_by_party(party_name)
+        members = processed_assembly_service.get_members_by_party(party_name)
         return {
             "success": True,
             "data": members,
             "total_count": len(members),
             "party": party_name,
-            "source": "실시간 뉴스 언급 기반 객관적 평가"
+            "source": "가공된 국회 공식 API 데이터"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"정당별 국회의원 조회 실패: {str(e)}")
@@ -398,12 +399,12 @@ async def get_assembly_members_by_party(party_name: str):
 async def get_assembly_member_detail(member_id: str):
     """국회의원 상세 정보 조회"""
     try:
-        member = get_member_by_id(int(member_id))
+        member = processed_assembly_service.get_member_by_id(member_id)
         if member:
             return {
                 "success": True,
                 "data": member,
-                "source": "실시간 뉴스 언급 기반 객관적 평가"
+                "source": "가공된 국회 공식 API 데이터"
             }
         else:
             raise HTTPException(status_code=404, detail="국회의원 정보를 찾을 수 없습니다")
@@ -412,34 +413,65 @@ async def get_assembly_member_detail(member_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"국회의원 상세 조회 실패: {str(e)}")
 
-# 자체 평가 시스템 관련 추가 API 엔드포인트
-@app.get("/api/assembly/influential")
-async def get_assembly_influential(limit: int = 20):
-    """영향력 높은 국회의원 조회"""
+# 추가 API 엔드포인트
+@app.get("/api/assembly/statistics")
+async def get_assembly_statistics():
+    """국회의원 통계 정보"""
     try:
-        members = get_top_influential_members(limit)
+        stats = processed_assembly_service.get_statistics()
+        return {
+            "success": True,
+            "data": stats,
+            "source": "가공된 국회 공식 API 데이터"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"통계 조회 실패: {str(e)}")
+
+@app.get("/api/assembly/members/committee/{committee}")
+async def get_assembly_members_by_committee(committee: str):
+    """위원회별 국회의원 목록 조회"""
+    try:
+        members = processed_assembly_service.get_members_by_committee(committee)
         return {
             "success": True,
             "data": members,
             "total_count": len(members),
-            "source": "실시간 뉴스 언급 기반 영향력 평가"
+            "committee": committee,
+            "source": "가공된 국회 공식 API 데이터"
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"영향력 조회 실패: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"위원회별 국회의원 조회 실패: {str(e)}")
 
-@app.get("/api/assembly/update-mention/{member_id}")
-async def update_member_mention(member_id: int, mention_count: int):
-    """특정 의원의 언급 횟수 업데이트"""
+@app.get("/api/assembly/members/orientation/{orientation}")
+async def get_assembly_members_by_orientation(orientation: str):
+    """정치 성향별 국회의원 목록 조회"""
     try:
-        update_mention_count(member_id, mention_count)
+        members = processed_assembly_service.get_members_by_orientation(orientation)
         return {
             "success": True,
-            "message": f"의원 ID {member_id}의 언급 횟수가 {mention_count}로 업데이트되었습니다",
-            "member_id": member_id,
-            "mention_count": mention_count
+            "data": members,
+            "total_count": len(members),
+            "orientation": orientation,
+            "source": "가공된 국회 공식 API 데이터"
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"언급 횟수 업데이트 실패: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"정치 성향별 국회의원 조회 실패: {str(e)}")
+
+@app.get("/api/assembly/search")
+async def search_assembly_members(query: str):
+    """국회의원 검색"""
+    try:
+        members = processed_assembly_service.search_members(query)
+        return {
+            "success": True,
+            "data": members,
+            "total_count": len(members),
+            "query": query,
+            "source": "가공된 국회 공식 API 데이터"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"국회의원 검색 실패: {str(e)}")
+
 
 if __name__ == "__main__":
     import hashlib  # news_service에서 사용

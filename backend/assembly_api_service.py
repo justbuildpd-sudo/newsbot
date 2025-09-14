@@ -65,9 +65,11 @@ class AssemblyAPIService:
                 members = []
                 for item in result.get('items', []):
                     member = {
-                        'id': item.get('empno', ''),
+                        'id': item.get('num', ''),  # 식별코드가 실제 의원 ID
+                        'dept_code': item.get('deptCd', ''),  # 부서코드
                         'name': item.get('empNm', ''),
-                        'name_hanja': item.get('hanjaNm', ''),
+                        'name_hanja': item.get('hjNm', ''),
+                        'name_english': item.get('engNm', ''),
                         'party': item.get('polyNm', ''),
                         'district': item.get('origNm', ''),
                         'committee': item.get('shrtNm', ''),
@@ -77,6 +79,7 @@ class AssemblyAPIService:
                         'email': item.get('email', ''),
                         'website': item.get('homepage', ''),
                         'image_url': item.get('jpgLink', ''),
+                        'member_number': item.get('num', ''),
                         'political_orientation': self._get_political_orientation(item.get('polyNm', '')),
                         'key_issues': self._get_key_issues(item.get('shrtNm', '')),
                         'description': f"{item.get('origNm', '')} 지역구 {item.get('polyNm', '')} 소속",
