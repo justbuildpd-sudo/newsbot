@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 데이터베이스 연결 및 설정
-Render PostgreSQL 사용 (psycopg3)
+Railway PostgreSQL 사용
 """
 
 import os
@@ -19,10 +19,10 @@ class Database:
     def connect(self):
         """PostgreSQL 데이터베이스에 연결합니다."""
         try:
-            # Render 환경변수에서 데이터베이스 URL 가져오기
+            # Railway 환경변수에서 데이터베이스 URL 가져오기
             database_url = os.getenv('DATABASE_URL')
             if not database_url:
-                # 로컬 개발용 (Render 없이 테스트)
+                # 로컬 개발용 (Railway 없이 테스트)
                 database_url = "postgresql://localhost:5432/newsbot"
             
             self.connection = psycopg.connect(
@@ -36,6 +36,7 @@ class Database:
             
         except Exception as e:
             print(f"❌ 데이터베이스 연결 오류: {e}")
+            print("⚠️ 데이터베이스 없이 계속 진행합니다...")
             self.connection = None
     
     def create_tables(self):
@@ -146,9 +147,9 @@ class Database:
             return True
             
         except Exception as e:
-       print(f"❌ 데이터베이스 연결 오류: {e}")
-       print("⚠️ 데이터베이스 없이 계속 진행합니다...")
-       self.connection = None
+            print(f"❌ 정치인 데이터 삽입 오류: {e}")
+            self.connection.rollback()
+            return False
     
     def get_politicians(self, limit: int = 100) -> List[Dict]:
         """정치인 목록을 조회합니다."""
