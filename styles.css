@@ -108,7 +108,7 @@ body {
 /* Dashboard Grid */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 2fr 1fr;
     grid-template-rows: auto auto auto;
     gap: 1.5rem;
     grid-template-areas: 
@@ -129,7 +129,7 @@ body {
 /* 반응형 디자인 */
 @media (max-width: 1200px) {
     .dashboard-grid {
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 2fr 2fr;
         grid-template-areas: 
             "politician news"
             "hot-issues network"
