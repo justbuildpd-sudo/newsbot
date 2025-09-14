@@ -1,32 +1,9 @@
-# FastAPI 및 웹 서버
 fastapi==0.104.1
-uvicorn[standard]==0.24.0
-python-multipart==0.0.6
-
-# 데이터베이스
-sqlalchemy==2.0.23
-psycopg2-binary==2.9.9
-alembic==1.12.1
-
-# HTTP 클라이언트
-httpx==0.25.2
+uvicorn==0.24.0
 requests==2.31.0
-
-# 데이터 처리
-pandas==2.1.3
-numpy==1.25.2
-
-# AI/ML
-transformers==4.35.2
-torch==2.1.1
-sentence-transformers==2.2.2
-
-# 환경 변수
+python-multipart==0.0.6
+beautifulsoup4==4.12.2
+lxml==4.9.3
+psutil==5.9.6
+psycopg2-binary==2.9.7
 python-dotenv==1.0.0
-
-# 로깅
-loguru==0.7.2
-
-# 테스트
-pytest==7.4.3
-pytest-asyncio==0.21.1

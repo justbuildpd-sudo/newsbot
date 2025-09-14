@@ -37,77 +37,7 @@
         <div class="container">
             <!-- 대시보드 위젯 그리드 -->
             <div class="dashboard-grid">
-                <!-- 실시간 뉴스 위젯 -->
-                <div class="widget news-widget">
-                    <div class="widget-header">
-                        <h2 class="widget-title">
-                            <svg class="widget-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                            </svg>
-                            실시간 뉴스
-                        </h2>
-                        <span class="widget-subtitle">30초마다 업데이트</span>
-                    </div>
-                    <div class="news-list" id="newsList">
-                        <!-- 뉴스 아이템들이 여기에 동적으로 추가됩니다 -->
-                    </div>
-                    <div class="widget-footer">
-                        <button class="widget-button" onclick="showAllNews()">모든 뉴스 보기</button>
-                    </div>
-                </div>
-
-                <!-- 핫이슈 랭킹 위젯 -->
-                <div class="widget hot-issues-widget">
-                    <div class="widget-header">
-                        <h2 class="widget-title">
-                            <svg class="widget-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                            핫이슈 랭킹
-                        </h2>
-                        <span class="widget-subtitle">실시간</span>
-                    </div>
-                    <div class="hot-issues-list" id="hotIssuesList">
-                        <!-- 핫이슈 아이템들이 여기에 동적으로 추가됩니다 -->
-                    </div>
-                    <div class="widget-footer">
-                        <button class="widget-button" onclick="showHotIssues()">상세 분석 보기</button>
-                    </div>
-                </div>
-
-                <!-- 트렌드 차트 위젯 -->
-                <div class="widget trend-chart-widget">
-                    <div class="widget-header">
-                        <h2 class="widget-title">
-                            <svg class="widget-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                            </svg>
-                            트렌드 차트
-                        </h2>
-                        <div class="period-selector">
-                            <button class="period-btn active" onclick="changePeriod('week')">주간</button>
-                            <button class="period-btn" onclick="changePeriod('month')">월간</button>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="trendChart" width="400" height="200"></canvas>
-                    </div>
-                    <div class="chart-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">평균 언급 수</span>
-                            <span class="stat-value" id="avgMentions">52</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">평균 감정</span>
-                            <span class="stat-value positive" id="avgSentiment">긍정</span>
-                        </div>
-                    </div>
-                    <div class="widget-footer">
-                        <button class="widget-button" onclick="showTrendAnalysis()">상세 분석 보기</button>
-                    </div>
-                </div>
-
-                <!-- 정치인 프로필 위젯 -->
+                <!-- 정치인 프로필 위젯 (좌상단) -->
                 <div class="widget politician-widget">
                     <div class="widget-header">
                         <h2 class="widget-title">
@@ -123,6 +53,51 @@
                     </div>
                     <div class="widget-footer">
                         <button class="widget-button" onclick="showAllPoliticians()">모든 정치인 보기</button>
+                    </div>
+                </div>
+
+                <!-- 실시간 뉴스 위젯 (가운데) -->
+                <div class="widget news-widget">
+                    <div class="widget-header">
+                        <h2 class="widget-title">
+                            <svg class="widget-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                            </svg>
+                            실시간 뉴스
+                        </h2>
+                        <div class="widget-actions">
+                            <button class="refresh-btn" onclick="refreshNews()" title="뉴스 새로고침">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                            </button>
+                            <span class="widget-subtitle">30초마다 업데이트</span>
+                        </div>
+                    </div>
+                    <div class="news-list" id="newsList">
+                        <!-- 뉴스 아이템들이 여기에 동적으로 추가됩니다 -->
+                    </div>
+                    <div class="widget-footer">
+                        <button class="widget-button" onclick="showAllNews()">모든 뉴스 보기</button>
+                    </div>
+                </div>
+
+                <!-- 핫이슈 랭킹 위젯 (우상단) -->
+                <div class="widget hot-issues-widget">
+                    <div class="widget-header">
+                        <h2 class="widget-title">
+                            <svg class="widget-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            핫이슈 랭킹
+                        </h2>
+                        <span class="widget-subtitle">실시간</span>
+                    </div>
+                    <div class="hot-issues-list" id="hotIssuesList">
+                        <!-- 핫이슈 아이템들이 여기에 동적으로 추가됩니다 -->
+                    </div>
+                    <div class="widget-footer">
+                        <button class="widget-button" onclick="showHotIssues()">상세 분석 보기</button>
                     </div>
                 </div>
 
@@ -157,7 +132,39 @@
                     </div>
                 </div>
 
-                <!-- 분석 리포트 위젯 -->
+                <!-- 트렌드 차트 위젯 (연결성 하단) -->
+                <div class="widget trend-chart-widget">
+                    <div class="widget-header">
+                        <h2 class="widget-title">
+                            <svg class="widget-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            트렌드 차트
+                        </h2>
+                        <div class="period-selector">
+                            <button class="period-btn active" onclick="changePeriod('week')">주간</button>
+                            <button class="period-btn" onclick="changePeriod('month')">월간</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="chart-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">평균 언급 수</span>
+                            <span class="stat-value" id="avgMentions">52</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">평균 감정</span>
+                            <span class="stat-value positive" id="avgSentiment">긍정</span>
+                        </div>
+                    </div>
+                    <div class="widget-footer">
+                        <button class="widget-button" onclick="showTrendAnalysis()">상세 분석 보기</button>
+                    </div>
+                </div>
+
+                <!-- 분석 리포트 위젯 (좌하단) -->
                 <div class="widget report-widget">
                     <div class="widget-header">
                         <h2 class="widget-title">
@@ -172,9 +179,25 @@
                         <!-- 분석 리포트 내용이 여기에 표시됩니다 -->
                     </div>
                     <div class="widget-footer">
-                        <div class="footer-buttons">
-                            <button class="widget-button" onclick="downloadReport()">PDF 다운로드</button>
-                            <button class="widget-button" onclick="showDetailedReport()">상세 보기</button>
+                        <button class="widget-button" onclick="showDetailedReport()">상세 보기</button>
+                    </div>
+                </div>
+
+                <!-- 광고 자리 (우하단) -->
+                <div class="widget ad-widget">
+                    <div class="widget-header">
+                        <h2 class="widget-title">
+                            <svg class="widget-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-9 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2M9 4a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                            광고
+                        </h2>
+                        <span class="widget-subtitle">준비중</span>
+                    </div>
+                    <div class="ad-content">
+                        <div class="ad-placeholder">
+                            <p>광고 영역</p>
+                            <p class="ad-subtitle">곧 광고가 표시됩니다</p>
                         </div>
                     </div>
                 </div>

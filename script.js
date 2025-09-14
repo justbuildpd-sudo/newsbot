@@ -4,6 +4,12 @@
 // 전역 변수
 let currentPeriod = 'week';
 let trendChart = null;
+let newsData = []; // 뉴스 데이터를 전역 변수로 저장
+
+// API 설정
+const API_BASE_URL = window.location.hostname === 'newsbot.kr' 
+    ? 'https://newsbot-kr-backend-production.up.railway.app'  // 프로덕션
+    : 'http://localhost:8001';  // 로컬 개발
 
 // DOM 로드 완료 후 실행
 document.addEventListener('DOMContentLoaded', function() {
@@ -50,46 +56,79 @@ function hideLoadingOverlay() {
     }
 }
 
-// 뉴스 데이터 로드
-function loadNewsData() {
+// 뉴스 데이터 로드 (API에서 가져오기)
+async function loadNewsData() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/news`);
+        const result = await response.json();
+        
+        if (result.success) {
+            const news = result.data.map((item, index) => ({
+                id: index + 1,
+                title: item.title,
+                description: item.description || "상세 내용을 확인하려면 클릭하세요.",
+                pubDate: item.pubDate,
+                category: "politics",
+                link: item.link
+            }));
+            newsData = news; // 전역 변수에 저장
+            renderNewsList(news);
+        } else {
+            console.error('뉴스 데이터 가져오기 실패:', result);
+            loadMockNewsData();
+        }
+    } catch (error) {
+        console.error('API 연결 오류:', error);
+        loadMockNewsData();
+    }
+}
+
+// 모의 뉴스 데이터 (API 연결 실패시 사용)
+function loadMockNewsData() {
     const mockNews = [
         {
             id: 1,
             title: "국회 예산안 심의 시작, 여야 대립 심화",
             description: "2024년 예산안 심의가 시작되면서 여야 간 대립이 심화되고 있다...",
             pubDate: "2024-01-15T10:30:00Z",
-            category: "politics"
+            category: "politics",
+            link: "https://example.com/news1"
         },
         {
             id: 2,
             title: "정부, 새로운 경제정책 발표",
             description: "정부가 내년 경제성장을 위한 새로운 정책을 발표했다...",
             pubDate: "2024-01-15T09:15:00Z",
-            category: "economy"
+            category: "economy",
+            link: "https://example.com/news2"
         },
         {
             id: 3,
             title: "국방위원회, 안보정책 논의",
             description: "국방위원회에서 최근 안보 상황에 대한 논의가 진행되었다...",
             pubDate: "2024-01-15T08:45:00Z",
-            category: "defense"
+            category: "defense",
+            link: "https://example.com/news3"
         },
         {
             id: 4,
             title: "교육정책 개혁안 제출",
             description: "교육부가 새로운 교육정책 개혁안을 국회에 제출했다...",
             pubDate: "2024-01-15T07:20:00Z",
-            category: "education"
+            category: "education",
+            link: "https://example.com/news4"
         },
         {
             id: 5,
             title: "환경정책 관련 법안 통과",
             description: "환경정책 관련 법안이 국회를 통과했다...",
             pubDate: "2024-01-15T06:30:00Z",
-            category: "environment"
+            category: "environment",
+            link: "https://example.com/news5"
         }
     ];
     
+    newsData = mockNews; // 전역 변수에 저장
     renderNewsList(mockNews);
 }
 
@@ -151,8 +190,99 @@ function renderHotIssuesList(issues) {
     `).join('');
 }
 
-// 정치인 데이터 로드
-function loadPoliticianData() {
+// 정치인 데이터 로드 (뉴스 언급 수 기준 랭킹)
+async function loadPoliticianData() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/politicians/ranking?limit=8`);
+        const result = await response.json();
+        
+        if (result.success && result.data.length > 0) {
+            const politicians = result.data.map((politician, index) => ({
+                id: politician.id,
+                name: politician.name,
+                party: getPartyCode(politician.party),
+                position: politician.committee,
+                mentionCount: politician.mention_count,
+                sentiment: Math.random() * 0.4 - 0.2, // -0.2 ~ 0.2
+                recentStatement: politician.mention_details[0]?.news_title || politician.description || "최근 언급된 뉴스가 있습니다.",
+                district: politician.district,
+                terms: politician.terms,
+                orientation: politician.political_orientation,
+                keyIssues: politician.key_issues,
+                ranking: index + 1,
+                influenceScore: politician.influence_score
+            }));
+            
+            renderPoliticianList(politicians);
+        } else {
+            console.log('뉴스에서 언급된 정치인이 없습니다. 기본 데이터를 로드합니다.');
+            loadFeaturedPoliticians();
+        }
+    } catch (error) {
+        console.error('정치인 랭킹 로드 오류:', error);
+        loadFeaturedPoliticians();
+    }
+}
+
+// 주요 정치인 데이터 로드 (백업용)
+async function loadFeaturedPoliticians() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/politicians/featured?limit=6`);
+        const result = await response.json();
+        
+        if (result.success) {
+            const politicians = result.data.map(politician => ({
+                id: politician.id,
+                name: politician.name,
+                party: getPartyCode(politician.party),
+                position: politician.committee,
+                mentionCount: Math.floor(Math.random() * 100) + 10, // 낮은 언급 수
+                sentiment: Math.random() * 0.4 - 0.2,
+                recentStatement: politician.description,
+                district: politician.district,
+                terms: politician.terms,
+                orientation: politician.political_orientation,
+                keyIssues: politician.key_issues,
+                ranking: 0, // 랭킹 없음
+                influenceScore: 0
+            }));
+            
+            renderPoliticianList(politicians);
+        } else {
+            loadMockPoliticianData();
+        }
+    } catch (error) {
+        console.error('주요 정치인 로드 오류:', error);
+        loadMockPoliticianData();
+    }
+}
+
+// 정당 코드 변환
+function getPartyCode(party) {
+    const partyMap = {
+        '더불어민주당': 'democratic',
+        '국민의힘': 'people-power',
+        '조국혁신당': 'innovation',
+        '개혁신당': 'reform',
+        '무소속': 'independent'
+    };
+    return partyMap[party] || 'independent';
+}
+
+// 정당 라벨 변환
+function getPartyLabel(partyCode) {
+    const partyLabels = {
+        'democratic': '더불어민주당',
+        'people-power': '국민의힘',
+        'innovation': '조국혁신당',
+        'reform': '개혁신당',
+        'independent': '무소속'
+    };
+    return partyLabels[partyCode] || partyCode;
+}
+
+// 모의 정치인 데이터 (백업용)
+function loadMockPoliticianData() {
     const mockPoliticians = [
         {
             id: 1,
@@ -202,14 +332,21 @@ function renderPoliticianList(politicians) {
     
     politicianList.innerHTML = politicians.map(politician => `
         <div class="politician-item fade-in" onclick="showPoliticianDetail(${politician.id})">
+            <div class="politician-ranking">
+                ${politician.ranking > 0 ? `#${politician.ranking}` : ''}
+            </div>
             <div class="politician-avatar">${politician.name.charAt(0)}</div>
             <div class="politician-info">
-                <div class="politician-name">${politician.name}</div>
+                <div class="politician-name">
+                    ${politician.name}
+                    ${politician.ranking > 0 ? `<span class="ranking-badge">${politician.ranking}위</span>` : ''}
+                </div>
                 <span class="politician-party ${politician.party}">${getPartyLabel(politician.party)}</span>
                 <div class="politician-position">${politician.position}</div>
                 <p class="politician-statement">"${politician.recentStatement}"</p>
                 <div class="politician-stats">
-                    <span>언급 ${politician.mentionCount.toLocaleString()}회</span>
+                    <span class="mention-count">언급 ${politician.mentionCount.toLocaleString()}회</span>
+                    ${politician.influenceScore > 0 ? `<span class="influence-score">영향력 ${politician.influenceScore}</span>` : ''}
                     <span class="sentiment-${getSentimentClass(politician.sentiment)}">${getSentimentLabel(politician.sentiment)}</span>
                     <a href="#" class="politician-link" onclick="event.stopPropagation(); showPoliticianDetail(${politician.id})">자세히 →</a>
                 </div>
@@ -514,7 +651,287 @@ function showDetailedReport() {
 
 // 상세 보기 이벤트 핸들러들
 function showNewsDetail(newsId) {
-    alert(`뉴스 ${newsId} 상세 보기 기능은 구현 예정입니다.`);
+    // 뉴스 데이터에서 해당 ID의 뉴스 찾기
+    const newsItem = newsData.find(item => item.id === newsId);
+    if (newsItem) {
+        showNewsModal(newsItem);
+    } else {
+        showNotification('뉴스 정보를 찾을 수 없습니다.', 'error');
+    }
+}
+
+// 뉴스 모달 표시
+function showNewsModal(newsItem) {
+    // 로딩 모달 먼저 표시
+    showLoadingModal(newsItem);
+    
+    // 기사 전문 가져오기
+    loadNewsContent(newsItem);
+}
+
+// 로딩 모달 표시
+function showLoadingModal(newsItem) {
+    const modalHTML = `
+        <div class="news-modal-overlay" onclick="closeNewsModal()">
+            <div class="news-modal" onclick="event.stopPropagation()">
+                <div class="news-modal-header">
+                    <h2 class="news-modal-title">${newsItem.title}</h2>
+                    <button class="news-modal-close" onclick="closeNewsModal()">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="news-modal-content">
+                    <div class="news-modal-meta">
+                        <span class="news-modal-category ${newsItem.category}">${getCategoryLabel(newsItem.category)}</span>
+                        <span class="news-modal-time">${formatDate(newsItem.pubDate)}</span>
+                    </div>
+                    <div class="news-loading">
+                        <div class="loading-spinner"></div>
+                        <p>기사 내용을 불러오는 중...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // 모달을 body에 추가
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // 모달 애니메이션
+    const modal = document.querySelector('.news-modal-overlay');
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+    
+    // ESC 키로 닫기
+    document.addEventListener('keydown', handleModalKeydown);
+}
+
+// 기사 전문 가져오기
+async function loadNewsContent(newsItem) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/news/content?url=${encodeURIComponent(newsItem.link)}`);
+        const result = await response.json();
+        
+        if (result.success) {
+            updateNewsModal(newsItem, result.data);
+        } else {
+            showErrorModal(newsItem, '기사 내용을 가져올 수 없습니다.');
+        }
+    } catch (error) {
+        console.error('기사 내용 가져오기 오류:', error);
+        showErrorModal(newsItem, '기사 내용을 불러오는 중 오류가 발생했습니다.');
+    }
+}
+
+// 뉴스 모달 업데이트 (기사 전문 포함)
+function updateNewsModal(newsItem, contentData) {
+    const modal = document.querySelector('.news-modal-overlay');
+    if (!modal) return;
+    
+    const contentDiv = modal.querySelector('.news-modal-content');
+    
+    // 이미지 HTML 생성
+    let imagesHTML = '';
+    if (contentData.images && contentData.images.length > 0) {
+        imagesHTML = `
+            <div class="news-modal-images">
+                ${contentData.images.map(img => `
+                    <div class="news-modal-image">
+                        <img src="${img.src}" alt="${img.alt}" loading="lazy" />
+                        <p class="image-caption">${img.alt}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    contentDiv.innerHTML = `
+        <div class="news-modal-meta">
+            <span class="news-modal-category ${newsItem.category}">${getCategoryLabel(newsItem.category)}</span>
+            <span class="news-modal-time">${formatDate(newsItem.pubDate)}</span>
+        </div>
+        ${imagesHTML}
+        <div class="news-modal-description">
+            <h3>기사 요약</h3>
+            <p>${newsItem.description}</p>
+        </div>
+        <div class="news-modal-full-content">
+            <h3>기사 전문</h3>
+            <div class="news-content-text">
+                ${contentData.content || '기사 전문을 가져올 수 없습니다.'}
+            </div>
+        </div>
+        <div class="news-modal-actions">
+            <button class="news-modal-btn primary" onclick="openNewsLink('${newsItem.link}')">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+                원문 보기
+            </button>
+            <button class="news-modal-btn secondary" onclick="shareNews('${newsItem.title}', '${newsItem.link}')">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                </svg>
+                공유하기
+            </button>
+        </div>
+    `;
+}
+
+// 오류 모달 표시
+function showErrorModal(newsItem, errorMessage) {
+    const modal = document.querySelector('.news-modal-overlay');
+    if (!modal) return;
+    
+    const contentDiv = modal.querySelector('.news-modal-content');
+    contentDiv.innerHTML = `
+        <div class="news-modal-meta">
+            <span class="news-modal-category ${newsItem.category}">${getCategoryLabel(newsItem.category)}</span>
+            <span class="news-modal-time">${formatDate(newsItem.pubDate)}</span>
+        </div>
+        <div class="news-modal-description">
+            <h3>기사 요약</h3>
+            <p>${newsItem.description}</p>
+        </div>
+        <div class="news-error">
+            <div class="error-icon">⚠️</div>
+            <p>${errorMessage}</p>
+        </div>
+        <div class="news-modal-actions">
+            <button class="news-modal-btn primary" onclick="openNewsLink('${newsItem.link}')">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+                원문 보기
+            </button>
+            <button class="news-modal-btn secondary" onclick="shareNews('${newsItem.title}', '${newsItem.link}')">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                </svg>
+                공유하기
+            </button>
+        </div>
+    `;
+}
+
+// 모달 닫기
+function closeNewsModal() {
+    const modal = document.querySelector('.news-modal-overlay');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
+    }
+    document.removeEventListener('keydown', handleModalKeydown);
+}
+
+// ESC 키 처리
+function handleModalKeydown(event) {
+    if (event.key === 'Escape') {
+        closeNewsModal();
+    }
+}
+
+// 뉴스 링크 열기
+function openNewsLink(url) {
+    if (url) {
+        window.open(url, '_blank');
+    } else {
+        showNotification('뉴스 링크가 없습니다.', 'error');
+    }
+}
+
+// 뉴스 공유하기
+function shareNews(title, url) {
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            url: url
+        }).catch(err => {
+            console.log('공유 실패:', err);
+            copyToClipboard(url);
+        });
+    } else {
+        copyToClipboard(url);
+    }
+}
+
+// 클립보드에 복사
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showNotification('링크가 클립보드에 복사되었습니다!', 'success');
+    }).catch(err => {
+        console.log('복사 실패:', err);
+        showNotification('복사에 실패했습니다.', 'error');
+    });
+}
+
+// 뉴스 새로고침
+async function refreshNews() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/news/refresh`);
+        const result = await response.json();
+        
+        if (result.success) {
+            const news = result.data.map((item, index) => ({
+                id: index + 1,
+                title: item.title,
+                description: item.description || "상세 내용을 확인하려면 클릭하세요.",
+                pubDate: item.pubDate,
+                category: "politics",
+                link: item.link
+            }));
+            newsData = news; // 전역 변수에 저장
+            renderNewsList(news);
+            
+            // 성공 메시지 표시
+            showNotification('뉴스가 새로고침되었습니다!', 'success');
+        } else {
+            console.error('뉴스 새로고침 실패:', result);
+            showNotification('뉴스 새로고침에 실패했습니다.', 'error');
+        }
+    } catch (error) {
+        console.error('뉴스 새로고침 오류:', error);
+        showNotification('뉴스 새로고침 중 오류가 발생했습니다.', 'error');
+    }
+}
+
+// 알림 표시
+function showNotification(message, type = 'info') {
+    // 간단한 알림 구현
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 4px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    if (type === 'success') {
+        notification.style.backgroundColor = '#10b981';
+    } else if (type === 'error') {
+        notification.style.backgroundColor = '#ef4444';
+    } else {
+        notification.style.backgroundColor = '#3b82f6';
+    }
+    
+    document.body.appendChild(notification);
+    
+    // 3초 후 제거
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
 function showHotIssueDetail(keyword) {
