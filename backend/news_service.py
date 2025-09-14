@@ -317,7 +317,19 @@ class NewsService:
                 news_id = hashlib.md5(news['title'].encode()).hexdigest()
                 self.news_cache[news_id] = news
         
-        return list(self.news_cache.values())[:10]  # 상위 10개만 반환
+        return list(self.news_cache.values())
+    
+    def get_cached_news(self) -> List[Dict]:
+        """캐시된 뉴스 가져오기"""
+        return list(self.news_cache.values())
+    
+    def get_news_stats(self) -> Dict:
+        """뉴스 통계 정보"""
+        return {
+            'total_cached': len(self.news_cache),
+            'last_cleanup': self.last_cleanup.isoformat(),
+            'cache_size': len(self.news_cache)
+        }[:10]  # 상위 10개만 반환
 
 # 테스트용
 if __name__ == "__main__":
