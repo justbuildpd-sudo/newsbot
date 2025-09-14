@@ -7,9 +7,9 @@ let trendChart = null;
 let newsData = []; // 뉴스 데이터를 전역 변수로 저장
 
 // API 설정
-const API_BASE_URL = window.location.hostname === 'newsbot.kr' 
-    ? 'https://newsbot-kr-backend-production.up.railway.app'  // 프로덕션
-    : 'http://localhost:8001';  // 로컬 개발
+   const API_BASE_URL = window.location.hostname === 'newsbot.kr' 
+       ? 'https://newsbot-backend-6j3p.onrender.com'  // 프로덕션 (Render)
+       : 'http://localhost:8001';  // 로컬 개발
 
 // DOM 로드 완료 후 실행
 document.addEventListener('DOMContentLoaded', function() {
