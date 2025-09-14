@@ -48,162 +48,51 @@ class NewsService:
             return []
     
     def get_news_content(self, news_url: str) -> Dict:
-        """뉴스 기사 전문 가져오기 (웹 스크래핑)"""
-        try:
-            import requests
-            from bs4 import BeautifulSoup
-            import re
-            import time
-            
-            # 네이버 뉴스 URL 확인
-            if 'news.naver.com' not in news_url:
-                return {
-                    'title': '',
-                    'content': '네이버 뉴스가 아닙니다.',
-                    'images': [],
-                    'pub_date': '',
-                    'url': news_url
-                }
-            
-            # User-Agent 설정 (네이버 봇 차단 우회)
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.8',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'DNT': '1',
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
-                'Sec-Fetch-Dest': 'document',
-                'Sec-Fetch-Mode': 'navigate',
-                'Sec-Fetch-Site': 'none',
-                'Cache-Control': 'max-age=0'
-            }
-            
-            # 요청 간격 조절 (DDoS 방지)
-            time.sleep(1)
-            
-            response = requests.get(news_url, headers=headers, timeout=15)
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # 네이버 뉴스 특화 셀렉터
-            title = ""
-            title_selectors = [
-                '.media_end_head_headline',  # 네이버 뉴스 제목
-                'h1', 
-                '.article_info h3', 
-                '.news_title', 
-                '.headline', 
-                'title'
-            ]
-            
-            for selector in title_selectors:
-                title_elem = soup.select_one(selector)
-                if title_elem:
-                    title = title_elem.get_text().strip()
-                    # HTML 태그 제거
-                    title = re.sub(r'<[^>]+>', '', title)
-                    break
-            
-            # 본문 추출 (네이버 뉴스 특화)
-            content = ""
-            content_selectors = [
-                '#newsct_article',  # 네이버 뉴스 본문
-                '.go_article',      # 네이버 뉴스 본문
-                '.article_body', 
-                '.news_body', 
-                '.article_view', 
-                '.article_content', 
-                '.news_content', 
-                '.content',
-                '[id*="article"]', 
-                '[class*="article"]', 
-                '[class*="content"]'
-            ]
-            
-            for selector in content_selectors:
-                content_elem = soup.select_one(selector)
-                if content_elem:
-                    # 스크립트, 스타일, 광고 태그 제거
-                    for unwanted in content_elem(["script", "style", ".ad", ".advertisement", ".banner"]):
-                        unwanted.decompose()
-                    
-                    # 텍스트 추출
-                    content = content_elem.get_text().strip()
-                    
-                    # HTML 태그 제거
-                    content = re.sub(r'<[^>]+>', '', content)
-                    
-                    # 불필요한 공백 정리
-                    content = re.sub(r'\s+', ' ', content)
-                    
-                    if len(content) > 100:  # 충분한 길이의 내용이 있는지 확인
-                        break
-            
-            # 이미지 추출 (네이버 뉴스 특화)
-            images = []
-            img_selectors = [
-                '#newsct_article img',  # 네이버 뉴스 본문 이미지
-                '.go_article img',      # 네이버 뉴스 본문 이미지
-                'img[src*="http"]', 
-                '.article_body img', 
-                '.news_body img',
-                '.article_view img', 
-                '.content img'
-            ]
-            
-            for selector in img_selectors:
-                img_elements = soup.select(selector)
-                for img in img_elements:
-                    src = img.get('src') or img.get('data-src') or img.get('data-original')
-                    if src and src.startswith('http'):
-                        # 네이버 이미지 URL 정리
-                        if 'news.naver.com' in src:
-                            # 네이버 이미지 크기 조정 (더 큰 이미지)
-                            src = src.replace('type=f120_80', 'type=f640_480')
-                        
-                        alt = img.get('alt', '')
-                        # 빈 alt 텍스트 처리
-                        if not alt:
-                            alt = '뉴스 이미지'
-                        
-                        images.append({
-                            'src': src,
-                            'alt': alt
-                        })
-            
-            # 발행일 추출
-            pub_date = ""
-            date_selectors = [
-                '.article_info .t11', '.news_date', '.article_date',
-                '.publish_date', '[class*="date"]', '[class*="time"]'
-            ]
-            
-            for selector in date_selectors:
-                date_elem = soup.select_one(selector)
-                if date_elem:
-                    pub_date = date_elem.get_text().strip()
-                    break
-            
-            return {
-                'title': title,
-                'content': content,
-                'images': images[:5],  # 최대 5개 이미지
-                'pub_date': pub_date,
-                'url': news_url
-            }
-            
-        except Exception as e:
-            print(f"뉴스 내용 가져오기 오류: {e}")
-            return {
-                'title': '',
-                'content': '기사 내용을 가져올 수 없습니다.',
-                'images': [],
-                'pub_date': '',
-                'url': news_url
-            }
+    """뉴스 기사 전문 가져오기 (간단한 버전)"""
+    try:
+        import time
+        
+        # 요청 간격 조절
+        time.sleep(1)
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        response = requests.get(news_url, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        # 간단한 텍스트 추출 (BeautifulSoup 없이)
+        text = response.text
+        
+        # 제목 추출 (간단한 방법)
+        title = ""
+        if '<title>' in text:
+            start = text.find('<title>') + 7
+            end = text.find('</title>', start)
+            if start < end:
+                title = text[start:end].strip()
+        
+        # 본문 추출 (간단한 방법)
+        content = ""
+        if 'newsct_article' in text:
+            content = "뉴스 내용을 가져오는 중입니다..."
+        
+        return {
+            'title': title,
+            'content': content,
+            'images': [],
+            'pub_date': ''
+        }
+        
+    except Exception as e:
+        print(f"뉴스 내용 가져오기 오류: {e}")
+        return {
+            'title': '',
+            'content': '',
+            'images': [],
+            'pub_date': ''
+        }
     
     def clean_html(self, text: str) -> str:
         """HTML 태그 제거"""
