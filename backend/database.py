@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 """
 데이터베이스 연결 및 설정
-Railway PostgreSQL 사용
+Render PostgreSQL 사용 (psycopg3)
 """
 
 import os
-import psycopg2
-from psycopg2.extras import RealDictCursor
+import psycopg
+from psycopg.rows import dict_row
 import json
 from typing import List, Dict, Optional
 
@@ -19,15 +19,15 @@ class Database:
     def connect(self):
         """PostgreSQL 데이터베이스에 연결합니다."""
         try:
-            # Railway 환경변수에서 데이터베이스 URL 가져오기
+            # Render 환경변수에서 데이터베이스 URL 가져오기
             database_url = os.getenv('DATABASE_URL')
             if not database_url:
-                # 로컬 개발용 (Railway 없이 테스트)
+                # 로컬 개발용 (Render 없이 테스트)
                 database_url = "postgresql://localhost:5432/newsbot"
             
-            self.connection = psycopg2.connect(
+            self.connection = psycopg.connect(
                 database_url,
-                cursor_factory=RealDictCursor
+                row_factory=dict_row
             )
             print("✅ PostgreSQL 데이터베이스 연결 성공")
             
@@ -164,7 +164,7 @@ class Database:
             """, (limit,))
             
             politicians = cursor.fetchall()
-            return [dict(politician) for politician in politicians]
+            return list(politicians)
             
         except Exception as e:
             print(f"❌ 정치인 조회 오류: {e}")
@@ -179,7 +179,7 @@ class Database:
             cursor = self.connection.cursor()
             cursor.execute("SELECT * FROM politicians WHERE id = %s", (politician_id,))
             politician = cursor.fetchone()
-            return dict(politician) if politician else None
+            return politician if politician else None
             
         except Exception as e:
             print(f"❌ 정치인 조회 오류: {e}")
