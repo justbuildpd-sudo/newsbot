@@ -27,6 +27,8 @@ function initializeApp() {
     loadNewsData();
     loadHotIssuesData();
     loadPoliticianData();
+    loadPoliticianStats();
+    loadCommitteeStats();
     loadReportData();
     initializeNetworkVisualization();
     initializeTrendChart();
@@ -191,37 +193,22 @@ function renderHotIssuesList(issues) {
     `).join('');
 }
 
-// 정치인 데이터 로드 (뉴스 언급 수 기준 랭킹)
+// 정치인 데이터 로드 (전체 309명)
 async function loadPoliticianData() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/politicians/ranking?limit=8`);
-        const result = await response.json();
+        const response = await fetch(`${API_BASE_URL}/api/politicians`);
+        const data = await response.json();
         
-        if (result.success && result.data.length > 0) {
-            const politicians = result.data.map((politician, index) => ({
-                id: politician.id,
-                name: politician.name,
-                party: getPartyCode(politician.party),
-                position: politician.committee || "위원회 정보 없음",
-                mentionCount: politician.mention_count || 0,
-                sentiment: Math.random() * 0.4 - 0.2, // -0.2 ~ 0.2
-                recentStatement: "최근 언급된 뉴스가 있습니다.",
-                district: politician.district || "지역 정보 없음",
-                terms: "재선",
-                orientation: "중도",
-                keyIssues: ["환경", "노동"],
-                ranking: index + 1,
-                influenceScore: politician.influence_score || 0
-            }));
-            
-            renderPoliticianList(politicians);
+        if (data.success && data.data) {
+            console.log(`전체 ${data.total_count}명의 국회의원 데이터 로드 완료`);
+            renderPoliticianList(data.data.slice(0, 50)); // 처음 50명만 표시 (스크롤로 더 보기 가능)
         } else {
-            console.log('뉴스에서 언급된 정치인이 없습니다. 기본 데이터를 로드합니다.');
-            loadFeaturedPoliticians();
+            console.error('정치인 데이터 로드 실패:', data.error);
+            renderPoliticianList([]);
         }
     } catch (error) {
-        console.error('정치인 랭킹 로드 오류:', error);
-        loadFeaturedPoliticians();
+        console.error('정치인 데이터 로드 오류:', error);
+        renderPoliticianList([]);
     }
 }
 
@@ -331,27 +318,94 @@ function renderPoliticianList(politicians) {
     const politicianList = document.getElementById('politicianList');
     if (!politicianList) return;
     
-    politicianList.innerHTML = politicians.map(politician => `
-        <div class="politician-item fade-in" onclick="showPoliticianDetail(${politician.id})">
+    politicianList.innerHTML = politicians.map((politician, index) => `
+        <div class="politician-item fade-in" onclick="showPoliticianDetail('${politician.id}')">
             <div class="politician-ranking">
-                ${politician.ranking > 0 ? `#${politician.ranking}` : ''}
+                #${index + 1}
             </div>
-            <div class="politician-avatar">${politician.name.charAt(0)}</div>
+            <div class="politician-avatar">
+                ${politician.photo_url ? 
+                    `<img src="${politician.photo_url}" alt="${politician.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                     <div class="initials" style="display: none;">${politician.name.charAt(0)}</div>` :
+                    `<div class="initials">${politician.name.charAt(0)}</div>`
+                }
+            </div>
             <div class="politician-info">
-                <div class="politician-name">
-                    ${politician.name}
-                    ${politician.ranking > 0 ? `<span class="ranking-badge">${politician.ranking}위</span>` : ''}
-                </div>
-                <span class="politician-party ${politician.party}">${getPartyLabel(politician.party)}</span>
-                <div class="politician-position">${politician.position}</div>
-                <p class="politician-statement">"${politician.recentStatement}"</p>
-                <div class="politician-stats">
-                    <span class="mention-count">언급 ${politician.mentionCount.toLocaleString()}회</span>
-                    ${politician.influenceScore > 0 ? `<span class="influence-score">영향력 ${politician.influenceScore}</span>` : ''}
-                    <span class="sentiment-${getSentimentClass(politician.sentiment)}">${getSentimentLabel(politician.sentiment)}</span>
-                    <a href="#" class="politician-link" onclick="event.stopPropagation(); showPoliticianDetail(${politician.id})">자세히 →</a>
-                </div>
+                <div class="politician-name">${politician.name}</div>
+                <span class="politician-party ${politician.party || 'unknown'}">${politician.party || '정당 정보 없음'}</span>
+                <div class="politician-position">${politician.committee || '위원회 정보 없음'}</div>
+                <div class="politician-district">${politician.district || '지역 정보 없음'}</div>
             </div>
+        </div>
+    `).join('');
+}
+
+// 정치인 통계 데이터 로드
+async function loadPoliticianStats() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/assembly/statistics`);
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+            renderPoliticianStats(data.data);
+        } else {
+            console.error('정치인 통계 로드 실패:', data.error);
+        }
+    } catch (error) {
+        console.error('정치인 통계 로드 오류:', error);
+    }
+}
+
+// 위원회 통계 데이터 로드
+async function loadCommitteeStats() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/assembly/statistics`);
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+            renderCommitteeStats(data.data);
+        } else {
+            console.error('위원회 통계 로드 실패:', data.error);
+        }
+    } catch (error) {
+        console.error('위원회 통계 로드 오류:', error);
+    }
+}
+
+// 정치인 통계 렌더링
+function renderPoliticianStats(stats) {
+    const statsContent = document.getElementById('statsContent');
+    if (!statsContent) return;
+    
+    statsContent.innerHTML = `
+        <div class="stat-item">
+            <span class="stat-label">총 의원 수</span>
+            <span class="stat-value">${stats.total_members || 0}명</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">정당별 의원</span>
+            <span class="stat-value">${Object.keys(stats.party_distribution || {}).length}개 정당</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">위원회별</span>
+            <span class="stat-value">${Object.keys(stats.committee_distribution || {}).length}개 위원회</span>
+        </div>
+    `;
+}
+
+// 위원회 통계 렌더링
+function renderCommitteeStats(stats) {
+    const committeeContent = document.getElementById('committeeContent');
+    if (!committeeContent || !stats.committee_distribution) return;
+    
+    const committees = Object.entries(stats.committee_distribution)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+    
+    committeeContent.innerHTML = committees.map(([committee, count]) => `
+        <div class="committee-item">
+            <span>${committee}</span>
+            <span>${count}명</span>
         </div>
     `).join('');
 }
@@ -939,8 +993,54 @@ function showHotIssueDetail(keyword) {
     alert(`"${keyword}" 핫이슈 상세 보기 기능은 구현 예정입니다.`);
 }
 
-function showPoliticianDetail(politicianId) {
-    alert(`정치인 ${politicianId} 상세 보기 기능은 구현 예정입니다.`);
+async function showPoliticianDetail(politicianId) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/assembly/members/${politicianId}`);
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+            const politician = data.data;
+            showPoliticianModal(politician);
+        } else {
+            alert('정치인 정보를 불러올 수 없습니다.');
+        }
+    } catch (error) {
+        console.error('정치인 상세 정보 로드 오류:', error);
+        alert('정치인 정보를 불러오는 중 오류가 발생했습니다.');
+    }
+}
+
+function showPoliticianModal(politician) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>${politician.name}</h3>
+                <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="politician-detail">
+                    <div class="politician-detail-avatar">
+                        ${politician.photo_url ? 
+                            `<img src="${politician.photo_url}" alt="${politician.name}">` :
+                            `<div class="initials">${politician.name.charAt(0)}</div>`
+                        }
+                    </div>
+                    <div class="politician-detail-info">
+                        <p><strong>정당:</strong> ${politician.party || '정보 없음'}</p>
+                        <p><strong>위원회:</strong> ${politician.committee || '정보 없음'}</p>
+                        <p><strong>선거구:</strong> ${politician.district || '정보 없음'}</p>
+                        <p><strong>당선횟수:</strong> ${politician.terms || '정보 없음'}</p>
+                        <p><strong>정치성향:</strong> ${politician.orientation || '정보 없음'}</p>
+                        <p><strong>주요 이슈:</strong> ${(politician.key_issues || []).join(', ') || '정보 없음'}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
 }
 
 
