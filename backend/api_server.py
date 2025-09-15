@@ -10,6 +10,7 @@ from monitoring import system_monitor
 from database import db
 from assembly_api_service import assembly_api
 from processed_assembly_service import processed_assembly_service
+from processed_full_assembly_service import processed_full_assembly_service
 import json
 import time
 from datetime import datetime
@@ -205,16 +206,16 @@ async def reset_rate_limits():
 # 정치인 관련 API 엔드포인트
 @app.get("/api/politicians")
 async def get_politicians():
-    """모든 정치인 목록을 반환합니다."""
+    """모든 정치인 목록을 반환합니다. (전체 309명)"""
     try:
-        # 가공된 국회의원 데이터 사용
-        politicians = processed_assembly_service.get_all_members()
+        # 전체 국회의원 데이터 사용
+        politicians = processed_full_assembly_service.get_all_members()
         
         return {
             "success": True,
             "data": politicians,
             "total_count": len(politicians),
-            "source": "가공된 국회 공식 API 데이터"
+            "source": "22대 국회의원 전체 데이터 (309명)"
         }
     except Exception as e:
         # 오류 발생 시 빈 배열 반환 (서비스 중단 방지)
@@ -228,15 +229,15 @@ async def get_politicians():
 
 @app.get("/api/politicians/featured")
 async def get_featured_politicians(limit: int = 6):
-    """주요 정치인 목록을 반환합니다."""
+    """주요 정치인 목록을 반환합니다. (정당별 대표)"""
     try:
-        # 가공된 데이터에서 영향력 높은 의원들 가져오기
-        politicians = processed_assembly_service.get_top_influential_members(limit)
+        # 전체 국회의원 데이터에서 정당별 대표 의원들 선택
+        politicians = processed_full_assembly_service.get_top_members(limit)
         return {
             "success": True,
             "data": politicians,
             "count": len(politicians),
-            "source": "가공된 국회 공식 API 데이터"
+            "source": "22대 국회의원 전체 데이터 (정당별 대표)"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"주요 정치인 조회 오류: {str(e)}")
@@ -416,13 +417,13 @@ async def get_assembly_member_detail(member_id: str):
 # 추가 API 엔드포인트
 @app.get("/api/assembly/statistics")
 async def get_assembly_statistics():
-    """국회의원 통계 정보"""
+    """국회의원 통계 정보 (전체 309명)"""
     try:
-        stats = processed_assembly_service.get_statistics()
+        stats = processed_full_assembly_service.get_statistics()
         return {
             "success": True,
             "data": stats,
-            "source": "가공된 국회 공식 API 데이터"
+            "source": "22대 국회의원 전체 데이터 (309명)"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"통계 조회 실패: {str(e)}")
