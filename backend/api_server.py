@@ -487,6 +487,57 @@ async def search_assembly_members(query: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"국회의원 검색 실패: {str(e)}")
 
+# 실시간 국회 API 엔드포인트들
+@app.get("/api/assembly/realtime/members")
+async def get_realtime_assembly_members():
+    """실시간 국회의원 현황 조회"""
+    try:
+        members = assembly_api.get_member_list()
+        return {
+            "success": True,
+            "data": members,
+            "total_count": len(members),
+            "source": "국회 공공데이터포털 실시간 API",
+            "last_updated": datetime.now().isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"실시간 국회의원 조회 실패: {str(e)}")
+
+@app.get("/api/assembly/realtime/members/party/{party_name}")
+async def get_realtime_assembly_members_by_party(party_name: str):
+    """실시간 소속정당별 국회의원 목록 조회"""
+    try:
+        members = assembly_api.get_members_by_party(party_name)
+        return {
+            "success": True,
+            "data": members,
+            "total_count": len(members),
+            "party": party_name,
+            "source": "국회 공공데이터포털 실시간 API",
+            "last_updated": datetime.now().isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"실시간 정당별 국회의원 조회 실패: {str(e)}")
+
+@app.get("/api/assembly/realtime/members/{member_id}")
+async def get_realtime_assembly_member_detail(member_id: str):
+    """실시간 국회의원 상세 정보 조회"""
+    try:
+        member = assembly_api.get_member_detail(member_id)
+        if member:
+            return {
+                "success": True,
+                "data": member,
+                "source": "국회 공공데이터포털 실시간 API",
+                "last_updated": datetime.now().isoformat()
+            }
+        else:
+            raise HTTPException(status_code=404, detail="국회의원 정보를 찾을 수 없습니다")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"실시간 국회의원 상세 조회 실패: {str(e)}")
+
 
 if __name__ == "__main__":
     import hashlib  # news_service에서 사용

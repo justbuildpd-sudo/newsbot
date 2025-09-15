@@ -196,18 +196,18 @@ function renderHotIssuesList(issues) {
 // 정치인 데이터 로드 (전체 309명)
 async function loadPoliticianData() {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/politicians`);
+        const response = await fetch(`${API_BASE_URL}/api/assembly/members`);
         const data = await response.json();
         
         if (data.success && data.data) {
             console.log(`전체 ${data.total_count}명의 국회의원 데이터 로드 완료`);
             renderPoliticianList(data.data.slice(0, 50)); // 처음 50명만 표시 (스크롤로 더 보기 가능)
         } else {
-            console.error('정치인 데이터 로드 실패:', data.error);
+            console.error('국회의원 데이터 로드 실패:', data.error);
             renderPoliticianList([]);
         }
     } catch (error) {
-        console.error('정치인 데이터 로드 오류:', error);
+        console.error('국회의원 데이터 로드 오류:', error);
         renderPoliticianList([]);
     }
 }
