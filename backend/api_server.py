@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.responses import Response
 import uvicorn
 from news_service import NewsService
 from stable_news_service import stable_news_service
@@ -164,19 +165,106 @@ async def get_news_content(url: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"뉴스 내용 가져오기 실패: {str(e)}")
 
+@app.get("/api/news/with-politicians")
+async def get_news_with_politicians():
+    """뉴스별 언급된 정치인 정보 포함하여 반환"""
+    try:
+        news_data = news_service.get_cached_news()
+        news_with_politicians = politician_analyzer.get_news_with_politicians(news_data)
+        
+        response_data = {
+            "success": True,
+            "data": news_with_politicians,
+            "total_count": len(news_with_politicians),
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # 캐시 제어 헤더 추가
+        response = JSONResponse(content=response_data)
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"뉴스-정치인 매칭 실패: {str(e)}")
+
+@app.get("/api/news/politician-mentions")
+async def get_politician_mentions():
+    """정치인별 뉴스 언급 통계"""
+    try:
+        news_data = news_service.get_cached_news()
+        mentioned_politicians = politician_analyzer.analyze_news_mentions(news_data)
+        
+        response_data = {
+            "success": True,
+            "data": mentioned_politicians,
+            "total_politicians": len(mentioned_politicians),
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # 캐시 제어 헤더 추가
+        response = JSONResponse(content=response_data)
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"정치인 언급 분석 실패: {str(e)}")
+
 @app.get("/api/health")
 async def health_check():
-    """서버 상태 확인"""
-    stats = system_monitor.get_system_stats()
-    alerts = system_monitor.check_alerts()
-    
-    return {
-        "status": "healthy",
-        "timestamp": datetime.now().isoformat(),
-        "news_cache_size": len(news_service.news_cache),
-        "system_stats": stats,
-        "alerts": alerts
-    }
+    """서버 상태 확인 (최적화)"""
+    try:
+        # 기본 상태 정보
+        health_status = {
+            "status": "healthy",
+            "timestamp": datetime.now().isoformat(),
+            "version": "1.0.0",
+            "uptime": "running"
+        }
+        
+        # 뉴스 서비스 상태
+        try:
+            news_count = len(news_service.news_cache)
+            health_status["news_service"] = {
+                "status": "healthy",
+                "cached_news": news_count,
+                "last_fetch": news_service.last_news_fetch.isoformat() if news_service.last_news_fetch else None
+            }
+        except Exception as e:
+            health_status["news_service"] = {"status": "error", "error": str(e)}
+        
+        # 정치인 분석기 상태
+        try:
+            if hasattr(politician_analyzer, '_initialized') and politician_analyzer._initialized:
+                health_status["politician_analyzer"] = {
+                    "status": "healthy",
+                    "politicians_count": len(politician_analyzer.politicians),
+                    "mapping_count": len(politician_analyzer.name_mapping)
+                }
+            else:
+                health_status["politician_analyzer"] = {"status": "not_initialized"}
+        except Exception as e:
+            health_status["politician_analyzer"] = {"status": "error", "error": str(e)}
+        
+        # 시스템 모니터링 (간소화)
+        try:
+            stats = system_monitor.get_system_stats()
+            health_status["system"] = {
+                "memory_usage": stats.get("memory_usage", "unknown"),
+                "cpu_usage": stats.get("cpu_usage", "unknown")
+            }
+        except:
+            health_status["system"] = {"status": "monitoring_unavailable"}
+        
+        return health_status
+        
+    except Exception as e:
+        return {
+            "status": "error",
+            "timestamp": datetime.now().isoformat(),
+            "error": str(e)
+        }
 
 @app.get("/api/monitoring/stats")
 async def get_monitoring_stats():
@@ -318,108 +406,57 @@ async def get_politician_stats():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"정치인 통계 조회 오류: {str(e)}")
 
-# 정치인 랭킹 관련 API 엔드포인트
-@app.get("/api/politicians/ranking")
-async def get_politician_ranking(limit: int = 8):
-    """뉴스 언급 수 기준 정치인 랭킹을 반환합니다."""
-    try:
-        # 최신 뉴스 데이터 가져오기
-        news_data = news_service.get_news()
-        
-        # 정치인 언급 분석
-        top_politicians = politician_analyzer.get_top_politicians(news_data, limit)
-        
-        return {
-            "success": True,
-            "data": top_politicians,
-            "count": len(top_politicians),
-            "analysis_time": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치인 랭킹 조회 오류: {str(e)}")
-
-@app.get("/api/politicians/ranking/refresh")
-async def refresh_politician_ranking(limit: int = 8):
-    """정치인 랭킹을 새로고침합니다."""
-    try:
-        # 뉴스 데이터 새로고침
-        await news_service.refresh_news()
-        news_data = news_service.get_news()
-        
-        # 정치인 언급 분석
-        top_politicians = politician_analyzer.get_top_politicians(news_data, limit)
-        
-        return {
-            "success": True,
-            "data": top_politicians,
-            "count": len(top_politicians),
-            "message": "정치인 랭킹이 새로고침되었습니다",
-            "analysis_time": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치인 랭킹 새로고침 오류: {str(e)}")
-
-@app.get("/api/politicians/ranking/stats")
-async def get_ranking_stats():
-    """정치인 랭킹 분석 통계를 반환합니다."""
-    try:
-        stats = politician_analyzer.get_politician_ranking_stats()
-        return {
-            "success": True,
-            "data": stats
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"랭킹 통계 조회 오류: {str(e)}")
+# 핫이슈 랭킹 관련 API는 제거됨 - 의미 없는 기능
 
 @app.post("/api/politicians/init")
 async def initialize_politicians():
     """정치인 데이터 초기화"""
     try:
-        # 정치인 서비스 재초기화
-        politician_service.load_politicians()
-        return {"success": True, "message": "정치인 데이터 초기화 완료"}
+        # 정치인 분석기 캐시 초기화
+        politician_analyzer.reset_cache()
+        return {"success": True, "message": "정치인 분석기 캐시 초기화 완료"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"정치인 데이터 초기화 실패: {str(e)}")
 
 @app.get("/api/assembly/members")
 async def get_assembly_members():
-    """국회의원 현황 조회 (가공된 데이터)"""
+    """국회의원 현황 조회 (실시간 API)"""
     try:
-        members = processed_assembly_service.get_all_members()
+        members = assembly_api.get_member_list()
         return {
             "success": True,
             "data": members,
             "total_count": len(members),
-            "source": "가공된 국회 공식 API 데이터"
+            "source": "국회 공공데이터포털 실시간 API"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"국회의원 조회 실패: {str(e)}")
 
 @app.get("/api/assembly/members/party/{party_name}")
 async def get_assembly_members_by_party(party_name: str):
-    """소속정당별 국회의원 목록 조회"""
+    """소속정당별 국회의원 목록 조회 (실시간 API)"""
     try:
-        members = processed_assembly_service.get_members_by_party(party_name)
+        members = assembly_api.get_members_by_party(party_name)
         return {
             "success": True,
             "data": members,
             "total_count": len(members),
             "party": party_name,
-            "source": "가공된 국회 공식 API 데이터"
+            "source": "국회 공공데이터포털 실시간 API"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"정당별 국회의원 조회 실패: {str(e)}")
 
 @app.get("/api/assembly/members/{member_id}")
 async def get_assembly_member_detail(member_id: str):
-    """국회의원 상세 정보 조회"""
+    """국회의원 상세 정보 조회 (실시간 API)"""
     try:
-        member = processed_assembly_service.get_member_by_id(member_id)
+        member = assembly_api.get_member_detail(member_id)
         if member:
             return {
                 "success": True,
                 "data": member,
-                "source": "가공된 국회 공식 API 데이터"
+                "source": "국회 공공데이터포털 실시간 API"
             }
         else:
             raise HTTPException(status_code=404, detail="국회의원 정보를 찾을 수 없습니다")
@@ -427,6 +464,37 @@ async def get_assembly_member_detail(member_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"국회의원 상세 조회 실패: {str(e)}")
+
+@app.get("/api/assembly/members/{member_id}/committee-activities")
+async def get_member_committee_activities(member_id: str):
+    """특정 국회의원의 상임위원회 활동 조회"""
+    try:
+        # 의원 정보에서 부서코드 가져오기
+        member = assembly_api.get_member_detail(member_id)
+        if not member:
+            raise HTTPException(status_code=404, detail="국회의원을 찾을 수 없습니다")
+        
+        dept_cd = member.get('dept_code', '')
+        if not dept_cd:
+            raise HTTPException(status_code=400, detail="부서코드가 없습니다")
+        
+        activities = assembly_api.get_committee_activities(dept_cd)
+        
+        return {
+            "success": True,
+            "data": {
+                "member_name": member.get('name', ''),
+                "member_party": member.get('party', ''),
+                "member_district": member.get('district', ''),
+                "activities": activities,
+                "total_count": len(activities)
+            },
+            "source": "국회 공공데이터포털 상임위원회 활동 API"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"상임위원회 활동 조회 실패: {str(e)}")
 
 # 추가 API 엔드포인트
 @app.get("/api/assembly/statistics")

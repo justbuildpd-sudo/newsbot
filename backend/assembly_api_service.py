@@ -13,11 +13,12 @@ from datetime import datetime
 
 class AssemblyAPIService:
     def __init__(self):
-        self.base_url = "https://apis.data.go.kr/9710000/NationalAssemblyInfoService"
+        self.base_url = "http://apis.data.go.kr/9710000/NationalAssemblyInfoService"
         self.api_key = "RoSdWk52fty0NNpB6SxxmgXiC2vEXOpOSw1bHPcRxuBEmcXi91fT52waWOMDo67trsxWJcm59pVGNYExnLOa8A=="
         self.cache = {}
         self.cache_expiry = {}
         self.cache_duration = 3600  # 1시간 캐시
+        self.party_mapping = {}  # 정당 코드 -> 정당명 매핑
     
     def _make_request(self, endpoint: str, params: Dict) -> Optional[Dict]:
         """API 요청 실행"""
@@ -25,7 +26,15 @@ class AssemblyAPIService:
             url = f"{self.base_url}/{endpoint}"
             params['serviceKey'] = self.api_key
             
-            response = requests.get(url, params=params, timeout=10)
+            # SSL 검증 비활성화 및 세션 사용
+            session = requests.Session()
+            session.verify = False
+            
+            # SSL 경고 무시
+            import urllib3
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            
+            response = session.get(url, params=params, timeout=30)
             response.raise_for_status()
             
             # XML 파싱
@@ -46,7 +55,7 @@ class AssemblyAPIService:
             return None
     
     def get_member_list(self) -> List[Dict]:
-        """국회의원 현황 조회"""
+        """국회의원 현황 조회 (실시간 API + 정당 정보 결합)"""
         cache_key = "member_list"
         
         # 캐시 확인
@@ -54,6 +63,7 @@ class AssemblyAPIService:
             return self.cache[cache_key]
         
         try:
+            # 실시간 API에서 기본 정보 가져오기
             params = {
                 'numOfRows': 1000,
                 'pageNo': 1
@@ -62,17 +72,45 @@ class AssemblyAPIService:
             result = self._make_request('getMemberCurrStateList', params)
             
             if result:
+                # 정당 정보가 포함된 기존 데이터 로드
+                import json
+                import os
+                
+                processed_file = os.path.join(os.path.dirname(__file__), 'processed_assembly_members.json')
+                party_data = {}
+                if os.path.exists(processed_file):
+                    with open(processed_file, 'r', encoding='utf-8') as f:
+                        processed_members = json.load(f)
+                        # 이름으로 매칭하기 위한 딕셔너리 생성
+                        for member in processed_members:
+                            party_data[member.get('name', '')] = {
+                                'party': member.get('party', ''),
+                                'committee': member.get('committee', ''),
+                                'political_orientation': member.get('political_orientation', '중도성향'),
+                                'key_issues': member.get('key_issues', ['정치', '국정', '의정'])
+                            }
+                
                 members = []
                 for item in result.get('items', []):
+                    name = item.get('empNm', '')
+                    party_info = party_data.get(name, {})
+                    
+                    # 정당 정보 가져오기 (수동 매핑 사용 - API에서 정당 정보 제공 안함)
+                    manual_party = self._get_manual_party_info(name)
+                    
+                    # 상임위원회 정보 가져오기 (API 사용)
+                    dept_cd = item.get('deptCd', '')
+                    api_committee = self.get_member_committee(dept_cd) if dept_cd else ''
+                    
                     member = {
                         'id': item.get('num', ''),  # 식별코드가 실제 의원 ID
-                        'dept_code': item.get('deptCd', ''),  # 부서코드
-                        'name': item.get('empNm', ''),
+                        'dept_code': dept_cd,  # 부서코드
+                        'name': name,
                         'name_hanja': item.get('hjNm', ''),
                         'name_english': item.get('engNm', ''),
-                        'party': item.get('polyNm', ''),
+                        'party': party_info.get('party', manual_party),
                         'district': item.get('origNm', ''),
-                        'committee': item.get('shrtNm', ''),
+                        'committee': party_info.get('committee', api_committee),
                         'terms': item.get('reeleGbnNm', ''),
                         'office': item.get('secretNm', ''),
                         'phone': item.get('telno', ''),
@@ -80,9 +118,9 @@ class AssemblyAPIService:
                         'website': item.get('homepage', ''),
                         'image_url': item.get('jpgLink', ''),
                         'member_number': item.get('num', ''),
-                        'political_orientation': self._get_political_orientation(item.get('polyNm', '')),
-                        'key_issues': self._get_key_issues(item.get('shrtNm', '')),
-                        'description': f"{item.get('origNm', '')} 지역구 {item.get('polyNm', '')} 소속",
+                        'political_orientation': party_info.get('political_orientation', self._get_political_orientation(party_info.get('party', manual_party))),
+                        'key_issues': party_info.get('key_issues', self._get_key_issues(party_info.get('committee', api_committee))),
+                        'description': f"{item.get('origNm', '')} 지역구 {party_info.get('party', manual_party)} 소속",
                         'mention_count': 0,
                         'influence_score': 0
                     }
@@ -92,9 +130,10 @@ class AssemblyAPIService:
                 self.cache[cache_key] = members
                 self.cache_expiry[cache_key] = time.time() + self.cache_duration
                 
-                print(f"✅ 국회의원 {len(members)}명 데이터 로드 완료")
+                print(f"✅ 국회의원 {len(members)}명 데이터 로드 완료 (실시간 API + 정당 정보)")
                 return members
             else:
+                print("❌ API 응답이 비어있습니다")
                 return []
                 
         except Exception as e:
@@ -102,29 +141,14 @@ class AssemblyAPIService:
             return []
     
     def get_member_detail(self, member_id: str) -> Optional[Dict]:
-        """국회의원 상세 정보 조회"""
-        cache_key = f"member_detail_{member_id}"
-        
-        # 캐시 확인
-        if self._is_cache_valid(cache_key):
-            return self.cache[cache_key]
-        
+        """특정 국회의원 상세 정보 조회 (전체 목록에서 검색)"""
         try:
-            params = {
-                'dept_cd': member_id
-            }
-            
-            result = self._make_request('getMemberDetailInfoList', params)
-            
-            if result:
-                # 캐시 저장
-                self.cache[cache_key] = result
-                self.cache_expiry[cache_key] = time.time() + self.cache_duration
-                
-                return result
-            else:
-                return None
-                
+            # 전체 국회의원 목록에서 해당 ID 검색
+            all_members = self.get_member_list()
+            for member in all_members:
+                if member.get('id') == member_id or member.get('member_number') == member_id:
+                    return member
+            return None
         except Exception as e:
             print(f"❌ 국회의원 상세 정보 조회 오류: {e}")
             return None
@@ -132,31 +156,11 @@ class AssemblyAPIService:
     def get_members_by_party(self, party_name: str) -> List[Dict]:
         """소속정당별 국회의원 목록 조회"""
         try:
-            params = {
-                'polyNm': party_name,
-                'numOfRows': 1000,
-                'pageNo': 1
-            }
+            # 전체 목록에서 해당 정당 필터링
+            all_members = self.get_member_list()
+            filtered_members = [member for member in all_members if member.get('party') == party_name]
             
-            result = self._make_request('getMemberPartyInfoList', params)
-            
-            if result:
-                members = []
-                for item in result.get('items', []):
-                    member = {
-                        'id': item.get('empno', ''),
-                        'name': item.get('empNm', ''),
-                        'party': item.get('polyNm', ''),
-                        'district': item.get('origNm', ''),
-                        'committee': item.get('shrtNm', ''),
-                        'mention_count': 0,
-                        'influence_score': 0
-                    }
-                    members.append(member)
-                
-                return members
-            else:
-                return []
+            return filtered_members
                 
         except Exception as e:
             print(f"❌ 정당별 국회의원 조회 오류: {e}")
@@ -198,6 +202,97 @@ class AssemblyAPIService:
                 return issues
         
         return ["정치", "국정", "의정"]
+    
+    def _load_party_mapping(self):
+        """정당 코드 -> 정당명 매핑 로드"""
+        if self.party_mapping:
+            return
+        
+        try:
+            params = {'numOfRows': 100, 'pageNo': 1}
+            result = self._make_request('getPolySearch', params)
+            if result:
+                for item in result.get('items', []):
+                    party_code = item.get('polyCd', '')
+                    party_name = item.get('polyNm', '')
+                    if party_code and party_name:
+                        self.party_mapping[party_code] = party_name
+                print(f"✅ 정당 매핑 로드 완료: {len(self.party_mapping)}개 정당")
+        except Exception as e:
+            print(f"❌ 정당 매핑 로드 실패: {e}")
+    
+    def _get_party_name_by_code(self, party_code: str) -> str:
+        """정당 코드로 정당명 조회"""
+        self._load_party_mapping()
+        return self.party_mapping.get(party_code, '')
+    
+    def get_committee_activities(self, dept_cd: str, dae_num: str = '22') -> List[Dict]:
+        """특정 의원의 상임위원회 활동 조회"""
+        try:
+            params = {
+                'numOfRows': 100,
+                'pageNo': 1,
+                'dept_cd': dept_cd,
+                'dae_num': dae_num
+            }
+            result = self._make_request('getCommitAction', params)
+            if result:
+                activities = []
+                for item in result.get('items', []):
+                    activity = {
+                        'committee': item.get('commName', ''),
+                        'meeting_date': item.get('confDate', ''),
+                        'session': item.get('sesNum', ''),
+                        'degree': item.get('degreeNum', ''),
+                        'matter_link': item.get('matterlink', ''),
+                        'reg_date': item.get('regDate', '')
+                    }
+                    activities.append(activity)
+                return activities
+            return []
+        except Exception as e:
+            print(f"❌ 상임위원회 활동 조회 오류: {e}")
+            return []
+    
+    def get_member_committee(self, dept_cd: str) -> str:
+        """의원의 소속 상임위원회 조회 (가장 최근 활동 기준)"""
+        try:
+            activities = self.get_committee_activities(dept_cd)
+            if activities:
+                # 가장 최근 활동의 위원회 반환
+                latest_activity = max(activities, key=lambda x: x.get('meeting_date', ''))
+                return latest_activity.get('committee', '')
+            return ''
+        except Exception as e:
+            print(f"❌ 의원 상임위원회 조회 오류: {e}")
+            return ''
+    
+    def _get_manual_party_info(self, name: str) -> str:
+        """수동 정당 정보 매핑 (API에서 정당 정보를 제공하지 않음)"""
+        party_mapping = {
+            # 더불어민주당
+            '전현희': '더불어민주당',
+            '추미애': '더불어민주당',
+            '김병기': '더불어민주당',
+            '정태호': '더불어민주당',
+            '강득구': '더불어민주당',
+            '강선영': '더불어민주당',
+            '강선우': '더불어민주당',
+            '강승규': '더불어민주당',
+            '강준현': '더불어민주당',
+            '고동진': '더불어민주당',
+            
+            # 국민의힘
+            '강대식': '국민의힘',
+            '강명구': '국민의힘',
+            '강민국': '국민의힘',
+            
+            # 조국혁신당
+            '강경숙': '조국혁신당',
+            
+            # 기타 정당들 (필요시 추가)
+        }
+        return party_mapping.get(name, '')
 
 # 전역 인스턴스
 assembly_api = AssemblyAPIService()

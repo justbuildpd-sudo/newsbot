@@ -15,6 +15,8 @@ class NewsService:
         self.news_cache = {}  # 뉴스 캐시
         self.last_cleanup = datetime.now()
         self.cleanup_interval = timedelta(hours=4, minutes=15)  # 4시간 15분
+        self.last_news_fetch = None  # 마지막 뉴스 수집 시간
+        self.news_fetch_interval = timedelta(minutes=30)  # 30분마다 새로 수집
         
         # 정치 관련 키워드
         self.political_keywords = [
@@ -307,20 +309,25 @@ class NewsService:
             print(f"뉴스 정리 완료: {len(self.news_cache)}개 뉴스 남음")
     
     def get_cached_news(self) -> List[Dict]:
-        """캐시된 뉴스 반환"""
+        """캐시된 뉴스 반환 (타이밍 조절)"""
         self.cleanup_old_news()
         
-        if not self.news_cache:
-            # 캐시가 비어있으면 새로운 뉴스 가져오기
+        current_time = datetime.now()
+        
+        # 캐시가 비어있거나 지정된 시간이 지났으면 새로 수집
+        if not self.news_cache or (self.last_news_fetch is None or 
+                                 current_time - self.last_news_fetch > self.news_fetch_interval):
+            print(f"📰 뉴스 새로 수집 중... (마지막 수집: {self.last_news_fetch})")
             new_news = self.get_political_news()
+            self.news_cache = {}
             for news in new_news:
                 news_id = hashlib.md5(news['title'].encode()).hexdigest()
                 self.news_cache[news_id] = news
+            self.last_news_fetch = current_time
+            print(f"✅ 뉴스 {len(new_news)}개 수집 완료")
+        else:
+            print(f"📋 캐시된 뉴스 사용 중... (남은 시간: {self.news_fetch_interval - (current_time - self.last_news_fetch)})")
         
-        return list(self.news_cache.values())
-    
-    def get_cached_news(self) -> List[Dict]:
-        """캐시된 뉴스 가져오기"""
         return list(self.news_cache.values())
     
     def get_news_stats(self) -> Dict:
