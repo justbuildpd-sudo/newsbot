@@ -32,14 +32,14 @@ class AssemblyAPIService:
             root = ET.fromstring(response.content)
             
             # 결과 추출
-            result = {}
+            items = []
             for item in root.findall('.//item'):
                 item_data = {}
                 for child in item:
                     item_data[child.tag] = child.text
-                result[item.tag] = item_data
+                items.append(item_data)
             
-            return result
+            return {'items': items}
             
         except Exception as e:
             print(f"API 요청 오류 ({endpoint}): {e}")
@@ -65,9 +65,11 @@ class AssemblyAPIService:
                 members = []
                 for item in result.get('items', []):
                     member = {
-                        'id': item.get('empno', ''),
+                        'id': item.get('num', ''),  # 식별코드가 실제 의원 ID
+                        'dept_code': item.get('deptCd', ''),  # 부서코드
                         'name': item.get('empNm', ''),
-                        'name_hanja': item.get('hanjaNm', ''),
+                        'name_hanja': item.get('hjNm', ''),
+                        'name_english': item.get('engNm', ''),
                         'party': item.get('polyNm', ''),
                         'district': item.get('origNm', ''),
                         'committee': item.get('shrtNm', ''),
@@ -77,6 +79,7 @@ class AssemblyAPIService:
                         'email': item.get('email', ''),
                         'website': item.get('homepage', ''),
                         'image_url': item.get('jpgLink', ''),
+                        'member_number': item.get('num', ''),
                         'political_orientation': self._get_political_orientation(item.get('polyNm', '')),
                         'key_issues': self._get_key_issues(item.get('shrtNm', '')),
                         'description': f"{item.get('origNm', '')} 지역구 {item.get('polyNm', '')} 소속",
