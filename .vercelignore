@@ -1,0 +1,38 @@
+# 대용량 데이터 파일들 제외
+*.json
+!web_service/**/*.json
+!backend/politicians_data_with_party.json
+!backend/data/politicians.json
+!package.json
+!vercel.json
+
+# 백업 및 캐시 파일들 제외
+backups/
+__pycache__/
+.next/
+node_modules/
+*.log
+*.db
+*.csv
+
+# 개발 파일들 제외
+.DS_Store
+.git/
+*.pyc
+*.pyo
+
+# 대용량 위젯 파일들 제외 (필요한 것만 포함)
+backend/id_card_widgets/
+backend/mac_family_tree_widgets/
+backend/sophisticated_panels/
+backend/stable_network_widgets/
+
+# 불필요한 이미지 파일들
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# 회의록 원본 파일들
+data/meeting_records/
+data/speaker_records/

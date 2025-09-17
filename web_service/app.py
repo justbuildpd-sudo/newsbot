@@ -20,10 +20,19 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'newsbot-kr-web-service-2025'
 
-# 기존 서버 연결 설정
-BACKEND_API_URL = "http://localhost:8001/api"  # 기존 API 서버
-UNIFIED_API_URL = "http://localhost:8000/api"  # 통합 서버
-BACKEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'backend')
+# 환경별 서버 연결 설정
+is_production = os.environ.get('VERCEL') == '1'
+
+if is_production:
+    # Vercel 배포 환경에서는 자체 API 사용
+    BACKEND_API_URL = os.environ.get('BACKEND_API_URL', '/api')
+    UNIFIED_API_URL = os.environ.get('UNIFIED_API_URL', '/api')
+    BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+else:
+    # 로컬 개발 환경
+    BACKEND_API_URL = "http://localhost:8001/api"
+    UNIFIED_API_URL = "http://localhost:8000/api"
+    BACKEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'backend')
 
 class NewsBot5000Service:
     """NewsBot localhost:5000 서비스"""
@@ -60,6 +69,17 @@ class NewsBot5000Service:
     
     def get_politicians_data(self, limit=50):
         """국회의원 데이터 조회 (기존 API 연동)"""
+        # Vercel 환경에서는 로컬 데이터 사용
+        if os.environ.get('VERCEL') == '1':
+            try:
+                lightweight_file = os.path.join(os.path.dirname(__file__), 'politicians_lightweight.json')
+                if os.path.exists(lightweight_file):
+                    with open(lightweight_file, 'r', encoding='utf-8') as f:
+                        politicians = json.load(f)
+                    return politicians[:limit]
+            except:
+                pass
+        
         try:
             # 먼저 기존 API 서버에서 조회
             response = self.session.get(f"{self.backend_api_url}/politicians/featured", 
@@ -360,20 +380,30 @@ def internal_error(error):
     """500 에러 핸들러"""
     return render_template('500.html'), 500
 
+# Vercel 배포를 위한 앱 인스턴스 노출
+application = app
+
 if __name__ == '__main__':
-    print("🚀 NewsBot-KR 웹 서비스 시작 (Port 5000)")
-    print("🔗 기존 서버 연결:")
-    print(f"   - API 서버 (8001): {BACKEND_API_URL}")
-    print(f"   - 통합 서버 (8000): {UNIFIED_API_URL}")
-    print("📍 웹 서비스 URL: http://localhost:5000")
+    import os
     
-    # 서버 상태 확인
-    health_status = service.get_health_status()
-    print("🏥 서버 상태:")
-    for server, status in health_status.items():
-        status_icon = "✅" if status else "❌"
-        print(f"   {status_icon} {server}: {'연결됨' if status else '연결 안됨'}")
+    # 환경 확인
+    is_production = os.environ.get('VERCEL') == '1'
     
-    print("=" * 60)
+    if not is_production:
+        print("🚀 NewsBot-KR 웹 서비스 시작 (Port 5000)")
+        print("🔗 기존 서버 연결:")
+        print(f"   - API 서버 (8001): {BACKEND_API_URL}")
+        print(f"   - 통합 서버 (8000): {UNIFIED_API_URL}")
+        print("📍 웹 서비스 URL: http://localhost:5000")
+        
+        # 서버 상태 확인
+        health_status = service.get_health_status()
+        print("🏥 서버 상태:")
+        for server, status in health_status.items():
+            status_icon = "✅" if status else "❌"
+            print(f"   {status_icon} {server}: {'연결됨' if status else '연결 안됨'}")
+        
+        print("=" * 60)
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=not is_production)
