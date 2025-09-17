@@ -120,17 +120,16 @@ def load_politicians_data():
     """정치인 데이터 로드"""
     global politicians_data
     
-    # 여러 경로에서 데이터 파일 찾기 (CSV 검증된 22대 의원 우선)
+    # 여러 경로에서 데이터 파일 찾기 (298명 현직 22대 의원 최종 확정)
     possible_paths = [
+        'final_298_current_assembly.json',  # 298명 현직 22대 의원 (최종 확정)
         'final_22nd_assembly_verified.json',  # CSV 기반 검증된 22대 의원
-        'verified_22nd_assembly_from_csv.json',  # CSV 추출 원본
         '22nd_assembly_members_300.json',  # 백엔드 폴더 내 (교체됨)
+        'verified_22nd_assembly_from_csv.json',  # CSV 추출 원본
         'authentic_assembly_members.json',  # 지역구 충돌 해결된 인증 데이터
         'processed_full_assembly_members.json',  # 처리된 전체 데이터 (원본)
         '../22nd_assembly_members_300.json',  # 상위 폴더
-        'politicians_data_with_party.json',
-        'data/politicians.json',
-        '../politicians_data_with_party.json'
+        'politicians_data_with_party.json'
     ]
     
     for path in possible_paths:
