@@ -267,6 +267,140 @@ class AssemblyAPIService:
             print(f"❌ 의원 상임위원회 조회 오류: {e}")
             return ''
     
+    def get_bill_list(self, num_of_rows: int = 100) -> List[Dict]:
+        """의안발의 목록 조회 (열린국회정보 API 사용)"""
+        try:
+            # 열린국회정보 API 사용
+            bill_api_url = "https://open.assembly.go.kr/portal/openapi/ALLBILL"
+            bill_api_key = "e9b6c7dcdd04446094d5bbfdff7fc930"
+            
+            # 여러 의안번호로 조회 (연속된 의안번호 사용)
+            bills = []
+            start_bill_no = 2123836  # 시작 의안번호
+            
+            for i in range(min(num_of_rows, 20)):  # 최대 20개까지 조회
+                bill_no = str(start_bill_no + i)
+                
+                params = {
+                    'KEY': bill_api_key,
+                    'Type': 'json',
+                    'pIndex': 1,
+                    'pSize': 1,
+                    'BILL_NO': bill_no
+                }
+                
+                try:
+                    response = requests.get(bill_api_url, params=params, timeout=30)
+                    response.raise_for_status()
+                    
+                    data = response.json()
+                    
+                    if 'ALLBILL' in data and len(data['ALLBILL']) > 1:
+                        if 'row' in data['ALLBILL'][1] and len(data['ALLBILL'][1]['row']) > 0:
+                            item = data['ALLBILL'][1]['row'][0]
+                            bill = {
+                                'bill_id': item.get('BILL_ID', ''),
+                                'bill_no': item.get('BILL_NO', ''),
+                                'bill_name': item.get('BILL_NM', ''),
+                                'bill_kind': item.get('BILL_KND', ''),
+                                'proposer': item.get('PPSR_NM', ''),
+                                'proposer_kind': item.get('PPSR_KND', ''),
+                                'propose_date': item.get('PPSL_DT', ''),
+                                'committee': item.get('JRCMIT_NM', ''),
+                                'committee_result': item.get('JRCMIT_PROC_RSLT', ''),
+                                'assembly_result': item.get('RGS_CONF_RSLT', ''),
+                                'link_url': item.get('LINK_URL', '')
+                            }
+                            bills.append(bill)
+                except Exception as e:
+                    print(f"❌ 의안 {bill_no} 조회 오류: {e}")
+                    continue
+                
+                # API 호출 간격 조절
+                time.sleep(0.1)
+            
+            print(f"✅ 의안발의 목록 조회 성공: {len(bills)}개")
+            return bills
+                
+        except Exception as e:
+            print(f"❌ 의안발의 목록 조회 오류: {e}")
+            return []
+    
+    def get_recent_bills(self, days: int = 30) -> List[Dict]:
+        """최근 N일간의 의안발의 조회"""
+        try:
+            # 최근 의안발의 조회 (실제 API 문서에 따라 수정 필요)
+            params = {
+                'numOfRows': 50,
+                'pageNo': 1,
+                'days': days
+            }
+            
+            result = self._make_request('getRecentBills', params)
+            
+            if result:
+                bills = []
+                for item in result.get('items', []):
+                    bill = {
+                        'bill_id': item.get('billId', ''),
+                        'bill_name': item.get('billName', ''),
+                        'bill_kind': item.get('billKind', ''),
+                        'proposer': item.get('proposer', ''),
+                        'proposer_party': item.get('proposerParty', ''),
+                        'propose_date': item.get('proposeDate', ''),
+                        'status': item.get('status', ''),
+                        'summary': item.get('summary', ''),
+                        'url': item.get('url', '')
+                    }
+                    bills.append(bill)
+                
+                print(f"✅ 최근 {days}일간 의안발의 조회 성공: {len(bills)}개")
+                return bills
+            else:
+                print("❌ 최근 의안발의 조회 실패")
+                return []
+                
+        except Exception as e:
+            print(f"❌ 최근 의안발의 조회 오류: {e}")
+            return []
+    
+    def get_member_bills(self, member_id: str) -> List[Dict]:
+        """특정 의원의 의안발의 조회"""
+        try:
+            params = {
+                'numOfRows': 100,
+                'pageNo': 1,
+                'memberId': member_id
+            }
+            
+            result = self._make_request('getMemberBills', params)
+            
+            if result:
+                bills = []
+                for item in result.get('items', []):
+                    bill = {
+                        'bill_id': item.get('billId', ''),
+                        'bill_name': item.get('billName', ''),
+                        'bill_kind': item.get('billKind', ''),
+                        'proposer': item.get('proposer', ''),
+                        'proposer_party': item.get('proposerParty', ''),
+                        'propose_date': item.get('proposeDate', ''),
+                        'status': item.get('status', ''),
+                        'summary': item.get('summary', ''),
+                        'url': item.get('url', '')
+                    }
+                    bills.append(bill)
+                
+                print(f"✅ 의원 {member_id}의 의안발의 조회 성공: {len(bills)}개")
+                return bills
+            else:
+                print(f"❌ 의원 {member_id}의 의안발의 조회 실패")
+                return []
+                
+        except Exception as e:
+            print(f"❌ 의원 {member_id}의 의안발의 조회 오류: {e}")
+            return []
+    
     def _get_manual_party_info(self, name: str) -> str:
         """수동 정당 정보 매핑 (API에서 정당 정보를 제공하지 않음)"""
         party_mapping = {

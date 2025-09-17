@@ -1,0 +1,65 @@
+{
+  "extraction_date": "2025-09-16T23:12:50.998499",
+  "total_databases": 10,
+  "total_bills": 10000,
+  "databases": [
+    {
+      "path": "./backend/newsbot_stable.db",
+      "count": 1000
+    },
+    {
+      "path": "./backend/data/legislative_data_standalone.db",
+      "count": 1000
+    },
+    {
+      "path": "./backend/data/backups/newsbot_backup_20250916_112700.db",
+      "count": 1000
+    },
+    {
+      "path": "./backend/data/backups/newsbot_backup_20250916_112734.db",
+      "count": 1000
+    },
+    {
+      "path": "./backend/data/backups/newsbot_backup_20250916_112721.db",
+      "count": 1000
+    },
+    {
+      "path": "./backups/newsbot_backup_20250916_132435/backend/newsbot_stable.db",
+      "count": 1000
+    },
+    {
+      "path": "./backups/newsbot_backup_20250916_132435/backend/data/legislative_data_standalone.db",
+      "count": 1000
+    },
+    {
+      "path": "./backups/newsbot_backup_20250916_132435/backend/data/backups/newsbot_backup_20250916_112700.db",
+      "count": 1000
+    },
+    {
+      "path": "./backups/newsbot_backup_20250916_132435/backend/data/backups/newsbot_backup_20250916_112734.db",
+      "count": 1000
+    },
+    {
+      "path": "./backups/newsbot_backup_20250916_132435/backend/data/backups/newsbot_backup_20250916_112721.db",
+      "count": 1000
+    }
+  ],
+  "sample_bill": {
+    "bill_id": "PRC_R2I4R0J5J3T0L1S0T1F7I2T5J6G9L8",
+    "bill_no": "2200001",
+    "bill_name": "교통약자의 이동편의 증진법 전부개정법률안",
+    "bill_type": "법률안",
+    "proposal_date": "2024-05-30",
+    "proposer_name": "서미화의원 등 28인",
+    "proposer_type": "의원",
+    "committee_name": "국토교통위원회",
+    "proposal_session": "414",
+    "co_proposers": "",
+    "bill_status": "",
+    "passage_date": "",
+    "promulgation_date": "",
+    "bill_content": "교통약자의 이동편의 증진법 전부개정법률안",
+    "era_code": "제22대",
+    "created_at": "2025-09-16 02:22:40"
+  }
+}

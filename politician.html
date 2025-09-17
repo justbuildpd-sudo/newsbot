@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정청래 의원 - 정치인 분석 | newsbot.kr</title>
+    <meta name="description" content="정청래 의원의 인맥 네트워크, 입법발의, 정치 활동 분석">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* 정청래 의원 전용 스타일 */
+        .politician-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .politician-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .politician-info {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .politician-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .politician-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .politician-title {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .politician-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .network-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .network-visualization {
+            height: 400px;
+            background: #f8fafc;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .network-node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .network-node:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        .network-node.center {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            width: 80px;
+            height: 80px;
+            font-size: 14px;
+        }
+        
+        .network-node.connection {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+        
+        .network-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            opacity: 0.6;
+            transform-origin: left center;
+        }
+        
+        .connection-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .connection-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .connection-item:hover {
+            background: #e2e8f0;
+            transform: translateX(4px);
+        }
+        
+        .connection-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+        
+        .connection-info {
+            flex: 1;
+        }
+        
+        .connection-name {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+        
+        .connection-type {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        
+        .connection-strength {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .bills-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .bill-item {
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .bill-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+        
+        .bill-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        
+        .bill-description {
+            color: #6b7280;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .bill-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .bill-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .bill-status.proposed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .bill-status.passed {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .bill-status.rejected {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .news-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .news-item {
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .news-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+        
+        .news-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .news-summary {
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+        
+        .news-sentiment {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .news-sentiment.positive {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .news-sentiment.negative {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .news-sentiment.neutral {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .politician-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .network-visualization {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/">newsbot.kr</a>
+                </div>
+                <nav class="nav">
+                    <a href="/" class="nav-link">홈</a>
+                    <a href="/politician.html" class="nav-link active">정치인 분석</a>
+                    <a href="#" class="nav-link">뉴스</a>
+                    <a href="#" class="nav-link">통계</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 정청래 의원 히어로 섹션 -->
+    <section class="politician-hero">
+        <div class="container">
+            <div class="politician-info">
+                <div class="politician-avatar">정</div>
+                <h1 class="politician-name">정청래</h1>
+                <p class="politician-title">서울 마포구을 국회의원</p>
+                <div class="politician-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-score">4.08</span>
+                        <span class="stat-label">종합 점수</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="connection-count">20</span>
+                        <span class="stat-label">인맥 연결</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="bill-count">12</span>
+                        <span class="stat-label">입법발의</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="news-count">45</span>
+                        <span class="stat-label">뉴스 언급</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-content">
+        <div class="content-grid">
+            <!-- 인맥 네트워크 섹션 -->
+            <div class="network-section">
+                <h2 class="section-title">
+                    <span class="section-icon">👥</span>
+                    인맥 네트워크
+                </h2>
+                <div class="network-visualization" id="network-viz">
+                    <!-- 네트워크 시각화가 여기에 렌더링됩니다 -->
+                </div>
+                <div class="connection-list" id="connection-list">
+                    <!-- 연결 목록이 여기에 표시됩니다 -->
+                </div>
+            </div>
+
+            <!-- 입법발의 섹션 -->
+            <div class="bills-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📋</span>
+                    입법발의 현황
+                </h2>
+                <div id="bills-list">
+                    <!-- 입법발의 목록이 여기에 표시됩니다 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 뉴스 섹션 -->
+        <div class="news-section">
+            <h2 class="section-title">
+                <span class="section-icon">📰</span>
+                관련 뉴스
+            </h2>
+            <div class="news-grid" id="news-grid">
+                <!-- 뉴스 목록이 여기에 표시됩니다 -->
+            </div>
+        </div>
+    </main>
+
+    <!-- 스크립트 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="static/script.js"></script>
+    <script>
+        // 정청래 의원 전용 스크립트
+        const API_BASE_URL = 'http://localhost:8000';
+        
+        // 페이지 로드 시 데이터 로드
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPoliticianData();
+        });
+        
+        async function loadPoliticianData() {
+            try {
+                // 정청래 의원의 평가 데이터 로드
+                const evaluationResponse = await fetch(`${API_BASE_URL}/api/evaluation/politician/정청래`);
+                const evaluationData = await evaluationResponse.json();
+                
+                if (evaluationData.success) {
+                    updatePoliticianStats(evaluationData.data);
+                }
+                
+                // 연결성 데이터 로드
+                const connectivityResponse = await fetch(`${API_BASE_URL}/api/connectivity/politician/정청래`);
+                const connectivityData = await connectivityResponse.json();
+                
+                if (connectivityData.success) {
+                    renderNetworkVisualization(connectivityData.data);
+                    renderConnectionList(connectivityData.data);
+                }
+                
+                // 입법발의 데이터 로드 (가상 데이터)
+                loadBillsData();
+                
+                // 뉴스 데이터 로드
+                loadNewsData();
+                
+            } catch (error) {
+                console.error('데이터 로드 실패:', error);
+            }
+        }
+        
+        function updatePoliticianStats(data) {
+            document.getElementById('total-score').textContent = data.total_score.toFixed(2);
+        }
+        
+        function renderNetworkVisualization(data) {
+            const container = document.getElementById('network-viz');
+            container.innerHTML = '';
+            
+            // 중앙 노드 (정청래)
+            const centerNode = document.createElement('div');
+            centerNode.className = 'network-node center';
+            centerNode.textContent = '정청래';
+            centerNode.style.left = '50%';
+            centerNode.style.top = '50%';
+            centerNode.style.transform = 'translate(-50%, -50%)';
+            container.appendChild(centerNode);
+            
+            // 연결 노드들
+            data.connections.slice(0, 10).forEach((connection, index) => {
+                const node = document.createElement('div');
+                node.className = 'network-node connection';
+                node.textContent = connection.politician.substring(0, 2);
+                node.title = connection.politician;
+                
+                // 원형으로 배치
+                const angle = (index / 10) * 2 * Math.PI;
+                const radius = 120;
+                const centerX = 200;
+                const centerY = 200;
+                
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                
+                node.style.left = x + 'px';
+                node.style.top = y + 'px';
+                node.style.transform = 'translate(-50%, -50%)';
+                
+                // 연결선
+                const line = document.createElement('div');
+                line.className = 'network-line';
+                const lineLength = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+                const lineAngle = Math.atan2(y - centerY, x - centerX);
+                
+                line.style.width = lineLength + 'px';
+                line.style.left = centerX + 'px';
+                line.style.top = centerY + 'px';
+                line.style.transform = `rotate(${lineAngle}rad)`;
+                
+                container.appendChild(line);
+                container.appendChild(node);
+            });
+        }
+        
+        function renderConnectionList(data) {
+            const container = document.getElementById('connection-list');
+            container.innerHTML = '';
+            
+            data.connections.forEach(connection => {
+                const item = document.createElement('div');
+                item.className = 'connection-item';
+                item.innerHTML = `
+                    <div class="connection-avatar">${connection.politician.substring(0, 2)}</div>
+                    <div class="connection-info">
+                        <div class="connection-name">${connection.politician}</div>
+                        <div class="connection-type">${connection.type === 'party' ? '같은 정당' : connection.type === 'district' ? '같은 지역구' : '같은 위원회'}</div>
+                    </div>
+                    <div class="connection-strength">${(connection.strength * 100).toFixed(0)}%</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+        
+        function loadBillsData() {
+            const container = document.getElementById('bills-list');
+            
+            // 가상 입법발의 데이터
+            const bills = [
+                {
+                    title: "국민안전강화법 일부개정법률안",
+                    description: "국민의 생명과 안전을 보호하기 위한 법률 개정안으로, 안전관리체계 강화 및 예방조치 강화를 주요 내용으로 함",
+                    status: "proposed",
+                    date: "2024-12-15",
+                    coSponsors: 15
+                },
+                {
+                    title: "지역균형발전특별법 일부개정법률안",
+                    description: "지역 간 균형발전을 도모하고 지역경제 활성화를 위한 특별법 개정안",
+                    status: "passed",
+                    date: "2024-11-20",
+                    coSponsors: 23
+                },
+                {
+                    title: "환경보호법 일부개정법률안",
+                    description: "환경보호를 위한 규제 강화 및 환경오염 방지 조치를 포함한 법률 개정안",
+                    status: "proposed",
+                    date: "2024-10-30",
+                    coSponsors: 8
+                }
+            ];
+            
+            container.innerHTML = '';
+            bills.forEach(bill => {
+                const item = document.createElement('div');
+                item.className = 'bill-item';
+                item.innerHTML = `
+                    <div class="bill-title">${bill.title}</div>
+                    <div class="bill-description">${bill.description}</div>
+                    <div class="bill-meta">
+                        <span>공동발의: ${bill.coSponsors}명</span>
+                        <span class="bill-status ${bill.status}">
+                            ${bill.status === 'proposed' ? '제안' : bill.status === 'passed' ? '가결' : '부결'}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+        
+        function loadNewsData() {
+            const container = document.getElementById('news-grid');
+            
+            // 가상 뉴스 데이터
+            const news = [
+                {
+                    title: "정청래 의원, 국민안전강화법 발의로 주목",
+                    summary: "정청래 의원이 국민안전강화법 일부개정법률안을 발의하여 국정감사에서 주목받고 있습니다.",
+                    date: "2024-12-16",
+                    sentiment: "positive",
+                    source: "연합뉴스"
+                },
+                {
+                    title: "정청래 의원, 지역발전 정책에 대한 입장 발표",
+                    summary: "마포구을 지역구 의원으로서 지역균형발전에 대한 구체적인 정책 방향을 제시했습니다.",
+                    date: "2024-12-14",
+                    sentiment: "neutral",
+                    source: "뉴스1"
+                },
+                {
+                    title: "정청래 의원, 환경정책 관련 질의",
+                    summary: "국정감사에서 환경정책에 대한 질의를 통해 정부의 환경보호 정책에 대한 의견을 표명했습니다.",
+                    date: "2024-12-12",
+                    sentiment: "positive",
+                    source: "매일경제"
+                }
+            ];
+            
+            container.innerHTML = '';
+            news.forEach(item => {
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item';
+                newsItem.innerHTML = `
+                    <div class="news-title">${item.title}</div>
+                    <div class="news-summary">${item.summary}</div>
+                    <div class="news-meta">
+                        <span>${item.source} · ${item.date}</span>
+                        <span class="news-sentiment ${item.sentiment}">
+                            ${item.sentiment === 'positive' ? '긍정' : item.sentiment === 'negative' ? '부정' : '중립'}
+                        </span>
+                    </div>
+                `;
+                container.appendChild(newsItem);
+            });
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,125 @@
+{
+  "evaluation_date": "2025-09-16T11:42:51.423247",
+  "total_evaluated_politicians": 522,
+  "average_score": 20.03,
+  "category_distribution": {
+    "부족": 299,
+    "미흡": 220,
+    "보통": 3
+  },
+  "top_10_politicians": [
+    {
+      "name": "김원이의원 등 17인",
+      "score": 42.01,
+      "category": "보통"
+    },
+    {
+      "name": "박수현의원 외 169인",
+      "score": 41.49,
+      "category": "보통"
+    },
+    {
+      "name": "김주영의원 등 16인",
+      "score": 41.2,
+      "category": "보통"
+    },
+    {
+      "name": "이철규의원 등 13인",
+      "score": 39.31,
+      "category": "미흡"
+    },
+    {
+      "name": "정부",
+      "score": 38.64,
+      "category": "미흡"
+    },
+    {
+      "name": "박찬대의원 등 2인 외 276인",
+      "score": 37.72,
+      "category": "미흡"
+    },
+    {
+      "name": "방송통신위원회위원장",
+      "score": 36.35,
+      "category": "미흡"
+    },
+    {
+      "name": "강유정의원 등 10인",
+      "score": 28.4,
+      "category": "미흡"
+    },
+    {
+      "name": "강대식의원 등 12인",
+      "score": 27.2,
+      "category": "미흡"
+    },
+    {
+      "name": "한병도의원 등 10인",
+      "score": 26.8,
+      "category": "미흡"
+    }
+  ],
+  "bottom_10_politicians": [
+    {
+      "name": "박상혁의원 등 10인",
+      "score": 11.71,
+      "category": "부족"
+    },
+    {
+      "name": "장경태의원 등 17인",
+      "score": 12.65,
+      "category": "부족"
+    },
+    {
+      "name": "송언석의원 등 12인",
+      "score": 12.77,
+      "category": "부족"
+    },
+    {
+      "name": "조경태의원 등 11인",
+      "score": 12.93,
+      "category": "부족"
+    },
+    {
+      "name": "김문수의원 등 15인",
+      "score": 13.03,
+      "category": "부족"
+    },
+    {
+      "name": "김문수의원 등 16인",
+      "score": 13.09,
+      "category": "부족"
+    },
+    {
+      "name": "민홍철의원 등 12인",
+      "score": 13.64,
+      "category": "부족"
+    },
+    {
+      "name": "강대식의원 등 10인",
+      "score": 13.98,
+      "category": "부족"
+    },
+    {
+      "name": "유용원의원 등 11인",
+      "score": 14.2,
+      "category": "부족"
+    },
+    {
+      "name": "김한규의원 등 12인",
+      "score": 14.24,
+      "category": "부족"
+    }
+  ],
+  "evaluation_criteria": {
+    "legislative_activity": "입법 활동량 (15%)",
+    "passage_rate": "법안 통과율 (20%)",
+    "policy_impact": "정책 영향도 (15%)",
+    "legislative_quality": "입법 품질 (10%)",
+    "political_agenda": "정치적 아젠다 (15%)",
+    "intent_consistency": "의도 일관성 (10%)",
+    "bill_diversity": "법안 다양성 (5%)",
+    "collaboration": "협력 활동 (5%)",
+    "committee_activity": "위원회 활동 (5%)"
+  }
+}

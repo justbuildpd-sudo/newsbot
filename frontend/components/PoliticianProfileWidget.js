@@ -1,162 +1,214 @@
 import { useState, useEffect } from 'react'
+import MemberDetailWidget from './MemberDetailWidget'
 
 const PoliticianProfileWidget = () => {
   const [politicians, setPoliticians] = useState([])
+  const [billScores, setBillScores] = useState({})
   const [isLoading, setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [selectedMember, setSelectedMember] = useState(null)
+  const itemsPerPage = 10
 
   useEffect(() => {
-    // 정치인 데이터 로딩 시뮬레이션
-    const mockPoliticians = [
-      {
-        id: 1,
-        name: "윤석열",
-        party: "국민의힘",
-        position: "대통령",
-        mentionCount: 1250,
-        sentiment: 0.3,
-        recentStatement: "경제 회복을 위한 정책을 추진하겠습니다."
-      },
-      {
-        id: 2,
-        name: "이재명",
-        party: "더불어민주당",
-        position: "대표",
-        mentionCount: 980,
-        sentiment: -0.1,
-        recentStatement: "정부의 정책에 대해 우려를 표명합니다."
-      },
-      {
-        id: 3,
-        name: "안철수",
-        party: "국민의당",
-        position: "대표",
-        mentionCount: 720,
-        sentiment: 0.1,
-        recentStatement: "새로운 정치를 제안합니다."
-      },
-      {
-        id: 4,
-        name: "조국",
-        party: "더불어민주당",
-        position: "의원",
-        mentionCount: 650,
-        sentiment: -0.2,
-        recentStatement: "법무정책 개혁이 필요합니다."
-      }
-    ]
-
-    setTimeout(() => {
-      setPoliticians(mockPoliticians)
-      setIsLoading(false)
-    }, 1000)
+    loadPoliticians(0)
+    loadBillScores()
   }, [])
 
-  const getSentimentColor = (sentiment) => {
-    if (sentiment > 0.2) return 'text-green-500'
-    if (sentiment < -0.2) return 'text-red-500'
-    return 'text-yellow-500'
+  const loadBillScores = async () => {
+    try {
+      const response = await fetch('http://localhost:8001/api/bills/scores')
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success) {
+          setBillScores(data.data)
+        }
+      }
+    } catch (error) {
+      console.error('Error loading bill scores:', error)
+    }
   }
 
-  const getSentimentLabel = (sentiment) => {
-    if (sentiment > 0.2) return '긍정'
-    if (sentiment < -0.2) return '부정'
-    return '중립'
+  const loadPoliticians = async (page = 0) => {
+    try {
+      if (page === 0) {
+        setIsLoading(true)
+      } else {
+        setIsLoadingMore(true)
+      }
+
+      const response = await fetch(`http://localhost:8001/api/assembly/members`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch politicians')
+      }
+      
+      const data = await response.json()
+      const allPoliticians = data.data || []
+      
+      // 페이지네이션 적용
+      const startIndex = page * itemsPerPage
+      const endIndex = startIndex + itemsPerPage
+      const pagePoliticians = allPoliticians.slice(startIndex, endIndex)
+      
+      if (page === 0) {
+        setPoliticians(pagePoliticians)
+      } else {
+        setPoliticians(prev => [...prev, ...pagePoliticians])
+      }
+      
+      setHasMore(endIndex < allPoliticians.length)
+      setCurrentPage(page)
+      
+    } catch (error) {
+      console.error('Error loading politicians:', error)
+    } finally {
+      setIsLoading(false)
+      setIsLoadingMore(false)
+    }
+  }
+
+  const loadMore = () => {
+    if (!isLoadingMore && hasMore) {
+      loadPoliticians(currentPage + 1)
+    }
   }
 
   const getPartyColor = (party) => {
     const colors = {
-      '국민의힘': 'bg-red-100 text-red-800',
-      '더불어민주당': 'bg-blue-100 text-blue-800',
-      '국민의당': 'bg-yellow-100 text-yellow-800',
-      '정의당': 'bg-green-100 text-green-800'
+      '더불어민주당': 'bg-blue-100 text-blue-800 border-blue-200',
+      '국민의힘': 'bg-red-100 text-red-800 border-red-200',
+      '개혁신당': 'bg-green-100 text-green-800 border-green-200',
+      '새로운미래': 'bg-purple-100 text-purple-800 border-purple-200',
+      '조국혁신당': 'bg-orange-100 text-orange-800 border-orange-200',
+      '진보당': 'bg-pink-100 text-pink-800 border-pink-200',
+      '기본소득당': 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      '녹색정의당': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+      '무소속': 'bg-gray-100 text-gray-800 border-gray-200',
+      '정당정보없음': 'bg-gray-100 text-gray-600 border-gray-200'
     }
-    return colors[party] || 'bg-gray-100 text-gray-800'
+    return colors[party] || colors['정당정보없음']
+  }
+
+  const getInitials = (name) => {
+    return name ? name.charAt(0) : '?'
+  }
+
+  const getBillScore = (memberName) => {
+    return billScores[memberName] || { main_proposals: 0, co_proposals: 0, total_bills: 0 }
+  }
+
+  const handleMemberClick = (memberName) => {
+    setSelectedMember(memberName)
   }
 
   if (isLoading) {
     return (
-      <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
-        <div className="animate-pulse">
-          <div className="h-6 bg-dark-700 rounded mb-4"></div>
-          <div className="space-y-3">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-dark-700 rounded-full"></div>
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-dark-700 rounded"></div>
-                  <div className="h-3 bg-dark-700 rounded w-2/3"></div>
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">국회의원 현황</h2>
+        <div className="flex items-center justify-center h-32">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-white flex items-center">
-          <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-          정치인 프로필
-        </h2>
-        <span className="text-sm text-dark-400">실시간</span>
-      </div>
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <h2 className="text-xl font-bold text-gray-800 mb-4">국회의원 현황</h2>
       
-      <div className="space-y-4">
-        {politicians.map((politician) => (
-          <div key={politician.id} className="bg-dark-700 rounded-lg p-4 hover:bg-dark-600 transition-colors cursor-pointer">
-            <div className="flex items-start space-x-3">
-              {/* 프로필 이미지 */}
-              <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                {politician.name.charAt(0)}
-              </div>
-              
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center space-x-2 mb-1">
-                  <h3 className="text-sm font-semibold text-white truncate">
-                    {politician.name}
-                  </h3>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPartyColor(politician.party)}`}>
-                    {politician.party}
-                  </span>
+      <div className="h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+        <div className="grid grid-cols-1 gap-4">
+          {politicians.map((politician, index) => {
+            const billScore = getBillScore(politician.name)
+            return (
+              <div 
+                key={politician.id || index} 
+                className="flex items-center space-x-4 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                onClick={() => handleMemberClick(politician.name)}
+              >
+                {/* 프로필 영역 - 정당명 텍스트 표시 */}
+                <div className="flex-shrink-0">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold ${getPartyColor(politician.party)}`}>
+                    {getInitials(politician.name)}
+                  </div>
                 </div>
                 
-                <p className="text-xs text-dark-400 mb-2">
-                  {politician.position}
-                </p>
-                
-                <p className="text-xs text-dark-300 line-clamp-2 mb-3">
-                  "{politician.recentStatement}"
-                </p>
-                
-                <div className="flex items-center justify-between text-xs">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-dark-400">
-                      언급 {politician.mentionCount.toLocaleString()}회
-                    </span>
-                    <span className={`font-medium ${getSentimentColor(politician.sentiment)}`}>
-                      {getSentimentLabel(politician.sentiment)}
+                {/* 정보 영역 */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <h3 className="text-sm font-medium text-gray-900 truncate">
+                      {politician.name}
+                    </h3>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getPartyColor(politician.party)}`}>
+                      {politician.party || '정당정보없음'}
                     </span>
                   </div>
-                  <button className="text-primary-500 hover:text-primary-400 transition-colors">
-                    자세히 →
-                  </button>
+                  
+                  <div className="text-xs text-gray-500 space-y-1">
+                    {politician.district && (
+                      <p className="truncate">지역구: {politician.district}</p>
+                    )}
+                    {politician.office && (
+                      <p className="truncate">소속: {politician.office}</p>
+                    )}
+                    {politician.terms && (
+                      <p className="truncate">선거구분: {politician.terms}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* 발의의안 점수 영역 */}
+                <div className="flex-shrink-0 text-right">
+                  <div className="text-xs text-gray-500 mb-1">발의의안</div>
+                  <div className="flex items-center space-x-2">
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-blue-600">{billScore.main_proposals}</div>
+                      <div className="text-xs text-gray-400">대표</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-purple-600">{billScore.co_proposals}</div>
+                      <div className="text-xs text-gray-400">공동</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-green-600">{billScore.total_bills}</div>
+                      <div className="text-xs text-gray-400">총계</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
+            )
+          })}
+        </div>
       </div>
       
-      <div className="mt-4 pt-4 border-t border-dark-700">
-        <button className="w-full text-center text-sm text-blue-500 hover:text-blue-400 transition-colors">
-          모든 정치인 보기
-        </button>
+      {/* 더 보기 버튼 */}
+      {hasMore && (
+        <div className="mt-4 text-center">
+          <button
+            onClick={loadMore}
+            disabled={isLoadingMore}
+            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isLoadingMore ? '로딩 중...' : '더 보기'}
+          </button>
+        </div>
+      )}
+      
+      {/* 통계 정보 */}
+      <div className="mt-4 pt-4 border-t border-gray-200">
+        <p className="text-xs text-gray-500 text-center">
+          총 {politicians.length}명 표시 중
+        </p>
       </div>
+
+      {/* 의원 상세정보 모달 */}
+      {selectedMember && (
+        <MemberDetailWidget 
+          memberName={selectedMember}
+          onClose={() => setSelectedMember(null)}
+        />
+      )}
     </div>
   )
 }

@@ -1342,6 +1342,307 @@ body {
     }
 }
 
+/* 연결성 네트워크 위젯 스타일 */
+.connectivity-widget {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border: 1px solid #475569;
+}
+
+.connectivity-content {
+    padding: 1rem 0;
+}
+
+.connectivity-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 8px;
+    border: 1px solid #475569;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3b82f6;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.connectivity-visualization {
+    margin-bottom: 1.5rem;
+}
+
+.family-tree-container {
+    text-align: center;
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #475569;
+}
+
+.family-tree-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.top-connected h4 {
+    color: #e2e8f0;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.connected-politician-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    margin: 0.25rem 0;
+    background: #374151;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #4b5563;
+}
+
+.connected-politician-item:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.connected-politician-item:active {
+    transform: translateY(0);
+}
+
+/* 모달 스타일 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: #1f2937;
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { 
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 평가 위젯 스타일 */
+.evaluation-widget {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border: 1px solid #475569;
+}
+
+.evaluation-content {
+    padding: 1rem 0;
+}
+
+.evaluation-filters {
+    margin-bottom: 1.5rem;
+}
+
+.filter-select {
+    background: #374151;
+    color: #e2e8f0;
+    border: 1px solid #4b5563;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.evaluation-stats {
+    margin-bottom: 1.5rem;
+}
+
+.evaluation-ranking {
+    margin-bottom: 1.5rem;
+}
+
+.evaluation-distribution {
+    margin-bottom: 1rem;
+}
+
+.evaluation-ranking-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #374151;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 6px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #4b5563;
+}
+
+.evaluation-ranking-item:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.evaluation-ranking-item:active {
+    transform: translateY(0);
+}
+
+.evaluation-rank-number {
+    width: 32px;
+    height: 32px;
+    background: #3b82f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 12px;
+}
+
+.evaluation-politician-info {
+    flex: 1;
+}
+
+.evaluation-politician-name {
+    color: #e2e8f0;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.evaluation-politician-details {
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.evaluation-scores {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.evaluation-score-item {
+    text-align: right;
+}
+
+.evaluation-score-value {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.evaluation-score-label {
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.evaluation-total-score {
+    color: #3b82f6;
+}
+
+.evaluation-news-score {
+    color: #60a5fa;
+}
+
+.evaluation-bill-score {
+    color: #34d399;
+}
+
+.evaluation-connectivity-score {
+    color: #a78bfa;
+}
+
+.evaluation-distribution-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 8px 0;
+}
+
+.evaluation-distribution-range {
+    color: #e2e8f0;
+    font-size: 14px;
+    min-width: 60px;
+}
+
+.evaluation-distribution-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    margin: 0 12px;
+}
+
+.evaluation-distribution-bar {
+    width: 128px;
+    background: #374151;
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.evaluation-distribution-bar-fill {
+    background: #3b82f6;
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.evaluation-distribution-count {
+    color: #9ca3af;
+    font-size: 12px;
+    min-width: 32px;
+}
+
 /* Utility Classes */
 .hidden {
     display: none !important;
@@ -1374,5 +1675,93 @@ body {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* 정치인 선택 섹션 */
+.politician-selector {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.politician-selector h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.politician-cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.politician-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    text-align: center;
+}
+
+.politician-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.politician-card .politician-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    margin: 0 auto 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.politician-card .politician-info h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.politician-card .politician-info p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.politician-card .politician-info .score {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* 반응형 디자인 추가 */
+@media (max-width: 768px) {
+    .politician-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .politician-card {
+        min-width: 250px;
     }
 }

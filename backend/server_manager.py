@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-서버 관리 도구
-뉴스봇 서버의 시작, 중지, 상태 확인, 로그 관리 등을 담당합니다.
+NewsBot 서버 관리자
+서버 자동 재시작 및 모니터링 기능을 제공합니다.
 """
 
 import os
@@ -10,182 +9,147 @@ import sys
 import time
 import signal
 import subprocess
+import logging
 import requests
-import json
 from datetime import datetime
-from typing import Optional, Dict, List
+
+# 로깅 설정
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class ServerManager:
-    def __init__(self):
+    def __init__(self, server_script="stable_server.py", port=8000, max_restarts=5):
+        self.server_script = server_script
+        self.port = port
+        self.max_restarts = max_restarts
+        self.restart_count = 0
         self.server_process = None
-        self.port = 8001
-        self.host = "0.0.0.0"
-        self.log_file = "server.log"
-        self.pid_file = "server.pid"
+        self.running = True
         
-    def start_server(self, background: bool = True) -> bool:
+        # 시그널 핸들러 등록
+        signal.signal(signal.SIGINT, self.signal_handler)
+        signal.signal(signal.SIGTERM, self.signal_handler)
+    
+    def signal_handler(self, signum, frame):
+        """시그널 핸들러"""
+        logger.info(f"시그널 {signum} 수신. 서버를 종료합니다...")
+        self.running = False
+        self.stop_server()
+        sys.exit(0)
+    
+    def start_server(self):
         """서버 시작"""
         try:
-            if self.is_server_running():
-                print("⚠️ 서버가 이미 실행 중입니다.")
-                return True
-                
-            print("🚀 서버 시작 중...")
+            logger.info(f"서버 시작 중... ({self.server_script})")
+            self.server_process = subprocess.Popen(
+                [sys.executable, self.server_script],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
             
-            cmd = [
-                sys.executable, "-m", "uvicorn", 
-                "api_server:app", 
-                "--host", self.host, 
-                "--port", str(self.port),
-                "--log-level", "info"
-            ]
+            # 서버 시작 대기
+            time.sleep(5)
             
-            if background:
-                with open(self.log_file, 'a') as log:
-                    self.server_process = subprocess.Popen(
-                        cmd, 
-                        stdout=log, 
-                        stderr=subprocess.STDOUT,
-                        preexec_fn=os.setsid
-                    )
-                
-                # PID 저장
-                with open(self.pid_file, 'w') as f:
-                    f.write(str(self.server_process.pid))
-                    
-                print(f"✅ 서버가 백그라운드에서 시작되었습니다. (PID: {self.server_process.pid})")
-            else:
-                self.server_process = subprocess.Popen(cmd)
-                print("✅ 서버가 포그라운드에서 시작되었습니다.")
-                
-            # 서버 준비 대기
-            self.wait_for_server_ready()
-            return True
-            
-        except Exception as e:
-            print(f"❌ 서버 시작 실패: {e}")
-            return False
-    
-    def stop_server(self) -> bool:
-        """서버 중지"""
-        try:
-            if self.server_process:
-                print("🛑 서버 중지 중...")
-                os.killpg(os.getpgid(self.server_process.pid), signal.SIGTERM)
-                self.server_process = None
-                
-                # PID 파일 삭제
-                if os.path.exists(self.pid_file):
-                    os.remove(self.pid_file)
-                    
-                print("✅ 서버가 중지되었습니다.")
+            if self.is_server_healthy():
+                logger.info(f"✅ 서버가 성공적으로 시작되었습니다. (PID: {self.server_process.pid})")
                 return True
             else:
-                print("⚠️ 실행 중인 서버가 없습니다.")
+                logger.error("❌ 서버 시작 실패")
                 return False
                 
         except Exception as e:
-            print(f"❌ 서버 중지 실패: {e}")
+            logger.error(f"서버 시작 중 오류 발생: {e}")
             return False
     
-    def restart_server(self) -> bool:
-        """서버 재시작"""
-        print("🔄 서버 재시작 중...")
-        self.stop_server()
-        time.sleep(2)
-        return self.start_server()
+    def stop_server(self):
+        """서버 중지"""
+        if self.server_process:
+            try:
+                logger.info("서버 중지 중...")
+                self.server_process.terminate()
+                self.server_process.wait(timeout=10)
+                logger.info("서버가 중지되었습니다.")
+            except subprocess.TimeoutExpired:
+                logger.warning("서버가 정상적으로 중지되지 않아 강제 종료합니다.")
+                self.server_process.kill()
+            except Exception as e:
+                logger.error(f"서버 중지 중 오류 발생: {e}")
     
-    def is_server_running(self) -> bool:
-        """서버 실행 상태 확인"""
+    def is_server_healthy(self):
+        """서버 상태 확인"""
         try:
             response = requests.get(f"http://localhost:{self.port}/api/health", timeout=5)
             return response.status_code == 200
-        except:
-            return False
-    
-    def wait_for_server_ready(self, timeout: int = 30) -> bool:
-        """서버 준비 완료 대기"""
-        print("⏳ 서버 준비 대기 중...")
-        start_time = time.time()
-        
-        while time.time() - start_time < timeout:
-            if self.is_server_running():
-                print("✅ 서버가 준비되었습니다.")
-                return True
-            time.sleep(1)
-            
-        print("❌ 서버 준비 시간 초과")
-        return False
-    
-    def get_server_status(self) -> Dict:
-        """서버 상태 정보"""
-        status = {
-            "running": self.is_server_running(),
-            "port": self.port,
-            "host": self.host,
-            "timestamp": datetime.now().isoformat()
-        }
-        
-        if os.path.exists(self.pid_file):
-            with open(self.pid_file, 'r') as f:
-                status["pid"] = int(f.read().strip())
-        
-        return status
-    
-    def get_logs(self, lines: int = 50) -> List[str]:
-        """서버 로그 조회"""
-        if not os.path.exists(self.log_file):
-            return ["로그 파일이 없습니다."]
-            
-        try:
-            with open(self.log_file, 'r', encoding='utf-8') as f:
-                all_lines = f.readlines()
-                return all_lines[-lines:] if lines > 0 else all_lines
         except Exception as e:
-            return [f"로그 읽기 실패: {e}"]
+            logger.debug(f"서버 상태 확인 실패: {e}")
+            return False
     
-    def clear_logs(self) -> bool:
-        """로그 파일 초기화"""
-        try:
-            if os.path.exists(self.log_file):
-                with open(self.log_file, 'w') as f:
-                    f.write("")
-                print("✅ 로그가 초기화되었습니다.")
-                return True
+    def restart_server(self):
+        """서버 재시작"""
+        if self.restart_count >= self.max_restarts:
+            logger.error(f"최대 재시작 횟수({self.max_restarts})에 도달했습니다. 서버를 종료합니다.")
             return False
-        except Exception as e:
-            print(f"❌ 로그 초기화 실패: {e}")
+        
+        self.restart_count += 1
+        logger.warning(f"서버 재시작 시도 {self.restart_count}/{self.max_restarts}")
+        
+        self.stop_server()
+        time.sleep(2)
+        
+        if self.start_server():
+            self.restart_count = 0  # 성공 시 카운터 리셋
+            return True
+        else:
             return False
+    
+    def monitor_server(self):
+        """서버 모니터링"""
+        logger.info("서버 모니터링 시작...")
+        
+        while self.running:
+            try:
+                if not self.is_server_healthy():
+                    logger.warning("서버가 응답하지 않습니다. 재시작을 시도합니다...")
+                    if not self.restart_server():
+                        break
+                else:
+                    # 성공적인 상태 확인 시 재시작 카운터 리셋
+                    if self.restart_count > 0:
+                        self.restart_count = 0
+                        logger.info("서버가 정상적으로 복구되었습니다.")
+                
+                time.sleep(30)  # 30초마다 확인
+                
+            except KeyboardInterrupt:
+                logger.info("사용자에 의해 중단되었습니다.")
+                break
+            except Exception as e:
+                logger.error(f"모니터링 중 오류 발생: {e}")
+                time.sleep(10)
+        
+        self.stop_server()
+        logger.info("서버 관리자가 종료되었습니다.")
+    
+    def run(self):
+        """서버 실행 및 모니터링"""
+        logger.info("=" * 50)
+        logger.info("NewsBot 서버 관리자 시작")
+        logger.info(f"서버 스크립트: {self.server_script}")
+        logger.info(f"포트: {self.port}")
+        logger.info(f"최대 재시작 횟수: {self.max_restarts}")
+        logger.info("=" * 50)
+        
+        if self.start_server():
+            self.monitor_server()
+        else:
+            logger.error("서버 시작에 실패했습니다.")
+            sys.exit(1)
 
 def main():
     """메인 함수"""
-    manager = ServerManager()
-    
-    if len(sys.argv) < 2:
-        print("사용법: python server_manager.py [start|stop|restart|status|logs|clear]")
-        return
-    
-    command = sys.argv[1].lower()
-    
-    if command == "start":
-        background = len(sys.argv) > 2 and sys.argv[2] == "bg"
-        manager.start_server(background)
-    elif command == "stop":
-        manager.stop_server()
-    elif command == "restart":
-        manager.restart_server()
-    elif command == "status":
-        status = manager.get_server_status()
-        print(json.dumps(status, indent=2, ensure_ascii=False))
-    elif command == "logs":
-        lines = int(sys.argv[2]) if len(sys.argv) > 2 else 50
-        logs = manager.get_logs(lines)
-        for log in logs:
-            print(log.rstrip())
-    elif command == "clear":
-        manager.clear_logs()
-    else:
-        print("알 수 없는 명령어입니다.")
+    server_manager = ServerManager()
+    server_manager.run()
 
 if __name__ == "__main__":
     main()

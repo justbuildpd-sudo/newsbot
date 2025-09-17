@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import NewsWidget from '../components/NewsWidget'
-import HotIssuesWidget from '../components/HotIssuesWidget'
+import RecentBillsWidget from '../components/RecentBillsWidget'
 import TrendChartWidget from '../components/TrendChartWidget'
 import PoliticianProfileWidget from '../components/PoliticianProfileWidget'
-import ConnectionNetworkWidget from '../components/ConnectionNetworkWidget'
+import ConnectivityNetworkWidget from '../components/ConnectivityNetworkWidget'
 import AnalysisReportWidget from '../components/AnalysisReportWidget'
+import PoliticianEvaluationWidget from '../components/PoliticianEvaluationWidget'
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
@@ -77,9 +78,9 @@ export default function Home() {
             <NewsWidget />
           </div>
 
-          {/* 핫이슈 랭킹 위젯 */}
+          {/* 최근 입법 위젯 */}
           <div className="lg:col-span-1">
-            <HotIssuesWidget />
+            <RecentBillsWidget />
           </div>
 
           {/* 트렌드 차트 위젯 */}
@@ -87,14 +88,19 @@ export default function Home() {
             <TrendChartWidget />
           </div>
 
-          {/* 정치인 프로필 위젯 */}
-          <div className="lg:col-span-1">
+          {/* 정치인 프로필 위젯 - 더 큰 크기로 조정 */}
+          <div className="lg:col-span-2">
             <PoliticianProfileWidget />
           </div>
 
           {/* 연결성 네트워크 위젯 */}
           <div className="lg:col-span-1">
-            <ConnectionNetworkWidget />
+            <ConnectivityNetworkWidget />
+          </div>
+
+          {/* 정치인 종합 평가 위젯 */}
+          <div className="lg:col-span-2">
+            <PoliticianEvaluationWidget />
           </div>
 
           {/* 분석 리포트 위젯 */}

@@ -9,12 +9,23 @@ let newsData = []; // 뉴스 데이터를 전역 변수로 저장
 // API 설정
 const API_BASE_URL = window.location.hostname === 'newsbot.kr' 
     ? 'https://newsbot-backend-6j3p.onrender.com'  // 프로덕션 (Render)
-    : 'http://localhost:8001';  // 로컬 개발
+    : 'http://localhost:8000';  // 로컬 개발
 
 // DOM 로드 완료 후 실행
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
+
+// 정치인 선택 함수
+function selectPolitician(politicianName) {
+    // 정청래 의원 페이지로 이동
+    if (politicianName === '정청래') {
+        window.location.href = 'politician.html';
+    } else {
+        // 다른 정치인은 추후 구현
+        alert(`${politicianName} 의원의 상세 분석 페이지는 준비 중입니다.`);
+    }
+}
 
 // 앱 초기화
 function initializeApp() {
@@ -30,6 +41,8 @@ function initializeApp() {
     loadPoliticianStats();
     loadCommitteeStats();
     loadReportData();
+    loadConnectivityData();
+    loadEvaluationData();
     initializeNetworkVisualization();
     initializeTrendChart();
     
@@ -1046,4 +1059,471 @@ function showPoliticianModal(politician) {
 
 function showNetworkNodeDetail(nodeId) {
     alert(`"${nodeId}" 네트워크 노드 상세 보기 기능은 구현 예정입니다.`);
+}
+
+// 연결성 데이터 로드
+async function loadConnectivityData() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/connectivity/stats`);
+        const data = await response.json();
+        
+        if (data.success) {
+            updateConnectivityStats(data.data);
+            loadTopConnectedPoliticians(data.data.top_connected);
+        }
+    } catch (error) {
+        console.error('연결성 데이터 로드 실패:', error);
+    }
+}
+
+// 연결성 통계 업데이트
+function updateConnectivityStats(stats) {
+    const totalPoliticians = document.getElementById('totalPoliticians');
+    const totalConnections = document.getElementById('totalConnections');
+    const partyConnections = document.getElementById('partyConnections');
+    const districtConnections = document.getElementById('districtConnections');
+    
+    if (totalPoliticians) totalPoliticians.textContent = stats.total_politicians.toLocaleString();
+    if (totalConnections) totalConnections.textContent = stats.total_connections.toLocaleString();
+    
+    const partyConn = stats.connection_types.find(t => t.type === 'party');
+    if (partyConnections && partyConn) partyConnections.textContent = partyConn.count.toLocaleString();
+    
+    const districtConn = stats.connection_types.find(t => t.type === 'district');
+    if (districtConnections && districtConn) districtConnections.textContent = districtConn.count.toLocaleString();
+}
+
+// 가장 연결성이 높은 정치인 목록 로드
+function loadTopConnectedPoliticians(topConnected) {
+    const container = document.getElementById('topConnected');
+    if (!container || !topConnected) return;
+    
+    container.innerHTML = '<h4 style="margin-bottom: 10px; color: #e2e8f0;">가장 연결성이 높은 정치인</h4>';
+    
+    topConnected.slice(0, 5).forEach((politician, index) => {
+        const item = document.createElement('div');
+        item.className = 'connected-politician-item';
+        item.style.cssText = `
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 4px 0;
+            background: #2d3748;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        `;
+        
+        item.innerHTML = `
+            <div style="display: flex; align-items: center;">
+                <div style="width: 24px; height: 24px; background: #4299e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold; margin-right: 8px;">
+                    ${index + 1}
+                </div>
+                <span style="color: #e2e8f0; font-weight: 500;">${politician.name}</span>
+            </div>
+            <div style="color: #4299e1; font-weight: bold;">${politician.connections}개</div>
+        `;
+        
+        item.addEventListener('click', () => showPoliticianConnections(politician.name));
+        item.addEventListener('mouseenter', () => item.style.backgroundColor = '#4a5568');
+        item.addEventListener('mouseleave', () => item.style.backgroundColor = '#2d3748');
+        
+        container.appendChild(item);
+    });
+}
+
+// 특정 정치인의 연결 정보 표시
+async function showPoliticianConnections(politicianName) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/connectivity/politician/${encodeURIComponent(politicianName)}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            showPoliticianConnectivityModal(data.data);
+        }
+    } catch (error) {
+        console.error('정치인 연결 정보 로드 실패:', error);
+        alert('정치인 연결 정보를 불러올 수 없습니다.');
+    }
+}
+
+// 정치인 연결 정보 모달 표시
+function showPoliticianConnectivityModal(data) {
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    `;
+    
+    modal.innerHTML = `
+        <div style="background: #2d3748; border-radius: 12px; padding: 24px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: #e2e8f0; font-size: 20px; font-weight: bold;">${data.politician.name}의 연결 정보</h3>
+                <button onclick="this.closest('.modal').remove()" style="background: none; border: none; color: #a0aec0; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                <div>
+                    <div style="color: #a0aec0; font-size: 14px; margin-bottom: 4px;">정당</div>
+                    <div style="color: #e2e8f0;">${data.politician.party}</div>
+                </div>
+                <div>
+                    <div style="color: #a0aec0; font-size: 14px; margin-bottom: 4px;">지역구</div>
+                    <div style="color: #e2e8f0;">${data.politician.district}</div>
+                </div>
+                <div>
+                    <div style="color: #a0aec0; font-size: 14px; margin-bottom: 4px;">소속 위원회</div>
+                    <div style="color: #e2e8f0;">${data.politician.committee || '정보없음'}</div>
+                </div>
+                <div>
+                    <div style="color: #a0aec0; font-size: 14px; margin-bottom: 4px;">총 연결 수</div>
+                    <div style="color: #4299e1; font-weight: bold;">${data.total_connections}개</div>
+                </div>
+            </div>
+            
+            <div>
+                <h4 style="color: #e2e8f0; margin-bottom: 12px;">주요 연결</h4>
+                <div style="max-height: 200px; overflow-y: auto;">
+                    ${data.connections.slice(0, 10).map(conn => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #4a5568;">
+                            <span style="color: #e2e8f0;">${conn.name}</span>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="color: #a0aec0; font-size: 12px;">${conn.type}</span>
+                                <span style="color: #4299e1; font-weight: bold;">${conn.strength}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modal.className = 'modal';
+    document.body.appendChild(modal);
+}
+
+// 연결성 상세 분석 표시
+function showConnectivityDetails() {
+    alert('연결성 상세 분석 기능은 준비 중입니다.');
+}
+
+// 평가 데이터 로드
+async function loadEvaluationData() {
+    try {
+        // 정당별 통계 로드
+        const partyStatsResponse = await fetch(`${API_BASE_URL}/api/evaluation/party-stats`);
+        const partyStatsData = await partyStatsResponse.json();
+        
+        if (partyStatsData.success) {
+            updatePartyStats(partyStatsData.data);
+        }
+        
+        // 정치인 랭킹 로드
+        const rankingResponse = await fetch(`${API_BASE_URL}/api/evaluation/ranking?limit=20`);
+        const rankingData = await rankingResponse.json();
+        
+        if (rankingData.success) {
+            updateEvaluationRanking(rankingData.data);
+        }
+        
+        // 점수 분포 로드
+        const distributionResponse = await fetch(`${API_BASE_URL}/api/evaluation/score-distribution`);
+        const distributionData = await distributionResponse.json();
+        
+        if (distributionData.success) {
+            updateScoreDistribution(distributionData.data);
+        }
+        
+    } catch (error) {
+        console.error('평가 데이터 로드 실패:', error);
+    }
+}
+
+// 정당별 통계 업데이트
+function updatePartyStats(data) {
+    const container = document.getElementById('evaluationStats');
+    if (!container || !data.party_statistics) return;
+    
+    container.innerHTML = '<h4 style="margin-bottom: 15px; color: #e2e8f0; font-size: 16px;">정당별 평균 점수</h4>';
+    
+    const statsGrid = document.createElement('div');
+    statsGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px;';
+    
+    data.party_statistics.forEach(party => {
+        const partyCard = document.createElement('div');
+        partyCard.style.cssText = 'background: #374151; border-radius: 8px; padding: 12px; border: 1px solid #4b5563;';
+        
+        const partyColor = getPartyColor(party.party);
+        
+        partyCard.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 12px; height: 12px; background: ${partyColor}; border-radius: 50%; margin-right: 8px;"></div>
+                    <span style="color: #e2e8f0; font-weight: 500;">${party.party}</span>
+                </div>
+                <span style="color: #9ca3af; font-size: 12px;">${party.count}명</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="color: #9ca3af; font-size: 14px;">평균 점수</span>
+                <span style="color: #3b82f6; font-size: 18px; font-weight: bold;">${party.avg_score}</span>
+            </div>
+            <div style="margin-top: 8px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; color: #9ca3af;">
+                    <span>최고: ${party.max_score}</span>
+                    <span>최저: ${party.min_score}</span>
+                </div>
+            </div>
+        `;
+        
+        statsGrid.appendChild(partyCard);
+    });
+    
+    container.appendChild(statsGrid);
+}
+
+// 평가 랭킹 업데이트
+function updateEvaluationRanking(data) {
+    const container = document.getElementById('evaluationRanking');
+    if (!container || !data.politicians) return;
+    
+    container.innerHTML = '<h4 style="margin-bottom: 15px; color: #e2e8f0; font-size: 16px;">정치인 랭킹</h4>';
+    
+    const rankingList = document.createElement('div');
+    rankingList.style.cssText = 'max-height: 300px; overflow-y: auto;';
+    
+    data.politicians.forEach((politician, index) => {
+        const rankingItem = document.createElement('div');
+        rankingItem.style.cssText = 'display: flex; align-items: center; justify-content: space-between; background: #374151; border-radius: 6px; padding: 12px; margin: 6px 0; cursor: pointer; transition: background-color 0.2s; border: 1px solid #4b5563;';
+        
+        rankingItem.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 32px; height: 32px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
+                    ${politician.rank}
+                </div>
+                <div>
+                    <div style="color: #e2e8f0; font-weight: 500;">${politician.name}</div>
+                    <div style="color: #9ca3af; font-size: 12px;">${politician.party} • ${politician.district}</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="text-align: right;">
+                    <div style="color: #3b82f6; font-size: 18px; font-weight: bold;">${politician.total_score}</div>
+                    <div style="color: #9ca3af; font-size: 12px;">총점</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="color: #60a5fa; font-size: 14px;">${politician.scores.news.mention}</div>
+                    <div style="color: #9ca3af; font-size: 12px;">뉴스</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="color: #34d399; font-size: 14px;">${politician.scores.bill_sponsor.main}</div>
+                    <div style="color: #9ca3af; font-size: 12px;">의안</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="color: #a78bfa; font-size: 14px;">${politician.scores.connectivity.total}</div>
+                    <div style="color: #9ca3af; font-size: 12px;">연결</div>
+                </div>
+            </div>
+        `;
+        
+        rankingItem.addEventListener('click', () => showPoliticianEvaluationDetail(politician.name));
+        rankingItem.addEventListener('mouseenter', () => rankingItem.style.backgroundColor = '#4b5563');
+        rankingItem.addEventListener('mouseleave', () => rankingItem.style.backgroundColor = '#374151');
+        
+        rankingList.appendChild(rankingItem);
+    });
+    
+    container.appendChild(rankingList);
+}
+
+// 점수 분포 업데이트
+function updateScoreDistribution(data) {
+    const container = document.getElementById('evaluationDistribution');
+    if (!container || !data.distribution) return;
+    
+    container.innerHTML = '<h4 style="margin-bottom: 15px; color: #e2e8f0; font-size: 16px;">점수 분포</h4>';
+    
+    const distributionList = document.createElement('div');
+    distributionList.style.cssText = 'space-y: 8px;';
+    
+    data.distribution.forEach(range => {
+        const percentage = (range.count / data.statistics.total_count) * 100;
+        
+        const distributionItem = document.createElement('div');
+        distributionItem.style.cssText = 'display: flex; align-items: center; justify-content: space-between; margin: 8px 0;';
+        
+        distributionItem.innerHTML = `
+            <span style="color: #e2e8f0; font-size: 14px; min-width: 60px;">${range.range}</span>
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; margin: 0 12px;">
+                <div style="width: 128px; background: #374151; border-radius: 4px; height: 8px;">
+                    <div style="background: #3b82f6; height: 8px; border-radius: 4px; width: ${percentage}%;"></div>
+                </div>
+                <span style="color: #9ca3af; font-size: 12px; min-width: 32px;">${range.count}</span>
+            </div>
+        `;
+        
+        distributionList.appendChild(distributionItem);
+    });
+    
+    container.appendChild(distributionList);
+}
+
+// 정당 색상 반환
+function getPartyColor(party) {
+    const colors = {
+        '국민의힘': '#ef4444',
+        '더불어민주당': '#3b82f6',
+        '정의당': '#10b981',
+        '개혁신당': '#8b5cf6',
+        '정당정보없음': '#6b7280'
+    };
+    return colors[party] || '#9ca3af';
+}
+
+// 정당별 필터링
+function filterByParty() {
+    const partyFilter = document.getElementById('partyFilter');
+    const selectedParty = partyFilter.value;
+    
+    // 랭킹 데이터 다시 로드
+    loadEvaluationRanking(selectedParty);
+}
+
+// 정당별 랭킹 로드
+async function loadEvaluationRanking(party = 'all') {
+    try {
+        const url = party === 'all' 
+            ? `${API_BASE_URL}/api/evaluation/ranking?limit=20`
+            : `${API_BASE_URL}/api/evaluation/ranking?limit=20&party=${encodeURIComponent(party)}`;
+            
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.success) {
+            updateEvaluationRanking(data.data);
+        }
+    } catch (error) {
+        console.error('랭킹 데이터 로드 실패:', error);
+    }
+}
+
+// 정치인 평가 상세 정보 표시
+async function showPoliticianEvaluationDetail(politicianName) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/evaluation/politician/${encodeURIComponent(politicianName)}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            showPoliticianEvaluationModal(data.data);
+        }
+    } catch (error) {
+        console.error('정치인 평가 상세 정보 로드 실패:', error);
+        alert('정치인 평가 상세 정보를 불러올 수 없습니다.');
+    }
+}
+
+// 정치인 평가 모달 표시
+function showPoliticianEvaluationModal(data) {
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 1000;';
+    
+    modal.innerHTML = `
+        <div style="background: #1f2937; border-radius: 12px; padding: 24px; max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: #e2e8f0; font-size: 20px; font-weight: bold;">${data.name} 종합 평가</h3>
+                <button onclick="this.closest('.modal').remove()" style="background: none; border: none; color: #a0aec0; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+                <div style="text-align: center;">
+                    <div style="color: #3b82f6; font-size: 24px; font-weight: bold;">${data.total_score}</div>
+                    <div style="color: #9ca3af; font-size: 14px;">총점</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #60a5fa; font-size: 18px; font-weight: bold;">${data.scores.news.mention}</div>
+                    <div style="color: #9ca3af; font-size: 14px;">뉴스 언급</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #34d399; font-size: 18px; font-weight: bold;">${data.scores.bill_sponsor.main}</div>
+                    <div style="color: #9ca3af; font-size: 14px;">의안 발의</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #a78bfa; font-size: 18px; font-weight: bold;">${data.scores.connectivity.total}</div>
+                    <div style="color: #9ca3af; font-size: 14px;">연결성</div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                <div>
+                    <h4 style="color: #e2e8f0; font-weight: 500; margin-bottom: 12px;">뉴스 점수</h4>
+                    <div style="space-y: 8px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">언급도</span>
+                            <span style="color: #e2e8f0;">${data.scores.news.mention}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">감정</span>
+                            <span style="color: #e2e8f0;">${data.scores.news.sentiment}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">트렌드</span>
+                            <span style="color: #e2e8f0;">${data.scores.news.trend}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="color: #e2e8f0; font-weight: 500; margin-bottom: 12px;">의안 점수</h4>
+                    <div style="space-y: 8px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">대표발의</span>
+                            <span style="color: #e2e8f0;">${data.scores.bill_sponsor.main}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">공동발의</span>
+                            <span style="color: #e2e8f0;">${data.scores.bill_sponsor.co}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">성공률</span>
+                            <span style="color: #e2e8f0;">${data.scores.bill_sponsor.success_rate}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="color: #e2e8f0; font-weight: 500; margin-bottom: 12px;">연결성 점수</h4>
+                    <div style="space-y: 8px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">총 연결</span>
+                            <span style="color: #e2e8f0;">${data.scores.connectivity.total}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">영향력</span>
+                            <span style="color: #e2e8f0;">${data.scores.connectivity.influence}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #9ca3af;">협력도</span>
+                            <span style="color: #e2e8f0;">${data.scores.connectivity.collaboration}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modal.className = 'modal';
+    document.body.appendChild(modal);
+}
+
+// 평가 상세 분석 표시
+function showEvaluationDetails() {
+    alert('평가 상세 분석 기능은 준비 중입니다.');
 }

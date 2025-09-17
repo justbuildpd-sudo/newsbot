@@ -88,110 +88,98 @@ class NewsService:
             response = requests.get(news_url, headers=headers, timeout=15)
             response.raise_for_status()
             
-            # BeautifulSoup 제거됨 - 간단한 텍스트 추출
+            # BeautifulSoup 없이 정규식으로 텍스트 추출
+            content = response.text
             
-            # 네이버 뉴스 특화 셀렉터
+            # 네이버 뉴스 특화 제목 추출
             title = ""
-            title_selectors = [
-                '.media_end_head_headline',  # 네이버 뉴스 제목
-                'h1', 
-                '.article_info h3', 
-                '.news_title', 
-                '.headline', 
-                'title'
+            title_patterns = [
+                r'<title[^>]*>(.*?)</title>',
+                r'<h1[^>]*>(.*?)</h1>',
+                r'class="media_end_head_headline"[^>]*>(.*?)</',
+                r'class="go_article"[^>]*>.*?<h1[^>]*>(.*?)</h1>',
+                r'class="article_info"[^>]*>.*?<h3[^>]*>(.*?)</h3>'
             ]
             
-            for selector in title_selectors:
-                title_elem = soup.select_one(selector)
-                if title_elem:
-                    title = title_elem.get_text().strip()
+            for pattern in title_patterns:
+                match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
+                if match:
+                    title = match.group(1).strip()
                     # HTML 태그 제거
                     title = re.sub(r'<[^>]+>', '', title)
-                    break
-            
-            # 본문 추출 (네이버 뉴스 특화)
-            content = ""
-            content_selectors = [
-                '#newsct_article',  # 네이버 뉴스 본문
-                '.go_article',      # 네이버 뉴스 본문
-                '.article_body', 
-                '.news_body', 
-                '.article_view', 
-                '.article_content', 
-                '.news_content', 
-                '.content',
-                '[id*="article"]', 
-                '[class*="article"]', 
-                '[class*="content"]'
-            ]
-            
-            for selector in content_selectors:
-                content_elem = soup.select_one(selector)
-                if content_elem:
-                    # 스크립트, 스타일, 광고 태그 제거
-                    for unwanted in content_elem(["script", "style", ".ad", ".advertisement", ".banner"]):
-                        unwanted.decompose()
-                    
-                    # 텍스트 추출
-                    content = content_elem.get_text().strip()
-                    
-                    # HTML 태그 제거
-                    content = re.sub(r'<[^>]+>', '', content)
-                    
-                    # 불필요한 공백 정리
-                    content = re.sub(r'\s+', ' ', content)
-                    
-                    if len(content) > 100:  # 충분한 길이의 내용이 있는지 확인
+                    # 특수 문자 정리
+                    title = re.sub(r'&[^;]+;', '', title)
+                    if len(title) > 10:  # 충분한 길이의 제목인지 확인
                         break
             
-            # 이미지 추출 (네이버 뉴스 특화)
+            # 본문 추출 (정규식 사용)
+            article_content = ""
+            content_patterns = [
+                r'id="newsct_article"[^>]*>(.*?)</div>',
+                r'class="go_article"[^>]*>(.*?)</div>',
+                r'class="article_body"[^>]*>(.*?)</div>',
+                r'class="news_body"[^>]*>(.*?)</div>',
+                r'class="article_view"[^>]*>(.*?)</div>',
+                r'class="article_content"[^>]*>(.*?)</div>'
+            ]
+            
+            for pattern in content_patterns:
+                match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
+                if match:
+                    article_content = match.group(1)
+                    # 스크립트, 스타일 태그 제거
+                    article_content = re.sub(r'<script[^>]*>.*?</script>', '', article_content, flags=re.DOTALL | re.IGNORECASE)
+                    article_content = re.sub(r'<style[^>]*>.*?</style>', '', article_content, flags=re.DOTALL | re.IGNORECASE)
+                    article_content = re.sub(r'<[^>]+>', '', article_content)  # 모든 HTML 태그 제거
+                    article_content = re.sub(r'&[^;]+;', '', article_content)  # HTML 엔티티 제거
+                    article_content = re.sub(r'\s+', ' ', article_content)  # 공백 정리
+                    article_content = article_content.strip()
+                    
+                    if len(article_content) > 100:  # 충분한 길이의 내용인지 확인
+                        break
+            
+            # 이미지 추출 (정규식 사용)
             images = []
-            img_selectors = [
-                '#newsct_article img',  # 네이버 뉴스 본문 이미지
-                '.go_article img',      # 네이버 뉴스 본문 이미지
-                'img[src*="http"]', 
-                '.article_body img', 
-                '.news_body img',
-                '.article_view img', 
-                '.content img'
-            ]
+            img_pattern = r'<img[^>]+src=["\']([^"\']+)["\'][^>]*>'
+            matches = re.findall(img_pattern, content, re.IGNORECASE)
             
-            for selector in img_selectors:
-                img_elements = soup.select(selector)
-                for img in img_elements:
-                    src = img.get('src') or img.get('data-src') or img.get('data-original')
-                    if src and src.startswith('http'):
-                        # 네이버 이미지 URL 정리
-                        if 'news.naver.com' in src:
-                            # 네이버 이미지 크기 조정 (더 큰 이미지)
-                            src = src.replace('type=f120_80', 'type=f640_480')
-                        
-                        alt = img.get('alt', '')
-                        # 빈 alt 텍스트 처리
-                        if not alt:
-                            alt = '뉴스 이미지'
-                        
-                        images.append({
-                            'src': src,
-                            'alt': alt
-                        })
+            for img_url in matches:
+                # 상대 URL을 절대 URL로 변환
+                if img_url.startswith('//'):
+                    img_url = 'https:' + img_url
+                elif img_url.startswith('/'):
+                    img_url = 'https://news.naver.com' + img_url
+                
+                # 유효한 이미지 URL인지 확인
+                if any(ext in img_url.lower() for ext in ['.jpg', '.jpeg', '.png', '.gif', '.webp']):
+                    # 네이버 이미지 URL 정리
+                    if 'news.naver.com' in img_url:
+                        # 네이버 이미지 크기 조정 (더 큰 이미지)
+                        img_url = img_url.replace('type=f120_80', 'type=f640_480')
+                    
+                    images.append({
+                        'src': img_url,
+                        'alt': '뉴스 이미지'
+                    })
             
-            # 발행일 추출
+            # 발행일 추출 (정규식 사용)
             pub_date = ""
-            date_selectors = [
-                '.article_info .t11', '.news_date', '.article_date',
-                '.publish_date', '[class*="date"]', '[class*="time"]'
+            date_patterns = [
+                r'class="article_info"[^>]*>.*?class="t11"[^>]*>(.*?)</',
+                r'class="news_date"[^>]*>(.*?)</',
+                r'class="article_date"[^>]*>(.*?)</',
+                r'class="publish_date"[^>]*>(.*?)</'
             ]
             
-            for selector in date_selectors:
-                date_elem = soup.select_one(selector)
-                if date_elem:
-                    pub_date = date_elem.get_text().strip()
+            for pattern in date_patterns:
+                match = re.search(pattern, content, re.DOTALL | re.IGNORECASE)
+                if match:
+                    pub_date = match.group(1).strip()
                     break
             
             return {
                 'title': title,
-                'content': content,
+                'content': article_content,
                 'images': images[:5],  # 최대 5개 이미지
                 'pub_date': pub_date,
                 'url': news_url

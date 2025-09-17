@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정치인 연결성 분석 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .politicians-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .politician-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .politician-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .politician-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .politician-info {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .politician-info p {
+            margin-bottom: 5px;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .connections-preview {
+            margin-top: 20px;
+        }
+        
+        .connections-preview h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .connection-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .connection-tag {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .view-button {
+            background: linear-gradient(135deg, #4ECDC4, #45B7D1);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .view-button:hover {
+            background: linear-gradient(135deg, #45B7D1, #4ECDC4);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔗 정치인 연결성 분석 시스템</h1>
+            <p>개인 정치인 중심의 고급 네트워크 시각화</p>
+        </div>
+        
+        <div class="politicians-grid">
+
+            <div class="politician-card" onclick="location.href='pages/page_정청래.html'">
+                <div class="politician-name">정청래</div>
+                <div class="politician-info">
+                    <p><strong>정당:</strong> 더불어민주당</p>
+                    <p><strong>지역구:</strong> 서울 마포구을</p>
+                    <p><strong>위원회:</strong> 기획재정위원회</p>
+                </div>
+                <div class="score-badge">
+                    연결성 점수: 85.5점
+                </div>
+                <div class="connections-preview">
+                    <h4>연결 유형:</h4>
+                    <div class="connection-tags">
+                        <span class="connection-tag">정치적_연결</span>
+                        <span class="connection-tag">위원회_연결</span>
+                        <span class="connection-tag">정책_연결</span>
+                        <span class="connection-tag">시간_연결</span>
+                        <span class="connection-tag">입법_연결</span>
+                        <span class="connection-tag">지역_연결</span>
+
+                    </div>
+                </div>
+                <button class="view-button" onclick="event.stopPropagation(); location.href='pages/page_정청래.html'">
+                    상세 분석 보기
+                </button>
+            </div>
+
+            <div class="politician-card" onclick="location.href='pages/page_김주영.html'">
+                <div class="politician-name">김주영</div>
+                <div class="politician-info">
+                    <p><strong>정당:</strong> 국민의힘</p>
+                    <p><strong>지역구:</strong> 경기 김포시갑</p>
+                    <p><strong>위원회:</strong> 과학기술정보방송통신위원회</p>
+                </div>
+                <div class="score-badge">
+                    연결성 점수: 78.2점
+                </div>
+                <div class="connections-preview">
+                    <h4>연결 유형:</h4>
+                    <div class="connection-tags">
+                        <span class="connection-tag">정치적_연결</span>
+                        <span class="connection-tag">위원회_연결</span>
+                        <span class="connection-tag">정책_연결</span>
+                        <span class="connection-tag">입법_연결</span>
+                        <span class="connection-tag">지역_연결</span>
+
+                    </div>
+                </div>
+                <button class="view-button" onclick="event.stopPropagation(); location.href='pages/page_김주영.html'">
+                    상세 분석 보기
+                </button>
+            </div>
+
+            <div class="politician-card" onclick="location.href='pages/page_신장식.html'">
+                <div class="politician-name">신장식</div>
+                <div class="politician-info">
+                    <p><strong>정당:</strong> 더불어민주당</p>
+                    <p><strong>지역구:</strong> 비례대표</p>
+                    <p><strong>위원회:</strong> 환경노동위원회</p>
+                </div>
+                <div class="score-badge">
+                    연결성 점수: 72.8점
+                </div>
+                <div class="connections-preview">
+                    <h4>연결 유형:</h4>
+                    <div class="connection-tags">
+                        <span class="connection-tag">정치적_연결</span>
+                        <span class="connection-tag">위원회_연결</span>
+                        <span class="connection-tag">정책_연결</span>
+                        <span class="connection-tag">시간_연결</span>
+                        <span class="connection-tag">입법_연결</span>
+
+                    </div>
+                </div>
+                <button class="view-button" onclick="event.stopPropagation(); location.href='pages/page_신장식.html'">
+                    상세 분석 보기
+                </button>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

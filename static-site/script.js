@@ -19,7 +19,6 @@ function initializeApp() {
     
     // 데이터 로드
     loadNewsData();
-    loadHotIssuesData();
     loadPoliticianData();
     loadReportData();
     initializeNetworkVisualization();
@@ -113,43 +112,6 @@ function renderNewsList(news) {
     `).join('');
 }
 
-// 핫이슈 데이터 로드
-function loadHotIssuesData() {
-    const mockHotIssues = [
-        { keyword: "예산안", count: 1250, trend: "up", change: "+15%" },
-        { keyword: "국방정책", count: 980, trend: "up", change: "+8%" },
-        { keyword: "교육개혁", count: 850, trend: "down", change: "-3%" },
-        { keyword: "환경정책", count: 720, trend: "up", change: "+12%" },
-        { keyword: "경제정책", count: 680, trend: "stable", change: "0%" },
-        { keyword: "복지정책", count: 590, trend: "up", change: "+5%" },
-        { keyword: "외교정책", count: 520, trend: "down", change: "-2%" },
-        { keyword: "법무정책", count: 480, trend: "up", change: "+7%" }
-    ];
-    
-    renderHotIssuesList(mockHotIssues);
-}
-
-// 핫이슈 목록 렌더링
-function renderHotIssuesList(issues) {
-    const hotIssuesList = document.getElementById('hotIssuesList');
-    if (!hotIssuesList) return;
-    
-    hotIssuesList.innerHTML = issues.map((issue, index) => `
-        <div class="hot-issue-item fade-in" onclick="showHotIssueDetail('${issue.keyword}')">
-            <div class="hot-issue-info">
-                <span class="hot-issue-rank">${index + 1}</span>
-                <div class="hot-issue-details">
-                    <h3>${issue.keyword}</h3>
-                    <p>${issue.count.toLocaleString()}회 언급</p>
-                </div>
-            </div>
-            <div class="hot-issue-trend">
-                ${getTrendIcon(issue.trend)}
-                <span class="trend-value ${issue.trend}">${issue.change}</span>
-            </div>
-        </div>
-    `).join('');
-}
 
 // 정치인 데이터 로드
 function loadPoliticianData() {
@@ -488,9 +450,6 @@ function showAllNews() {
     alert('모든 뉴스 보기 기능은 구현 예정입니다.');
 }
 
-function showHotIssues() {
-    alert('핫이슈 상세 분석 기능은 구현 예정입니다.');
-}
 
 function showTrendAnalysis() {
     alert('트렌드 상세 분석 기능은 구현 예정입니다.');
@@ -517,9 +476,6 @@ function showNewsDetail(newsId) {
     alert(`뉴스 ${newsId} 상세 보기 기능은 구현 예정입니다.`);
 }
 
-function showHotIssueDetail(keyword) {
-    alert(`"${keyword}" 핫이슈 상세 보기 기능은 구현 예정입니다.`);
-}
 
 function showPoliticianDetail(politicianId) {
     alert(`정치인 ${politicianId} 상세 보기 기능은 구현 예정입니다.`);
