@@ -1,16 +1,19 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
+import OptimizedPoliticianList from '../components/OptimizedPoliticianList'
+import KoreaMapWidget from '../components/KoreaMapWidget'
+import MemberDetailWidget from '../components/MemberDetailWidget'
 import OptimizedNewsWidget from '../components/OptimizedNewsWidget'
 import RecentBillsWidget from '../components/RecentBillsWidget'
-import TrendChartWidget from '../components/TrendChartWidget'
-import PoliticianProfileWidget from '../components/PoliticianProfileWidget'
 import TrendChart from '../components/TrendChart'
-import ConnectivityNetworkWidget from '../components/ConnectivityNetworkWidget'
-import AnalysisReportWidget from '../components/AnalysisReportWidget'
-import PoliticianEvaluationWidget from '../components/PoliticianEvaluationWidget'
+import useOptimizedData from '../hooks/useOptimizedData'
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedPolitician, setSelectedPolitician] = useState(null)
+  
+  // 최적화된 데이터 훅 사용
+  const { data: { politicians } } = useOptimizedData()
 
   useEffect(() => {
     // 초기 로딩 시뮬레이션
@@ -20,6 +23,14 @@ export default function Home() {
 
     return () => clearTimeout(timer)
   }, [])
+
+  const handleSelectPolitician = (politicianName) => {
+    setSelectedPolitician(politicianName)
+  }
+
+  const handleClosePoliticianDetail = () => {
+    setSelectedPolitician(null)
+  }
 
   if (isLoading) {
     return (
@@ -72,8 +83,8 @@ export default function Home() {
 
       {/* 메인 컨텐츠 */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 대시보드 위젯 그리드 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* 상단 위젯들 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* 실시간 뉴스 위젯 */}
           <div className="lg:col-span-1">
             <OptimizedNewsWidget />
@@ -86,30 +97,34 @@ export default function Home() {
 
           {/* 트렌드 차트 위젯 */}
           <div className="lg:col-span-1">
-            <TrendChartWidget />
+            <TrendChart />
           </div>
+        </div>
 
-          {/* 정치인 프로필 위젯 - 더 큰 크기로 조정 */}
+        {/* 메인 섹션: 국회의원 현황 + 지도 위젯 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* 국회의원 현황 (좌측 2/3) */}
           <div className="lg:col-span-2">
-            <PoliticianProfileWidget />
+            <OptimizedPoliticianList onSelectPolitician={handleSelectPolitician} />
           </div>
 
-          {/* 연결성 네트워크 위젯 */}
+          {/* 지역구 현황 지도 (우측 1/3) */}
           <div className="lg:col-span-1">
-            <ConnectivityNetworkWidget />
-          </div>
-
-          {/* 정치인 종합 평가 위젯 */}
-          <div className="lg:col-span-2">
-            <PoliticianEvaluationWidget />
-          </div>
-
-          {/* 분석 리포트 위젯 */}
-          <div className="lg:col-span-1">
-            <AnalysisReportWidget />
+            <KoreaMapWidget 
+              onSelectPolitician={handleSelectPolitician}
+              politicians={politicians}
+            />
           </div>
         </div>
       </main>
+
+      {/* 정치인 상세정보 팝업 */}
+      {selectedPolitician && (
+        <MemberDetailWidget 
+          memberName={selectedPolitician}
+          onClose={handleClosePoliticianDetail}
+        />
+      )}
 
       {/* 푸터 */}
       <footer className="bg-dark-800 border-t border-dark-700 mt-12">
