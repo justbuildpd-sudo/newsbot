@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import useOptimizedData from '../hooks/useOptimizedData'
+import { FALLBACK_POLITICIANS } from '../data/fallback_politicians'
 
 const OptimizedPoliticianList = ({ onSelectPolitician }) => {
   const [currentPage, setCurrentPage] = useState(0)
@@ -33,10 +34,25 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
 
   // 스마트 정렬된 정치인 목록 (메모이제이션)
   const smartOrderedPoliticians = useMemo(() => {
-    if (!politicians || politicians.length === 0) return []
+    // 백엔드 API 실패 시 폴백 데이터 사용
+    let workingPoliticians = politicians
+    
+    if (!politicians || politicians.length === 0) {
+      console.warn('🔄 백엔드 데이터 없음, 폴백 데이터 사용')
+      workingPoliticians = FALLBACK_POLITICIANS
+    } else {
+      // 데이터 품질 확인
+      const validNames = politicians.filter(p => p.name && p.name.trim() !== '').length
+      if (validNames === 0) {
+        console.warn('🔄 백엔드 데이터 손상, 폴백 데이터 사용')
+        workingPoliticians = FALLBACK_POLITICIANS
+      }
+    }
+    
+    if (!workingPoliticians || workingPoliticians.length === 0) return []
     
     console.log('🔄 스마트 정렬 시작:', {
-      politicians: politicians.length,
+      politicians: workingPoliticians.length,
       news: Object.keys(news || {}).length,
       trends: trends ? Object.keys(trends).length : 0,
       billScores: Object.keys(billScores || {}).length
@@ -79,7 +95,7 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
     // 4. 우선순위 점수 계산
     const priorityScores = new Map()
     
-    politicians.forEach(politician => {
+    workingPoliticians.forEach(politician => {
       let score = 0
       const name = politician.name
       
@@ -115,7 +131,7 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
     })
     
     // 5. 우선순위 점수 기준으로 정렬
-    const sortedPoliticians = [...politicians].sort((a, b) => {
+    const sortedPoliticians = [...workingPoliticians].sort((a, b) => {
       const scoreA = priorityScores.get(a.name) || 0
       const scoreB = priorityScores.get(b.name) || 0
       return scoreB - scoreA

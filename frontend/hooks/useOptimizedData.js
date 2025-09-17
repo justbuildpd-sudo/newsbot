@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { FALLBACK_POLITICIANS, FALLBACK_BILL_SCORES, FALLBACK_NEWS, FALLBACK_TRENDS } from '../data/fallback_politicians'
 
 /**
  * 최적화된 데이터 로딩 훅
@@ -104,7 +105,7 @@ export const useOptimizedData = () => {
       setLoading(prev => ({ ...prev, trends: false }))
     }
     
-    // 병렬 실행
+    // 병렬 실행 (에러 핸들링 강화)
     if (promises.length > 0) {
       try {
         const responses = await Promise.allSettled(promises)
