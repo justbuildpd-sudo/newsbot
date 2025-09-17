@@ -2,37 +2,17 @@
   "version": 2,
   "builds": [
     {
-      "src": "web_service/app.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "50mb",
-        "runtime": "python3.11"
-      }
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/web_service/static/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "web_service/app.py"
+      "dest": "frontend/$1"
     }
   ],
-  "env": {
-    "PYTHON_VERSION": "3.11.6",
-    "FLASK_ENV": "production",
-    "BACKEND_API_URL": "https://newsbot-kr.vercel.app/api",
-    "UNIFIED_API_URL": "https://newsbot-kr.vercel.app/api"
-  },
-  "functions": {
-    "web_service/app.py": {
-      "maxDuration": 30,
-      "memory": 1024
-    }
-  },
-  "regions": ["icn1"],
+  "outputDirectory": "frontend/.next",
   "cleanUrls": true,
   "trailingSlash": false
 }
