@@ -18,7 +18,7 @@ const PoliticianProfileWidget = () => {
 
   const loadBillScores = async () => {
     try {
-      const response = await fetch('http://localhost:8001/api/bills/scores')
+      const response = await fetch('https://newsbot-backend-6j3p.onrender.com/api/bills/scores')
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
@@ -38,7 +38,7 @@ const PoliticianProfileWidget = () => {
         setIsLoadingMore(true)
       }
 
-      const response = await fetch(`http://localhost:8001/api/assembly/members`)
+      const response = await fetch(`https://newsbot-backend-6j3p.onrender.com/api/assembly/members`)
       if (!response.ok) {
         throw new Error('Failed to fetch politicians')
       }

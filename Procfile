@@ -1,3 +1,1 @@
-web: cd web_service && gunicorn --bind 0.0.0.0:$PORT app:app
-api: cd backend && python unified_server.py
-backend: cd backend && python api_server.py
+web: cd backend && python -m uvicorn unified_server:app --host 0.0.0.0 --port $PORT
