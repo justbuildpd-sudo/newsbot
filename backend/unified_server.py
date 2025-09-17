@@ -112,8 +112,21 @@ class NewsBotUnifiedService:
     def load_politicians(self):
         """정치인 데이터 로드"""
         try:
-            with open('data/politicians.json', 'r', encoding='utf-8') as f:
-                data = json.load(f)
+            # 여러 경로에서 정치인 데이터 찾기
+            possible_paths = [
+                'data/politicians.json',
+                'politicians_data_with_party.json',
+                '../politicians_data_with_party.json'
+            ]
+            
+            data = []
+            for path in possible_paths:
+                try:
+                    with open(path, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                    break
+                except FileNotFoundError:
+                    continue
             
             self.politicians_data = {p.get('name'): p for p in data if p.get('name')}
             
@@ -773,16 +786,21 @@ async def get_news_trends():
     return {"success": True, "data": trends}
 
 if __name__ == "__main__":
+    import os
+    
+    # Render 환경에서는 PORT 환경변수 사용
+    port = int(os.environ.get("PORT", 8000))
+    
     print("🚀 NewsBot 통합 서버 시작 중...")
     print("📊 데이터 로드 완료")
-    print("🌐 서버 주소: http://localhost:8000")
-    print("📖 API 문서: http://localhost:8000/docs")
+    print(f"🌐 서버 주소: http://0.0.0.0:{port}")
+    print(f"📖 API 문서: http://0.0.0.0:{port}/docs")
     print("=" * 50)
     
     uvicorn.run(
         app,
         host="0.0.0.0",
-        port=8000,
+        port=port,
         log_level="info",
         access_log=True
     )
