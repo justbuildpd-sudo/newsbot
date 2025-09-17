@@ -115,13 +115,11 @@ def load_politicians_data():
     """정치인 데이터 로드"""
     global politicians_data
     
-    # 여러 경로에서 데이터 파일 찾기 (검증된 실제 의원 데이터 우선)
+    # 여러 경로에서 데이터 파일 찾기 (인증된 충돌 없는 데이터 우선)
     possible_paths = [
+        'authentic_assembly_members.json',  # 지역구 충돌 해결된 인증 데이터
         'verified_real_assembly_members.json',  # 가짜 인물 제거된 검증된 데이터
-        'real_assembly_members_only.json',  # 실제 의원만
-        'processed_full_assembly_members.json',  # 처리된 전체 데이터
-        'complete_assembly_members.json',  # 이름과 정당 정보 완전 수정된 데이터
-        'fixed_assembly_members.json',  # 정당 정보 수정된 데이터
+        'processed_full_assembly_members.json',  # 처리된 전체 데이터 (원본)
         '22nd_assembly_members_300.json',  # 백엔드 폴더 내
         '../22nd_assembly_members_300.json',  # 상위 폴더
         'politicians_data_with_party.json',
