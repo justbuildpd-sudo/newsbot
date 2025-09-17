@@ -53,7 +53,10 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
       '국민의힘': 'bg-red-500 text-white', 
       '조국혁신당': 'bg-purple-500 text-white',
       '개혁신당': 'bg-green-500 text-white',
-      '진보당': 'bg-pink-500 text-white'
+      '진보당': 'bg-pink-500 text-white',
+      '국민의미래': 'bg-teal-500 text-white',
+      '더불어민주연합': 'bg-cyan-500 text-white',
+      '새로운미래': 'bg-lime-500 text-white'
     }
     return colors[party] || 'bg-gray-500 text-white'
   }
