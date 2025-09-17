@@ -24,8 +24,9 @@ class AssemblyMemberAPI:
     
     def load_member_data(self):
         """의원 데이터 로드"""
-        # 실제 의원 데이터 파일들 우선순위
+        # 실제 의원 데이터 파일들 우선순위 (검증된 CSV 데이터 우선)
         data_files = [
+            'verified_22nd_assembly_from_csv.json',  # CSV에서 추출한 검증된 22대 의원
             'processed_full_assembly_members.json',  # 가장 완전한 원본
             'real_assembly_members.json',
             '22nd_assembly_members_300.json',
