@@ -1,1 +1,1 @@
-web: cd backend && python -m uvicorn api_server:app --host 0.0.0.0 --port $PORT
+web: cd backend && python -m uvicorn simple_clean_api:app --host 0.0.0.0 --port $PORT
