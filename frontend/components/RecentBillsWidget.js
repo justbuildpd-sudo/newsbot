@@ -12,7 +12,7 @@ export default function RecentBillsWidget() {
   const fetchRecentBills = async () => {
     try {
       setLoading(true)
-      const response = await fetch('http://localhost:8001/api/bills/recent')
+      const response = await fetch('https://newsbot-backend-6j3p.onrender.com/api/bills/recent?limit=10')
       const data = await response.json()
       
       if (data.success) {
@@ -137,11 +137,11 @@ export default function RecentBillsWidget() {
               
               <div className="flex items-center justify-between text-xs text-gray-400">
                 <div className="flex items-center space-x-2">
-                  <span className={`font-medium ${getPartyColor(bill.proposer_party)}`}>
-                    {bill.proposer}
+                  <span className={`font-medium ${getPartyColor('더불어민주당')}`}>
+                    {bill.politician}
                   </span>
                   <span className="text-gray-500">•</span>
-                  <span className="text-gray-400">{bill.proposer_party}</span>
+                  <span className="text-gray-400">{bill.committee || '위원회 정보 없음'}</span>
                 </div>
                 <span>{bill.propose_date}</span>
               </div>
