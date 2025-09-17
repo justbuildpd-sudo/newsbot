@@ -83,21 +83,27 @@ export default function Home() {
 
       {/* 메인 컨텐츠 */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 상단 위젯들 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {/* 상단 위젯들 - 높이 동일하게 확장 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 h-96">
           {/* 실시간 뉴스 위젯 */}
-          <div className="lg:col-span-1">
-            <OptimizedNewsWidget />
+          <div className="lg:col-span-1 flex">
+            <div className="w-full">
+              <OptimizedNewsWidget />
+            </div>
           </div>
 
           {/* 최근 입법 위젯 */}
-          <div className="lg:col-span-1">
-            <RecentBillsWidget />
+          <div className="lg:col-span-1 flex">
+            <div className="w-full">
+              <RecentBillsWidget />
+            </div>
           </div>
 
           {/* 트렌드 차트 위젯 */}
-          <div className="lg:col-span-1">
-            <TrendChart />
+          <div className="lg:col-span-1 flex">
+            <div className="w-full">
+              <TrendChart />
+            </div>
           </div>
         </div>
 

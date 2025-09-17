@@ -119,7 +119,7 @@ const OptimizedNewsWidget = () => {
   }
 
   return (
-    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 h-96 flex flex-col">
+    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-white">실시간 뉴스</h2>
         <div className="flex items-center space-x-2">
