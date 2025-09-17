@@ -29,30 +29,44 @@ export default function MemberDetailWidget({ memberName, onClose }) {
   const fetchMemberData = async () => {
     try {
       setLoading(true)
+      setError(null)
       
-      // 의원 기본 정보 가져오기
-      const memberResponse = await fetch('https://newsbot-backend-6j3p.onrender.com/api/assembly/members')
-      const memberData = await memberResponse.json()
+      // 병렬로 데이터 로드
+      const [memberResponse, scoresResponse, billsResponse] = await Promise.all([
+        fetch(`https://newsbot-backend-6j3p.onrender.com/api/assembly/members/${encodeURIComponent(memberName)}`),
+        fetch('https://newsbot-backend-6j3p.onrender.com/api/bills/scores'),
+        fetch(`https://newsbot-backend-6j3p.onrender.com/api/bills/politician/${encodeURIComponent(memberName)}`)
+      ])
       
-      // 발의의안 점수 정보 가져오기
-      const scoresResponse = await fetch('https://newsbot-backend-6j3p.onrender.com/api/bills/scores')
-      const scoresData = await scoresResponse.json()
-      
-      // 특정 의원 발의안 목록 가져오기
-      const billsResponse = await fetch(`https://newsbot-backend-6j3p.onrender.com/api/bills/politician/${memberName}`)
-      const billsData = await billsResponse.json()
-      
-      if (memberData.success) {
-        const member = memberData.data.find(m => m.name === memberName)
-        setMemberInfo(member)
+      // 의원 기본 정보 처리
+      if (memberResponse.ok) {
+        const memberData = await memberResponse.json()
+        if (memberData.success) {
+          setMemberInfo(memberData.data)
+          console.log('✅ 의원 정보 로드:', memberData.data.name, memberData.data.party)
+        } else {
+          console.warn('⚠️ 의원 정보 로드 실패:', memberData.error)
+        }
+      } else {
+        console.warn('⚠️ 의원 API 응답 실패:', memberResponse.status)
       }
       
-      if (scoresData.success) {
-        setBillScores(scoresData.data[memberName] || {})
+      // 발의의안 점수 정보 처리
+      if (scoresResponse.ok) {
+        const scoresData = await scoresResponse.json()
+        if (scoresData.success) {
+          setBillScores(scoresData.data[memberName] || {})
+          console.log('✅ 발의안 점수 로드 완료')
+        }
       }
       
-      if (billsData.success) {
-        setMemberBills(billsData.data.bills || [])
+      // 특정 의원 발의안 목록 처리
+      if (billsResponse.ok) {
+        const billsData = await billsResponse.json()
+        if (billsData.success) {
+          setMemberBills(billsData.data.bills || [])
+          console.log('✅ 발의안 목록 로드:', billsData.data.bills?.length || 0, '건')
+        }
       }
       
     } catch (err) {
