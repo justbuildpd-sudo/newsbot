@@ -33,7 +33,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 전역 데이터 저장
+# 개별 API 서비스 임포트
+from assembly_member_api import assembly_api
+from bills_info_api import bills_api  
+from naver_api_service import naver_api
+
+# 전역 데이터 저장 (개별 API에서 관리)
 politicians_data = []
 bills_data = {}
 news_data = {}
@@ -272,24 +277,29 @@ async def get_assembly_members():
 
 @app.get("/api/assembly/members/{member_id}")
 async def get_assembly_member(member_id: str):
-    """특정 국회의원 조회"""
+    """특정 국회의원 조회 (국회의원통합API 사용)"""
     try:
-        member = next((p for p in politicians_data if p.get('id') == member_id or p.get('name') == member_id), None)
+        # 1. 국회의원통합API 사용
+        member = assembly_api.get_member_by_name(member_id)
         
         if member:
             return {
                 "success": True,
                 "data": member,
-                "source": "NewsBot 경량 API"
+                "source": "국회의원통합API"
             }
         else:
-            raise HTTPException(status_code=404, detail="국회의원을 찾을 수 없습니다")
+            return {
+                "success": False,
+                "error": f"국회의원 '{member_id}'를 찾을 수 없습니다"
+            }
             
-    except HTTPException:
-        raise
     except Exception as e:
         logger.error(f"국회의원 상세 조회 오류: {e}")
-        raise HTTPException(status_code=500, detail="국회의원 상세 조회 실패")
+        return {
+            "success": False,
+            "error": f"국회의원 상세 조회 실패: {str(e)}"
+        }
 
 @app.get("/api/assembly/stats")
 async def get_assembly_stats():
