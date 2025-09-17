@@ -100,7 +100,7 @@ export default function RecentBillsWidget() {
   }
 
   return (
-    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 h-96 flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-white">최근 입법</h2>
         <button 
@@ -113,11 +113,30 @@ export default function RecentBillsWidget() {
         </button>
       </div>
 
-      <div className="space-y-4">
-        {bills.length === 0 ? (
+      {/* 스크롤 가능한 발의안 목록 */}
+      <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+        {loading ? (
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="animate-pulse">
+                <div className="h-4 bg-dark-700 rounded mb-2"></div>
+                <div className="h-3 bg-dark-700 rounded w-3/4"></div>
+              </div>
+            ))}
+          </div>
+        ) : error ? (
+          <div className="text-center py-8">
+            <div className="text-red-400 mb-2">
+              <svg className="h-8 w-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <p className="text-red-400 text-sm">{error}</p>
+          </div>
+        ) : bills.length === 0 ? (
           <div className="text-center py-8">
             <div className="text-gray-400 mb-2">
-              <svg className="h-12 w-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-8 w-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
@@ -125,7 +144,7 @@ export default function RecentBillsWidget() {
           </div>
         ) : (
           bills.map((bill, index) => (
-            <div key={bill.bill_id || index} className="border-b border-dark-700 pb-4 last:border-b-0">
+            <div key={bill.bill_id || index} className="border-b border-dark-700 pb-4 last:border-b-0 hover:bg-dark-700/50 p-2 rounded transition-colors">
               <div className="flex items-start justify-between mb-2">
                 <h3 className="text-sm font-medium text-white line-clamp-2 flex-1 mr-2">
                   {bill.bill_name}
@@ -156,13 +175,12 @@ export default function RecentBillsWidget() {
         )}
       </div>
 
-      {bills.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-dark-700">
-          <button className="w-full text-center text-primary-500 hover:text-primary-400 text-sm font-medium transition-colors">
-            모든 입법 보기 →
-          </button>
-        </div>
-      )}
+      {/* 하단 버튼 */}
+      <div className="mt-4 pt-4 border-t border-dark-700">
+        <button className="w-full text-center text-primary-500 hover:text-primary-400 text-sm font-medium transition-colors">
+          모든 입법 보기 →
+        </button>
+      </div>
     </div>
   )
 }
