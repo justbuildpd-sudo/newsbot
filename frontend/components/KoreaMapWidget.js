@@ -80,9 +80,9 @@ const KoreaMapWidget = ({ onSelectPolitician, politicians = [] }) => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
         <h3 className="text-lg font-semibold mb-4">지역구 현황</h3>
-        <div className="flex items-center justify-center h-96">
+        <div className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       </div>
@@ -90,7 +90,7 @@ const KoreaMapWidget = ({ onSelectPolitician, politicians = [] }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">지역구 현황</h3>
         <div className="text-sm text-gray-500">
@@ -98,12 +98,12 @@ const KoreaMapWidget = ({ onSelectPolitician, politicians = [] }) => {
         </div>
       </div>
 
-      {/* 남한 지도 SVG */}
-      <div className="relative">
+      {/* 남한 지도 SVG - flex-1로 남은 공간 모두 사용 */}
+      <div className="relative flex-1 flex flex-col">
         <svg 
           viewBox="0 0 400 500" 
-          className="w-full h-96 border border-gray-200 rounded-lg"
-          style={{ maxHeight: '400px' }}
+          className="w-full flex-1 border border-gray-200 rounded-lg"
+          style={{ minHeight: '300px' }}
         >
           {/* 서울특별시 */}
           <rect 
@@ -286,59 +286,61 @@ const KoreaMapWidget = ({ onSelectPolitician, politicians = [] }) => {
           <text x="350" y="57" textAnchor="middle" className="text-xs font-bold fill-gray-800">비례대표</text>
         </svg>
 
-        {/* 범례 */}
-        <div className="mt-4 flex items-center justify-between text-xs text-gray-600">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 bg-gray-200 border border-gray-400"></div>
-              <span>0명</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 bg-blue-100 border border-gray-400"></div>
-              <span>1-5명</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 bg-blue-300 border border-gray-400"></div>
-              <span>15-30명</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <div className="w-3 h-3 bg-blue-500 border border-gray-400"></div>
-              <span>50명+</span>
+        {/* 범례 - 압축된 형태 */}
+        <div className="mt-2 flex flex-col space-y-1 text-xs text-gray-600">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-gray-200 border border-gray-400"></div>
+                <span>0</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-blue-100 border border-gray-400"></div>
+                <span>1-5</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-blue-300 border border-gray-400"></div>
+                <span>15-30</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-blue-500 border border-gray-400"></div>
+                <span>50+</span>
+              </div>
             </div>
           </div>
-          <div className="text-xs text-gray-500">
+          <div className="text-center text-gray-500">
             클릭하여 해당 지역 의원 보기
           </div>
         </div>
       </div>
 
-      {/* 선택된 지역의 의원 목록 */}
+      {/* 선택된 지역의 의원 목록 - 컴팩트 버전 */}
       {selectedRegion && regionMembers[selectedRegion] && (
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="font-semibold text-gray-800">
+        <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <h4 className="font-semibold text-sm text-gray-800">
               {selectedRegion} ({regionMembers[selectedRegion].length}명)
             </h4>
             <button 
               onClick={() => setSelectedRegion(null)}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700 text-sm"
             >
               ✕
             </button>
           </div>
           
-          <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+          <div className="grid grid-cols-1 gap-1 max-h-32 overflow-y-auto">
             {regionMembers[selectedRegion].map((member, index) => (
               <div 
                 key={index}
                 className="flex items-center justify-between p-2 bg-white rounded border hover:bg-blue-50 cursor-pointer transition-colors"
                 onClick={() => handleMemberClick(member.name)}
               >
-                <div>
-                  <div className="font-medium text-sm text-gray-800">{member.name}</div>
-                  <div className="text-xs text-gray-500">{member.party}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-xs text-gray-800 truncate">{member.name}</div>
+                  <div className="text-xs text-gray-500 truncate">{member.party}</div>
                 </div>
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-gray-400 ml-2">
                   {member.district !== '비례대표' ? member.district.replace(selectedRegion.split('특별시')[0].split('광역시')[0].split('도')[0], '').trim() : '비례'}
                 </div>
               </div>

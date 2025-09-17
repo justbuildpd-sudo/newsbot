@@ -102,18 +102,22 @@ export default function Home() {
         </div>
 
         {/* 메인 섹션: 국회의원 현황 + 지도 위젯 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
           {/* 국회의원 현황 (좌측 2/3) */}
-          <div className="lg:col-span-2">
-            <OptimizedPoliticianList onSelectPolitician={handleSelectPolitician} />
+          <div className="lg:col-span-2 flex">
+            <div className="w-full">
+              <OptimizedPoliticianList onSelectPolitician={handleSelectPolitician} />
+            </div>
           </div>
 
           {/* 지역구 현황 지도 (우측 1/3) */}
-          <div className="lg:col-span-1">
-            <KoreaMapWidget 
-              onSelectPolitician={handleSelectPolitician}
-              politicians={politicians}
-            />
+          <div className="lg:col-span-1 flex">
+            <div className="w-full">
+              <KoreaMapWidget 
+                onSelectPolitician={handleSelectPolitician}
+                politicians={politicians}
+              />
+            </div>
           </div>
         </div>
       </main>
