@@ -135,23 +135,47 @@ def load_politicians_data():
         except FileNotFoundError:
             continue
     
-    # 데이터 파일이 없으면 샘플 데이터 생성 (사진 URL 포함)
+    # 데이터 파일이 없으면 실제 정당 데이터로 샘플 생성
     politicians_data = [
         {
-            "name": "정청래",
+            "name": "이재명",
             "party": "더불어민주당", 
-            "district": "서울 마포구을",
+            "district": "경기 성남시분당구을",
             "committee": "기획재정위원회",
             "id": "sample1",
             "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample1.jpg"
         },
         {
-            "name": "김영배", 
-            "party": "더불어민주당",
-            "district": "서울 강남구갑",
-            "committee": "기획재정위원회", 
+            "name": "한동훈", 
+            "party": "국민의힘",
+            "district": "서울 동작구갑",
+            "committee": "법제사법위원회", 
             "id": "sample2",
             "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample2.jpg"
+        },
+        {
+            "name": "조국", 
+            "party": "조국혁신당",
+            "district": "서울 종로구",
+            "committee": "법제사법위원회", 
+            "id": "sample3",
+            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample3.jpg"
+        },
+        {
+            "name": "정청래",
+            "party": "더불어민주당", 
+            "district": "서울 마포구을",
+            "committee": "기획재정위원회",
+            "id": "sample4",
+            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample4.jpg"
+        },
+        {
+            "name": "김기현", 
+            "party": "국민의힘",
+            "district": "울산 북구",
+            "committee": "정무위원회", 
+            "id": "sample5",
+            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample5.jpg"
         }
     ]
     logger.warning("데이터 파일을 찾을 수 없어 샘플 데이터 사용")
@@ -190,6 +214,32 @@ async def health_check():
         "data_loaded": len(politicians_data) > 0,
         "version": "1.0.0"
     }
+
+@app.post("/api/reload")
+async def reload_data():
+    """데이터 강제 재로드"""
+    try:
+        load_politicians_data()
+        load_bills_data()
+        load_news_data()
+        load_trend_data()
+        
+        # 샘플 정당 확인
+        sample_parties = []
+        for member in politicians_data[:5]:
+            party = member.get('party', '무소속')
+            sample_parties.append(party)
+        
+        return {
+            "success": True,
+            "message": "데이터 재로드 완료",
+            "politicians_count": len(politicians_data),
+            "sample_parties": sample_parties,
+            "timestamp": datetime.now().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"데이터 재로드 실패: {e}")
+        raise HTTPException(status_code=500, detail="데이터 재로드 실패")
 
 @app.get("/api/assembly/members")
 async def get_assembly_members():
