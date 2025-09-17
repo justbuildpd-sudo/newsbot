@@ -11,6 +11,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
+from datetime import datetime, timedelta
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -40,10 +41,13 @@ def load_bills_data():
     """발의안 데이터 로드"""
     global bills_data
     
-    # 발의안 데이터 파일 찾기
+    # 발의안 데이터 파일 찾기 (개선된 데이터 우선)
     possible_paths = [
+        'enhanced_bills_data_22nd.json',
         'bills_data_22nd.json',
+        '../enhanced_bills_data_22nd.json',
         '../bills_data_22nd.json',
+        './backend/enhanced_bills_data_22nd.json',
         './backend/bills_data_22nd.json'
     ]
     
@@ -205,40 +209,60 @@ async def get_featured_politicians():
 
 @app.get("/api/bills/scores")
 async def get_bill_scores():
-    """발의안 점수 (실제 데이터 기반)"""
+    """발의안 점수 (개선된 실제 데이터 기반)"""
     try:
-        # 실제 발의안 데이터에서 점수 계산
+        # 개선된 발의안 데이터에서 점수 계산
         bill_scores = {}
         for name, bills in bills_data.items():
             if bills:
-                main_proposals = sum(1 for bill in bills if '대표발의' in bill.get('bill_name', '') or len(bill.get('co_proposers', [])) > 0)
+                # 주발의자인 경우 (공동발의자가 있는 경우)
+                main_proposals = sum(1 for bill in bills if len(bill.get('co_proposers', [])) > 0)
+                # 공동발의 (주발의가 아닌 경우)
                 co_proposals = len(bills) - main_proposals
                 total_bills = len(bills)
                 
-                # 통과율 계산
-                passed_bills = sum(1 for bill in bills if bill.get('status') == '본회의 통과')
+                # 통과율 계산 (본회의 통과, 정부이송 포함)
+                passed_bills = sum(1 for bill in bills 
+                                 if bill.get('status') in ['본회의 통과', '정부이송', '공포'])
                 success_rate = round(passed_bills / total_bills, 2) if total_bills > 0 else 0
+                
+                # 최근 활동 점수 (최근 3개월 내 발의안)
+                recent_bills = sum(1 for bill in bills 
+                                 if is_recent_bill(bill.get('propose_date', '')))
                 
                 bill_scores[name] = {
                     "main_proposals": main_proposals,
                     "co_proposals": co_proposals,
                     "total_bills": total_bills,
-                    "success_rate": success_rate
+                    "success_rate": success_rate,
+                    "recent_activity": recent_bills
                 }
         
         return {
             "success": True,
             "data": bill_scores,
             "count": len(bill_scores),
-            "source": "NewsBot 경량 API (실제 발의안 데이터)"
+            "source": "NewsBot 경량 API (개선된 발의안 데이터)",
+            "last_updated": datetime.now().isoformat()
         }
     except Exception as e:
         logger.error(f"발의안 점수 조회 오류: {e}")
         raise HTTPException(status_code=500, detail="발의안 점수 조회 실패")
 
+def is_recent_bill(propose_date):
+    """최근 3개월 내 발의안인지 확인"""
+    try:
+        if not propose_date:
+            return False
+        bill_date = datetime.strptime(propose_date, '%Y-%m-%d')
+        three_months_ago = datetime.now() - timedelta(days=90)
+        return bill_date >= three_months_ago
+    except:
+        return False
+
 @app.get("/api/bills/politician/{politician_name}")
 async def get_politician_bills(politician_name: str):
-    """특정 정치인의 발의안 목록 (실제 데이터)"""
+    """특정 정치인의 발의안 목록 (개선된 데이터)"""
     try:
         # 발의안 데이터에서 해당 정치인 찾기
         if politician_name not in bills_data:
@@ -246,20 +270,63 @@ async def get_politician_bills(politician_name: str):
         
         bills = bills_data[politician_name]
         
+        # 발의안을 최신순으로 정렬
+        sorted_bills = sorted(bills, key=lambda x: x.get('propose_date', ''), reverse=True)
+        
+        # 통계 계산
+        stats = {
+            "total_bills": len(bills),
+            "main_proposals": sum(1 for bill in bills if len(bill.get('co_proposers', [])) > 0),
+            "recent_bills": sum(1 for bill in bills if is_recent_bill(bill.get('propose_date', ''))),
+            "passed_bills": sum(1 for bill in bills 
+                              if bill.get('status') in ['본회의 통과', '정부이송', '공포']),
+            "committees": list(set(bill.get('committee', '') for bill in bills if bill.get('committee')))
+        }
+        
         return {
             "success": True,
             "data": {
                 "politician": politician_name,
-                "bills": bills,
+                "bills": sorted_bills,
+                "statistics": stats,
                 "total_count": len(bills)
             },
-            "source": "NewsBot 경량 API (실제 발의안 데이터)"
+            "source": "NewsBot 경량 API (개선된 발의안 데이터)",
+            "last_updated": datetime.now().isoformat()
         }
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"정치인 발의안 조회 오류: {e}")
         raise HTTPException(status_code=500, detail="발의안 조회 실패")
+
+@app.get("/api/bills/recent")
+async def get_recent_bills(limit: int = 20):
+    """최근 발의안 목록"""
+    try:
+        all_bills = []
+        
+        # 모든 의원의 발의안 수집
+        for politician_name, bills in bills_data.items():
+            for bill in bills:
+                bill_copy = bill.copy()
+                bill_copy['politician'] = politician_name
+                all_bills.append(bill_copy)
+        
+        # 최신순으로 정렬
+        sorted_bills = sorted(all_bills, 
+                            key=lambda x: x.get('propose_date', ''), 
+                            reverse=True)[:limit]
+        
+        return {
+            "success": True,
+            "data": sorted_bills,
+            "total_count": len(sorted_bills),
+            "source": "NewsBot 경량 API (개선된 발의안 데이터)"
+        }
+    except Exception as e:
+        logger.error(f"최근 발의안 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="최근 발의안 조회 실패")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
