@@ -8,7 +8,7 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
 
   // 최적화된 데이터 훅 사용
   const { 
-    data: { politicians, billScores }, 
+    data: { politicians, billScores, news, trends }, 
     loading, 
     errors, 
     isLoading,
@@ -31,14 +31,112 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
     }
   }
 
+  // 스마트 정렬된 정치인 목록 (메모이제이션)
+  const smartOrderedPoliticians = useMemo(() => {
+    if (!politicians || politicians.length === 0) return []
+    
+    console.log('🔄 스마트 정렬 시작:', {
+      politicians: politicians.length,
+      news: Object.keys(news || {}).length,
+      trends: trends ? Object.keys(trends).length : 0,
+      billScores: Object.keys(billScores || {}).length
+    })
+    
+    // 1. 뉴스에 등장하는 인물들 추출
+    const newsPersons = new Set()
+    if (news && typeof news === 'object') {
+      Object.keys(news).forEach(personName => {
+        if (news[personName] && news[personName].length > 0) {
+          newsPersons.add(personName)
+        }
+      })
+    }
+    
+    // 2. 트렌드에 등장하는 인물들 추출
+    const trendPersons = new Set()
+    if (trends && trends.ranking && Array.isArray(trends.ranking)) {
+      trends.ranking.forEach(item => {
+        if (item.politician) {
+          trendPersons.add(item.politician)
+        }
+      })
+    }
+    
+    // 3. 대표발의 상위 인물들 (billScores 기준)
+    const billRanking = Object.entries(billScores || {})
+      .map(([name, scores]) => ({
+        name,
+        mainProposals: scores.main_proposals || 0
+      }))
+      .sort((a, b) => b.mainProposals - a.mainProposals)
+    
+    console.log('📊 정렬 기준 데이터:', {
+      newsPersons: Array.from(newsPersons).slice(0, 5),
+      trendPersons: Array.from(trendPersons).slice(0, 5),
+      topBillProposers: billRanking.slice(0, 5).map(p => `${p.name}(${p.mainProposals})`)
+    })
+    
+    // 4. 우선순위 점수 계산
+    const priorityScores = new Map()
+    
+    politicians.forEach(politician => {
+      let score = 0
+      const name = politician.name
+      
+      // 1순위: 뉴스 등장 인물 (100점)
+      if (newsPersons.has(name)) {
+        score += 100
+        // 뉴스 많을수록 추가 점수
+        const newsCount = news[name]?.length || 0
+        score += Math.min(newsCount * 5, 50) // 최대 50점 추가
+      }
+      
+      // 2순위: 트렌드 등장 인물 (80점)
+      if (trendPersons.has(name)) {
+        score += 80
+        // 트렌드 순위에 따른 추가 점수
+        const trendRank = trends.ranking?.findIndex(item => item.politician === name)
+        if (trendRank !== -1 && trendRank < 10) {
+          score += (10 - trendRank) * 3 // 상위권일수록 높은 점수
+        }
+      }
+      
+      // 3순위: 대표발의 상위 인물 (60점 + 발의안 수 기준)
+      const billData = billScores[name]
+      if (billData && billData.main_proposals > 0) {
+        score += 60
+        score += Math.min(billData.main_proposals, 40) // 발의안 수만큼 추가 점수 (최대 40점)
+      }
+      
+      // 기본 점수 (이름 가나다순)
+      score += (1000 - name.charCodeAt(0)) / 1000
+      
+      priorityScores.set(name, score)
+    })
+    
+    // 5. 우선순위 점수 기준으로 정렬
+    const sortedPoliticians = [...politicians].sort((a, b) => {
+      const scoreA = priorityScores.get(a.name) || 0
+      const scoreB = priorityScores.get(b.name) || 0
+      return scoreB - scoreA
+    })
+    
+    console.log('✅ 스마트 정렬 완료:', {
+      total: sortedPoliticians.length,
+      top10: sortedPoliticians.slice(0, 10).map(p => `${p.name}(${Math.round(priorityScores.get(p.name) || 0)}점)`)
+    })
+    
+    return sortedPoliticians
+  }, [politicians, news, trends, billScores])
+
   // 페이징된 정치인 목록 (메모이제이션)
   const paginatedPoliticians = useMemo(() => {
-    if (!politicians || politicians.length === 0) return []
+    if (!smartOrderedPoliticians || smartOrderedPoliticians.length === 0) return []
     
     const startIdx = currentPage * itemsPerPage
     const endIdx = startIdx + itemsPerPage
-    return politicians.slice(startIdx, endIdx)
-  }, [politicians, currentPage, itemsPerPage])
+    return smartOrderedPoliticians.slice(startIdx, endIdx)
+  }, [smartOrderedPoliticians, currentPage, itemsPerPage])
 
   // 발의안 점수 가져오기 (메모이제이션)
   const getBillScore = useMemo(() => {
@@ -65,7 +163,7 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
     setCurrentPage(prev => prev + 1)
   }
 
-  const hasMore = politicians && (currentPage + 1) * itemsPerPage < politicians.length
+  const hasMore = smartOrderedPoliticians && (currentPage + 1) * itemsPerPage < smartOrderedPoliticians.length
 
   if (isLoading) {
     return (
@@ -128,7 +226,7 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
             ⚡ 캐시 최적화 ({cacheStats.size}개 항목)
           </div>
           <div className="text-sm text-gray-500">
-            총 {politicians?.length || 0}명
+            총 {smartOrderedPoliticians?.length || 0}명 (스마트 정렬)
           </div>
           <button 
             onClick={() => refreshData('politicians')}
@@ -222,7 +320,7 @@ const OptimizedPoliticianList = ({ onSelectPolitician }) => {
                 <span>로딩 중...</span>
               </div>
             ) : (
-              `더 보기 (${politicians?.length - (currentPage + 1) * itemsPerPage}명 남음)`
+              `더 보기 (${smartOrderedPoliticians?.length - (currentPage + 1) * itemsPerPage}명 남음)`
             )}
           </button>
         </div>
