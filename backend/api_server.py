@@ -135,10 +135,24 @@ def load_politicians_data():
     for path in possible_paths:
         try:
             with open(path, 'r', encoding='utf-8') as f:
-                politicians_data = json.load(f)
-            logger.info(f"정치인 데이터 로드 성공: {len(politicians_data)}명 ({path})")
-            return
+                loaded_data = json.load(f)
+            
+            # 데이터 검증 - 이름과 정당이 제대로 있는지 확인
+            if loaded_data and len(loaded_data) > 0:
+                sample_member = loaded_data[0]
+                if sample_member.get('name') and sample_member.get('name').strip() != '':
+                    politicians_data = loaded_data
+                    logger.info(f"✅ 정치인 데이터 로드 성공: {len(politicians_data)}명 ({path})")
+                    logger.info(f"샘플 검증: {sample_member.get('name')} ({sample_member.get('party')})")
+                    return
+                else:
+                    logger.warning(f"❌ 데이터 품질 문제: {path} - 이름 필드 누락")
+                    continue
         except FileNotFoundError:
+            logger.warning(f"파일 없음: {path}")
+            continue
+        except Exception as e:
+            logger.error(f"파일 로드 오류: {path} - {e}")
             continue
     
     # 데이터 파일이 없으면 실제 정당 데이터로 샘플 생성
