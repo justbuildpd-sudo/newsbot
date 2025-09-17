@@ -310,44 +310,6 @@ python3 unified_server.py
 
 ---
 
-## 🎨 웹페이지 컨셉 적용 완료 (2025-09-17 09:40)
-
-### ✅ 메인 페이지 리뉴얼
-- **컨셉 변경**: 메인에서 위젯 숨김, 정치인 목록만 표시
-- **새로운 디자인**: 다면적 정치인 평가 솔루션 컨셉 반영
-- **기능**: 검색, 정치인 카드 그리드, 실시간 서버 상태
-
-### ✅ 정치인 상세 페이지 구축
-- **URL**: `/politician/{정치인명}`
-- **위젯 통합**: 선택 시 3가지 위젯 탭으로 표시
-  - 신분증 카드 위젯
-  - 맥패밀리트리 위젯  
-  - 세련된 패널 위젯
-- **평가 점수**: 종합/뉴스/의안/연결성 점수 표시
-
-### ✅ 위젯 시스템 통합
-- **정적 파일 링크**: 
-  - `static/id_card_widgets` → `../backend/id_card_widgets`
-  - `static/mac_family_tree_widgets` → `../backend/mac_family_tree_widgets`
-  - `static/sophisticated_panels` → `../backend/sophisticated_panels`
-- **위젯 라우트**: `/widgets/{type}/{정치인명}`
-
-### 🌐 완성된 웹 서비스 구조
-```
-localhost:5000/                    # 메인 페이지 (정치인 목록)
-localhost:5000/politician/정청래   # 정치인 상세 (위젯 표시)
-localhost:5000/widgets/id-card/정청래     # 신분증 카드
-localhost:5000/widgets/family-tree/정청래 # 맥패밀리트리
-localhost:5000/widgets/panel/정청래       # 세련된 패널
-```
-
-### 🔗 뉴스봇 연결상태 확인 완료
-- **API 서버 (8001)**: ✅ 298명 정치인 데이터
-- **통합 서버 (8000)**: ✅ 평가 시스템 작동
-- **웹 서비스 (5000)**: ✅ 위젯 통합 완료
-
----
-
 **⚠️ 이 파일은 절대 삭제하지 마세요. 모든 작업의 핵심 기록점입니다.**
 
 ---

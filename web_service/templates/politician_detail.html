@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ politician_name }} | NewsBot-KR 정치인 분석</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 한글 폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        .politician-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .politician-photo {
+            width: 150px;
+            height: 180px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .politician-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .politician-info {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .party-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+        
+        .party-더불어민주당 { background-color: #1e40af; color: white; }
+        .party-국민의힘 { background-color: #dc2626; color: white; }
+        .party-조국혁신당 { background-color: #7c3aed; color: white; }
+        .party-정당정보없음 { background-color: #6b7280; color: white; }
+        .party-default { background-color: #059669; color: white; }
+        
+        .analysis-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-icon {
+            font-size: 1.8rem;
+            margin-right: 0.8rem;
+            color: #667eea;
+        }
+        
+        .widget-container {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            background: #f8f9fa;
+            min-height: 400px;
+            position: relative;
+        }
+        
+        .widget-tabs {
+            margin-bottom: 2rem;
+        }
+        
+        .widget-tab {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .widget-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .widget-tab:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+        }
+        
+        .widget-tab.active:hover {
+            background: #5a6fd8;
+        }
+        
+        .widget-content {
+            display: none;
+        }
+        
+        .widget-content.active {
+            display: block;
+        }
+        
+        .score-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .score-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .score-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .loading-widget {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            color: #6c757d;
+        }
+        
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .news-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .news-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .news-summary {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 정치인 헤더 -->
+    <div class="politician-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="politician-photo">
+                        {{ politician_name[0] if politician_name else 'P' }}
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h1 class="politician-name">{{ politician_name }}</h1>
+                    <div class="politician-info">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        {{ politician_data.get('district', '지역구 정보 없음') }}
+                    </div>
+                    <div class="politician-info">
+                        <i class="fas fa-building me-2"></i>
+                        {{ politician_data.get('committee', '위원회 정보 없음') }}
+                    </div>
+                    <div class="party-badge party-{{ politician_data.get('party', '정당정보없음').replace(' ', '') }}">
+                        {{ politician_data.get('party', '정당정보없음') }}
+                    </div>
+                </div>
+                <div class="col-md-2 text-end">
+                    <a href="/" class="back-button">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        목록으로
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 종합 평가 점수 -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="score-card">
+                    <div class="score-number" id="totalScore">-</div>
+                    <div class="score-label">종합 점수</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="score-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="score-number" id="newsScore">-</div>
+                    <div class="score-label">뉴스 평가</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="score-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="score-number" id="billScore">-</div>
+                    <div class="score-label">의안 활동</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="score-card" style="background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);">
+                    <div class="score-number" id="connectivityScore">-</div>
+                    <div class="score-label">연결성</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 관계나무 시각화 섹션 -->
+        <div class="analysis-section">
+            <h2 class="section-title">
+                <i class="fas fa-project-diagram section-icon"></i>
+                관계 네트워크 분석
+            </h2>
+            
+            <!-- 위젯 탭 -->
+            <div class="widget-tabs text-center">
+                <div class="widget-tab active" onclick="showWidget('id-card')">
+                    <i class="fas fa-id-card me-2"></i>
+                    신분증 카드
+                </div>
+                <div class="widget-tab" onclick="showWidget('family-tree')">
+                    <i class="fas fa-sitemap me-2"></i>
+                    맥패밀리트리
+                </div>
+                <div class="widget-tab" onclick="showWidget('panel')">
+                    <i class="fas fa-th-large me-2"></i>
+                    세련된 패널
+                </div>
+            </div>
+
+            <!-- 위젯 컨테이너 -->
+            <div class="widget-container">
+                <!-- 신분증 카드 위젯 -->
+                <div id="id-card-widget" class="widget-content active">
+                    <div class="loading-widget">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>신분증 카드 위젯을 로드하는 중...</p>
+                        <button class="btn btn-primary" onclick="loadIdCardWidget()">
+                            <i class="fas fa-sync me-2"></i>위젯 로드
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 맥패밀리트리 위젯 -->
+                <div id="family-tree-widget" class="widget-content">
+                    <div class="loading-widget">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>맥패밀리트리 위젯을 로드하는 중...</p>
+                        <button class="btn btn-primary" onclick="loadFamilyTreeWidget()">
+                            <i class="fas fa-sync me-2"></i>위젯 로드
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 세련된 패널 위젯 -->
+                <div id="panel-widget" class="widget-content">
+                    <div class="loading-widget">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>세련된 패널 위젯을 로드하는 중...</p>
+                        <button class="btn btn-primary" onclick="loadPanelWidget()">
+                            <i class="fas fa-sync me-2"></i>위젯 로드
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 뉴스 분석 섹션 -->
+        <div class="analysis-section">
+            <h2 class="section-title">
+                <i class="fas fa-newspaper section-icon"></i>
+                뉴스 분석
+            </h2>
+            <div id="newsAnalysis">
+                <div class="loading-widget">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>뉴스 데이터를 분석하는 중...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 의안 활동 섹션 -->
+        <div class="analysis-section">
+            <h2 class="section-title">
+                <i class="fas fa-balance-scale section-icon"></i>
+                의안 활동 분석
+            </h2>
+            <div id="billAnalysis">
+                <div class="loading-widget">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>의안 활동 데이터를 분석하는 중...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const politicianName = "{{ politician_name }}";
+
+        // 페이지 로드 시 데이터 로드
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPoliticianData();
+            loadNewsAnalysis();
+            loadBillAnalysis();
+        });
+
+        // 정치인 데이터 로드
+        async function loadPoliticianData() {
+            try {
+                // 통합 서버에서 평가 데이터 조회
+                const response = await fetch(`http://localhost:8000/api/evaluation/politician/${encodeURIComponent(politicianName)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        updateScoreCards(data.data);
+                    }
+                }
+            } catch (error) {
+                console.error('평가 데이터 로드 실패:', error);
+            }
+        }
+
+        // 점수 카드 업데이트
+        function updateScoreCards(data) {
+            document.getElementById('totalScore').textContent = data.total_score || '-';
+            document.getElementById('newsScore').textContent = 
+                Math.round((data.scores?.news?.mention || 0) + (data.scores?.news?.sentiment || 0) + (data.scores?.news?.trend || 0));
+            document.getElementById('billScore').textContent = 
+                Math.round((data.scores?.bill_sponsor?.main || 0) + (data.scores?.bill_result?.pass_rate || 0));
+            document.getElementById('connectivityScore').textContent = 
+                Math.round(data.scores?.connectivity?.total || 0);
+        }
+
+        // 뉴스 분석 로드
+        async function loadNewsAnalysis() {
+            try {
+                const response = await fetch(`http://localhost:8001/api/news/with-politicians`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        const relevantNews = data.data.filter(news => 
+                            news.politicians && news.politicians.some(p => p.name === politicianName)
+                        );
+                        displayNewsAnalysis(relevantNews);
+                    }
+                }
+            } catch (error) {
+                console.error('뉴스 분석 로드 실패:', error);
+                document.getElementById('newsAnalysis').innerHTML = 
+                    '<div class="alert alert-warning">뉴스 데이터를 불러올 수 없습니다.</div>';
+            }
+        }
+
+        // 뉴스 분석 표시
+        function displayNewsAnalysis(news) {
+            const container = document.getElementById('newsAnalysis');
+            
+            if (news.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">관련 뉴스가 없습니다.</div>';
+                return;
+            }
+
+            let html = '';
+            news.slice(0, 5).forEach(item => {
+                html += `
+                    <div class="news-item">
+                        <div class="news-title">${item.title}</div>
+                        <div class="news-summary">${item.summary || '요약 정보가 없습니다.'}</div>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>${item.date}
+                            <i class="fas fa-external-link-alt ms-2 me-1"></i>
+                            <a href="${item.link}" target="_blank">원문 보기</a>
+                        </small>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // 의안 활동 분석 로드
+        async function loadBillAnalysis() {
+            try {
+                // 의안 활동 데이터 로드 로직 (추후 구현)
+                setTimeout(() => {
+                    document.getElementById('billAnalysis').innerHTML = 
+                        '<div class="alert alert-info">의안 활동 데이터를 준비 중입니다.</div>';
+                }, 2000);
+            } catch (error) {
+                console.error('의안 분석 로드 실패:', error);
+                document.getElementById('billAnalysis').innerHTML = 
+                    '<div class="alert alert-warning">의안 데이터를 불러올 수 없습니다.</div>';
+            }
+        }
+
+        // 위젯 탭 전환
+        function showWidget(widgetType) {
+            // 모든 탭 비활성화
+            document.querySelectorAll('.widget-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.widget-content').forEach(content => content.classList.remove('active'));
+            
+            // 선택된 탭 활성화
+            event.target.closest('.widget-tab').classList.add('active');
+            document.getElementById(`${widgetType}-widget`).classList.add('active');
+        }
+
+        // 신분증 카드 위젯 로드
+        function loadIdCardWidget() {
+            const container = document.getElementById('id-card-widget');
+            container.innerHTML = `
+                <iframe src="/widgets/id-card/${encodeURIComponent(politicianName)}" 
+                        width="100%" height="400" frameborder="0"
+                        style="border-radius: 10px;">
+                </iframe>
+            `;
+        }
+
+        // 맥패밀리트리 위젯 로드
+        function loadFamilyTreeWidget() {
+            const container = document.getElementById('family-tree-widget');
+            container.innerHTML = `
+                <iframe src="/widgets/family-tree/${encodeURIComponent(politicianName)}" 
+                        width="100%" height="400" frameborder="0"
+                        style="border-radius: 10px;">
+                </iframe>
+            `;
+        }
+
+        // 세련된 패널 위젯 로드
+        function loadPanelWidget() {
+            const container = document.getElementById('panel-widget');
+            container.innerHTML = `
+                <iframe src="/widgets/panel/${encodeURIComponent(politicianName)}" 
+                        width="100%" height="400" frameborder="0"
+                        style="border-radius: 10px;">
+                </iframe>
+            `;
+        }
+    </script>
+</body>
+</html>
