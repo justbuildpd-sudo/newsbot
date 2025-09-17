@@ -129,8 +129,20 @@ const PoliticianProfileWidget = () => {
               >
                 {/* 프로필 영역 - 정당명 텍스트 표시 */}
                 <div className="flex-shrink-0">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold ${getPartyColor(politician.party)}`}>
-                    {getInitials(politician.name)}
+                  <div className={`w-12 h-12 rounded-full overflow-hidden flex items-center justify-center text-sm font-bold ${getPartyColor(politician.party)}`}>
+                    {politician.photo_url ? (
+                      <img 
+                        src={politician.photo_url} 
+                        alt={politician.name || politician.naas_nm}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.textContent = getInitials(politician.name);
+                        }}
+                      />
+                    ) : (
+                      getInitials(politician.name)
+                    )}
                   </div>
                 </div>
                 

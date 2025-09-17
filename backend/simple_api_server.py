@@ -39,8 +39,10 @@ def load_politicians_data():
     """정치인 데이터 로드"""
     global politicians_data
     
-    # 여러 경로에서 데이터 파일 찾기
+    # 여러 경로에서 데이터 파일 찾기 (사진 URL 포함 데이터 우선)
     possible_paths = [
+        '../22nd_assembly_members_300.json',
+        '22nd_assembly_members_300.json',
         'politicians_data_with_party.json',
         'data/politicians.json',
         '../politicians_data_with_party.json'
@@ -55,21 +57,23 @@ def load_politicians_data():
         except FileNotFoundError:
             continue
     
-    # 데이터 파일이 없으면 샘플 데이터 생성
+    # 데이터 파일이 없으면 샘플 데이터 생성 (사진 URL 포함)
     politicians_data = [
         {
             "name": "정청래",
             "party": "더불어민주당", 
             "district": "서울 마포구을",
             "committee": "기획재정위원회",
-            "id": "sample1"
+            "id": "sample1",
+            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample1.jpg"
         },
         {
-            "name": "김영배",
+            "name": "김영배", 
             "party": "더불어민주당",
-            "district": "서울 강남구갑", 
-            "committee": "기획재정위원회",
-            "id": "sample2"
+            "district": "서울 강남구갑",
+            "committee": "기획재정위원회", 
+            "id": "sample2",
+            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample2.jpg"
         }
     ]
     logger.warning("데이터 파일을 찾을 수 없어 샘플 데이터 사용")
@@ -174,6 +178,72 @@ async def get_featured_politicians():
     except Exception as e:
         logger.error(f"주요 정치인 조회 오류: {e}")
         raise HTTPException(status_code=500, detail="주요 정치인 조회 실패")
+
+@app.get("/api/bills/scores")
+async def get_bill_scores():
+    """발의안 점수 (샘플 데이터)"""
+    try:
+        # 정치인별 발의안 점수 생성
+        bill_scores = {}
+        for politician in politicians_data:
+            name = politician.get('name') or politician.get('naas_nm', '')
+            if name:
+                # 해시 기반 가상 점수 생성
+                hash_val = hash(name) % 100
+                bill_scores[name] = {
+                    "main_proposals": (hash_val % 20) + 1,
+                    "co_proposals": (hash_val % 30) + 5, 
+                    "total_bills": (hash_val % 50) + 6,
+                    "success_rate": round((hash_val % 80 + 20) / 100, 2)
+                }
+        
+        return {
+            "success": True,
+            "data": bill_scores,
+            "count": len(bill_scores),
+            "source": "NewsBot 경량 API (샘플 데이터)"
+        }
+    except Exception as e:
+        logger.error(f"발의안 점수 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="발의안 점수 조회 실패")
+
+@app.get("/api/bills/politician/{politician_name}")
+async def get_politician_bills(politician_name: str):
+    """특정 정치인의 발의안 목록"""
+    try:
+        # 해당 정치인 찾기
+        politician = next((p for p in politicians_data 
+                         if p.get('name') == politician_name or p.get('naas_nm') == politician_name), None)
+        
+        if not politician:
+            raise HTTPException(status_code=404, detail="정치인을 찾을 수 없습니다")
+        
+        # 샘플 발의안 데이터 생성
+        hash_val = hash(politician_name)
+        bills = []
+        for i in range((hash_val % 5) + 1):
+            bills.append({
+                "bill_id": f"22{hash_val % 9999:04d}{i+1:02d}",
+                "title": f"{politician_name} 의원 대표발의 법안 {i+1}",
+                "status": ["발의", "심사중", "통과", "폐기"][i % 4],
+                "date": "2024-09-01",
+                "type": "주발의" if i == 0 else "공동발의"
+            })
+        
+        return {
+            "success": True,
+            "data": {
+                "politician": politician_name,
+                "bills": bills,
+                "total_count": len(bills)
+            },
+            "source": "NewsBot 경량 API (샘플 데이터)"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"정치인 발의안 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="발의안 조회 실패")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
