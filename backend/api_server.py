@@ -36,6 +36,7 @@ app.add_middleware(
 # 전역 데이터 저장
 politicians_data = []
 bills_data = {}
+news_data = {}
 
 def load_bills_data():
     """발의안 데이터 로드"""
@@ -61,6 +62,28 @@ def load_bills_data():
             continue
     
     logger.warning("발의안 데이터 파일을 찾을 수 없음")
+
+def load_news_data():
+    """뉴스 데이터 로드"""
+    global news_data
+    
+    # 뉴스 데이터 파일 찾기
+    possible_paths = [
+        'naver_news_collected.json',
+        '../naver_news_collected.json'
+    ]
+    
+    for path in possible_paths:
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                news_data = json.load(f)
+            total_news = sum(len(news) for news in news_data.values())
+            logger.info(f"뉴스 데이터 로드 성공: {len(news_data)}명, {total_news}건 ({path})")
+            return
+        except FileNotFoundError:
+            continue
+    
+    logger.warning("뉴스 데이터 파일을 찾을 수 없음")
 
 def load_politicians_data():
     """정치인 데이터 로드"""
@@ -108,6 +131,7 @@ def load_politicians_data():
 # 서버 시작 시 데이터 로드
 load_politicians_data()
 load_bills_data()
+load_news_data()
 
 @app.get("/")
 async def root():
@@ -327,6 +351,105 @@ async def get_recent_bills(limit: int = 20):
     except Exception as e:
         logger.error(f"최근 발의안 조회 오류: {e}")
         raise HTTPException(status_code=500, detail="최근 발의안 조회 실패")
+
+@app.get("/api/news/politician/{politician_name}")
+async def get_politician_news(politician_name: str):
+    """특정 정치인 관련 뉴스"""
+    try:
+        if politician_name not in news_data:
+            raise HTTPException(status_code=404, detail="해당 정치인의 뉴스를 찾을 수 없습니다")
+        
+        news_list = news_data[politician_name]
+        
+        # 감정 분석 통계
+        sentiments = {'positive': 0, 'negative': 0, 'neutral': 0}
+        for news in news_list:
+            sentiments[news.get('sentiment', 'neutral')] += 1
+        
+        return {
+            "success": True,
+            "data": {
+                "politician": politician_name,
+                "news": news_list,
+                "statistics": {
+                    "total_count": len(news_list),
+                    "positive": sentiments['positive'],
+                    "negative": sentiments['negative'],
+                    "neutral": sentiments['neutral'],
+                    "sentiment_ratio": sentiments['positive'] / len(news_list) if news_list else 0
+                }
+            },
+            "source": "네이버 뉴스 API"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"정치인 뉴스 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="뉴스 조회 실패")
+
+@app.get("/api/news/trending")
+async def get_trending_news(limit: int = 20):
+    """트렌딩 뉴스 (모든 정치인)"""
+    try:
+        all_news = []
+        
+        # 모든 정치인의 뉴스 수집
+        for politician_name, news_list in news_data.items():
+            for news in news_list:
+                news_copy = news.copy()
+                all_news.append(news_copy)
+        
+        # 최신순으로 정렬 (pub_date 기준)
+        all_news.sort(key=lambda x: x.get('pub_date', ''), reverse=True)
+        
+        return {
+            "success": True,
+            "data": all_news[:limit],
+            "total_count": len(all_news),
+            "source": "네이버 뉴스 API"
+        }
+    except Exception as e:
+        logger.error(f"트렌딩 뉴스 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="트렌딩 뉴스 조회 실패")
+
+@app.get("/api/news/stats")
+async def get_news_stats():
+    """뉴스 통계"""
+    try:
+        stats = {
+            "politicians_count": len(news_data),
+            "total_news": sum(len(news) for news in news_data.values()),
+            "sentiment_distribution": {'positive': 0, 'negative': 0, 'neutral': 0},
+            "politicians_ranking": []
+        }
+        
+        # 감정 분석 통계
+        for politician_name, news_list in news_data.items():
+            politician_sentiments = {'positive': 0, 'negative': 0, 'neutral': 0}
+            for news in news_list:
+                sentiment = news.get('sentiment', 'neutral')
+                stats["sentiment_distribution"][sentiment] += 1
+                politician_sentiments[sentiment] += 1
+            
+            stats["politicians_ranking"].append({
+                "politician": politician_name,
+                "news_count": len(news_list),
+                "positive": politician_sentiments['positive'],
+                "negative": politician_sentiments['negative'],
+                "neutral": politician_sentiments['neutral']
+            })
+        
+        # 뉴스 수 기준 정렬
+        stats["politicians_ranking"].sort(key=lambda x: x['news_count'], reverse=True)
+        
+        return {
+            "success": True,
+            "data": stats,
+            "source": "네이버 뉴스 API"
+        }
+    except Exception as e:
+        logger.error(f"뉴스 통계 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="뉴스 통계 조회 실패")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
