@@ -152,50 +152,22 @@ def load_politicians_data():
             logger.error(f"파일 로드 오류: {path} - {e}")
             continue
     
-    # 데이터 파일이 없으면 실제 정당 데이터로 샘플 생성
-    politicians_data = [
-        {
-            "name": "이재명",
-            "party": "더불어민주당", 
-            "district": "경기 성남시분당구을",
-            "committee": "기획재정위원회",
-            "id": "sample1",
-            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample1.jpg"
-        },
-        {
-            "name": "한동훈", 
-            "party": "국민의힘",
-            "district": "서울 동작구갑",
-            "committee": "법제사법위원회", 
-            "id": "sample2",
-            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample2.jpg"
-        },
-        {
-            "name": "조국", 
-            "party": "조국혁신당",
-            "district": "서울 종로구",
-            "committee": "법제사법위원회", 
-            "id": "sample3",
-            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample3.jpg"
-        },
-        {
-            "name": "정청래",
-            "party": "더불어민주당", 
-            "district": "서울 마포구을",
-            "committee": "기획재정위원회",
-            "id": "sample4",
-            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample4.jpg"
-        },
-        {
-            "name": "김기현", 
-            "party": "국민의힘",
-            "district": "울산 북구",
-            "committee": "정무위원회", 
-            "id": "sample5",
-            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample5.jpg"
-        }
-    ]
-    logger.warning("데이터 파일을 찾을 수 없어 샘플 데이터 사용")
+    # 데이터 파일이 없으면 하드코딩된 실제 298명 의원 데이터 사용
+    logger.warning("❌ 모든 파일 로드 실패, 하드코딩 데이터 사용")
+    try:
+        from hardcoded_members import HARDCODED_MEMBERS
+        politicians_data = HARDCODED_MEMBERS
+        logger.info(f"✅ 하드코딩 데이터 로드: {len(politicians_data)}명")
+    except ImportError:
+        # 하드코딩 파일도 없으면 최소한의 실제 의원 데이터
+        politicians_data = [
+            {"name": "강경숙", "party": "조국혁신당", "district": "비례대표", "committee": "교육위원회"},
+            {"name": "강대식", "party": "국민의힘", "district": "대구 동구군위군을", "committee": "국방위원회"},
+            {"name": "강득구", "party": "더불어민주당", "district": "경기 안양시만안구", "committee": "환경노동위원회"},
+            {"name": "강명구", "party": "국민의힘", "district": "경북 구미시을", "committee": "농림축산식품해양수산위원회"},
+            {"name": "강민국", "party": "국민의힘", "district": "경남 진주시을", "committee": "정무위원회"}
+        ]
+        logger.warning("하드코딩 파일도 없어 최소 샘플 데이터 사용")
 
 # 성능 최적화 시스템 초기화
 try:
