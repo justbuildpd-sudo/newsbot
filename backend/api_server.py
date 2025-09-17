@@ -90,9 +90,13 @@ def load_trend_data():
     """트렌드 분석 데이터 로드"""
     global trend_data
     
-    # 트렌드 데이터 파일 찾기
+    # 트렌드 데이터 파일 찾기 (확장된 데이터 우선)
     possible_paths = [
+        'extended_trend_data.json',
+        'naver_integrated_data.json',
         'trend_analysis_result.json',
+        '../extended_trend_data.json',
+        '../naver_integrated_data.json',
         '../trend_analysis_result.json'
     ]
     
