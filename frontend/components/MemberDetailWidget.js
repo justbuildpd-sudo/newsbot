@@ -99,6 +99,30 @@ export default function MemberDetailWidget({ memberName, onClose }) {
     }
   }
 
+  const formatElectionCount = (terms) => {
+    if (!terms) return '초선'
+    
+    // 숫자만 추출
+    const numMatch = terms.toString().match(/\d+/)
+    if (numMatch) {
+      const num = parseInt(numMatch[0])
+      if (num === 1) return '초선'
+      if (num === 2) return '재선'
+      if (num >= 3) return `${num}선`
+    }
+    
+    // 텍스트 기반 처리
+    const termStr = terms.toString().toLowerCase()
+    if (termStr.includes('초선') || termStr === '1') return '초선'
+    if (termStr.includes('재선') || termStr === '2') return '재선'
+    if (termStr.includes('삼선') || termStr === '3') return '3선'
+    if (termStr.includes('4') || termStr.includes('사선')) return '4선'
+    if (termStr.includes('5') || termStr.includes('오선')) return '5선'
+    if (termStr.includes('6') || termStr.includes('육선')) return '6선'
+    
+    return '초선' // 기본값
+  }
+
   if (!memberName) return null
 
   if (loading) {
@@ -208,7 +232,7 @@ export default function MemberDetailWidget({ memberName, onClose }) {
                   </div>
                   <div>
                     <div className="text-sm text-gray-400">당선횟수</div>
-                    <div className="text-lg text-white">{memberInfo.terms || '1'}선</div>
+                    <div className="text-lg text-white">{formatElectionCount(memberInfo.terms)}</div>
                   </div>
                 </div>
               )}
