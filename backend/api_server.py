@@ -37,6 +37,7 @@ app.add_middleware(
 politicians_data = []
 bills_data = {}
 news_data = {}
+trend_data = {}
 
 def load_bills_data():
     """발의안 데이터 로드"""
@@ -85,6 +86,27 @@ def load_news_data():
     
     logger.warning("뉴스 데이터 파일을 찾을 수 없음")
 
+def load_trend_data():
+    """트렌드 분석 데이터 로드"""
+    global trend_data
+    
+    # 트렌드 데이터 파일 찾기
+    possible_paths = [
+        'trend_analysis_result.json',
+        '../trend_analysis_result.json'
+    ]
+    
+    for path in possible_paths:
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                trend_data = json.load(f)
+            logger.info(f"트렌드 데이터 로드 성공: {len(trend_data.get('trends', {}))}명 ({path})")
+            return
+        except FileNotFoundError:
+            continue
+    
+    logger.warning("트렌드 데이터 파일을 찾을 수 없음")
+
 def load_politicians_data():
     """정치인 데이터 로드"""
     global politicians_data
@@ -132,6 +154,7 @@ def load_politicians_data():
 load_politicians_data()
 load_bills_data()
 load_news_data()
+load_trend_data()
 
 @app.get("/")
 async def root():
@@ -450,6 +473,75 @@ async def get_news_stats():
     except Exception as e:
         logger.error(f"뉴스 통계 조회 오류: {e}")
         raise HTTPException(status_code=500, detail="뉴스 통계 조회 실패")
+
+@app.get("/api/trends/chart")
+async def get_trend_chart():
+    """트렌드 차트 데이터"""
+    try:
+        if not trend_data:
+            raise HTTPException(status_code=404, detail="트렌드 데이터를 찾을 수 없습니다")
+        
+        chart_data = trend_data.get('chart_data', {})
+        if not chart_data:
+            raise HTTPException(status_code=404, detail="차트 데이터가 없습니다")
+        
+        return {
+            "success": True,
+            "data": chart_data,
+            "source": "네이버 데이터랩 + 뉴스 API"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"트렌드 차트 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="트렌드 차트 조회 실패")
+
+@app.get("/api/trends/ranking")
+async def get_trend_ranking():
+    """트렌드 랭킹"""
+    try:
+        if not trend_data:
+            raise HTTPException(status_code=404, detail="트렌드 데이터를 찾을 수 없습니다")
+        
+        ranking = trend_data.get('ranking', [])
+        summary = trend_data.get('summary', {})
+        
+        return {
+            "success": True,
+            "data": {
+                "ranking": ranking,
+                "summary": summary,
+                "generated_at": trend_data.get('generated_at', '')
+            },
+            "source": "네이버 데이터랩 + 뉴스 API"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"트렌드 랭킹 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="트렌드 랭킹 조회 실패")
+
+@app.get("/api/trends/politician/{politician_name}")
+async def get_politician_trend(politician_name: str):
+    """특정 정치인 트렌드"""
+    try:
+        if not trend_data or 'trends' not in trend_data:
+            raise HTTPException(status_code=404, detail="트렌드 데이터를 찾을 수 없습니다")
+        
+        politician_trend = trend_data['trends'].get(politician_name)
+        if not politician_trend:
+            raise HTTPException(status_code=404, detail="해당 정치인의 트렌드 데이터를 찾을 수 없습니다")
+        
+        return {
+            "success": True,
+            "data": politician_trend,
+            "source": "네이버 데이터랩 + 뉴스 API"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"정치인 트렌드 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="정치인 트렌드 조회 실패")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
