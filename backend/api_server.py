@@ -385,7 +385,7 @@ async def get_politician_bills(politician_name: str):
         raise HTTPException(status_code=500, detail="발의안 조회 실패")
 
 @app.get("/api/bills/recent")
-async def get_recent_bills(limit: int = 20):
+async def get_recent_bills(limit: int = 25):
     """최근 발의안 목록"""
     try:
         all_bills = []
@@ -448,7 +448,7 @@ async def get_politician_news(politician_name: str):
         raise HTTPException(status_code=500, detail="뉴스 조회 실패")
 
 @app.get("/api/news/trending")
-async def get_trending_news(limit: int = 20):
+async def get_trending_news(limit: int = 25):
     """트렌딩 뉴스 (모든 정치인)"""
     try:
         all_news = []

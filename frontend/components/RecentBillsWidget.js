@@ -12,7 +12,7 @@ export default function RecentBillsWidget() {
   const fetchRecentBills = async () => {
     try {
       setLoading(true)
-      const response = await fetch('https://newsbot-backend-6j3p.onrender.com/api/bills/recent?limit=10')
+      const response = await fetch('https://newsbot-backend-6j3p.onrender.com/api/bills/recent?limit=13')
       const data = await response.json()
       
       if (data.success) {

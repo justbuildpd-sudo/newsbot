@@ -17,8 +17,8 @@ const OptimizedNewsWidget = () => {
     try {
       setError(null)
       
-      // 실시간 뉴스 API 호출
-      const response = await fetch('https://newsbot-backend-6j3p.onrender.com/api/news/trending?limit=15')
+      // 실시간 뉴스 API 호출 (18건으로 증가)
+      const response = await fetch('https://newsbot-backend-6j3p.onrender.com/api/news/trending?limit=18')
       
       if (response.ok) {
         const data = await response.json()
