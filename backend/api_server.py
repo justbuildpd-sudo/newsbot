@@ -150,6 +150,15 @@ def load_politicians_data():
     ]
     logger.warning("데이터 파일을 찾을 수 없어 샘플 데이터 사용")
 
+# 성능 최적화 시스템 초기화
+try:
+    from performance_optimizer import PerformanceOptimizer
+    performance_optimizer = PerformanceOptimizer()
+    logger.info("성능 최적화 시스템 초기화 완료")
+except Exception as e:
+    logger.error(f"성능 최적화 시스템 초기화 실패: {e}")
+    performance_optimizer = None
+
 # 서버 시작 시 데이터 로드
 load_politicians_data()
 load_bills_data()
@@ -178,13 +187,27 @@ async def health_check():
 
 @app.get("/api/assembly/members")
 async def get_assembly_members():
-    """국회의원 목록 조회"""
+    """국회의원 목록 조회 (최적화)"""
     try:
+        # 성능 최적화된 데이터 사용
+        if performance_optimizer:
+            optimized_data = performance_optimizer.get_politicians_fast()
+            if optimized_data:
+                return {
+                    "success": True,
+                    "data": optimized_data,
+                    "total_count": len(optimized_data),
+                    "source": "NewsBot 경량 API (캐시 최적화)",
+                    "cached": True
+                }
+        
+        # 폴백: 기존 데이터
         return {
             "success": True,
             "data": politicians_data,
             "total_count": len(politicians_data),
-            "source": "NewsBot 경량 API"
+            "source": "NewsBot 경량 API",
+            "cached": False
         }
     except Exception as e:
         logger.error(f"국회의원 조회 오류: {e}")
@@ -256,24 +279,33 @@ async def get_featured_politicians():
 
 @app.get("/api/bills/scores")
 async def get_bill_scores():
-    """발의안 점수 (개선된 실제 데이터 기반)"""
+    """발의안 점수 (최적화)"""
     try:
-        # 개선된 발의안 데이터에서 점수 계산
+        # 성능 최적화된 데이터 사용
+        if performance_optimizer:
+            cached_scores = performance_optimizer.get_bill_scores_fast()
+            if cached_scores:
+                return {
+                    "success": True,
+                    "data": cached_scores,
+                    "count": len(cached_scores),
+                    "source": "NewsBot 경량 API (캐시 최적화)",
+                    "last_updated": datetime.now().isoformat(),
+                    "cached": True
+                }
+        
+        # 폴백: 기존 계산
         bill_scores = {}
         for name, bills in bills_data.items():
             if bills:
-                # 주발의자인 경우 (공동발의자가 있는 경우)
                 main_proposals = sum(1 for bill in bills if len(bill.get('co_proposers', [])) > 0)
-                # 공동발의 (주발의가 아닌 경우)
                 co_proposals = len(bills) - main_proposals
                 total_bills = len(bills)
                 
-                # 통과율 계산 (본회의 통과, 정부이송 포함)
                 passed_bills = sum(1 for bill in bills 
                                  if bill.get('status') in ['본회의 통과', '정부이송', '공포'])
                 success_rate = round(passed_bills / total_bills, 2) if total_bills > 0 else 0
                 
-                # 최근 활동 점수 (최근 3개월 내 발의안)
                 recent_bills = sum(1 for bill in bills 
                                  if is_recent_bill(bill.get('propose_date', '')))
                 
@@ -289,8 +321,9 @@ async def get_bill_scores():
             "success": True,
             "data": bill_scores,
             "count": len(bill_scores),
-            "source": "NewsBot 경량 API (개선된 발의안 데이터)",
-            "last_updated": datetime.now().isoformat()
+            "source": "NewsBot 경량 API (실시간 계산)",
+            "last_updated": datetime.now().isoformat(),
+            "cached": False
         }
     except Exception as e:
         logger.error(f"발의안 점수 조회 오류: {e}")
