@@ -34,6 +34,29 @@ app.add_middleware(
 
 # 전역 데이터 저장
 politicians_data = []
+bills_data = {}
+
+def load_bills_data():
+    """발의안 데이터 로드"""
+    global bills_data
+    
+    # 발의안 데이터 파일 찾기
+    possible_paths = [
+        'bills_data_22nd.json',
+        '../bills_data_22nd.json',
+        './backend/bills_data_22nd.json'
+    ]
+    
+    for path in possible_paths:
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                bills_data = json.load(f)
+            logger.info(f"발의안 데이터 로드 성공: {len(bills_data)}명 ({path})")
+            return
+        except FileNotFoundError:
+            continue
+    
+    logger.warning("발의안 데이터 파일을 찾을 수 없음")
 
 def load_politicians_data():
     """정치인 데이터 로드"""
@@ -41,8 +64,8 @@ def load_politicians_data():
     
     # 여러 경로에서 데이터 파일 찾기 (사진 URL 포함 데이터 우선)
     possible_paths = [
-        '../22nd_assembly_members_300.json',
-        '22nd_assembly_members_300.json',
+        '22nd_assembly_members_300.json',  # 백엔드 폴더 내
+        '../22nd_assembly_members_300.json',  # 상위 폴더
         'politicians_data_with_party.json',
         'data/politicians.json',
         '../politicians_data_with_party.json'
@@ -80,6 +103,7 @@ def load_politicians_data():
 
 # 서버 시작 시 데이터 로드
 load_politicians_data()
+load_bills_data()
 
 @app.get("/")
 async def root():
@@ -181,27 +205,32 @@ async def get_featured_politicians():
 
 @app.get("/api/bills/scores")
 async def get_bill_scores():
-    """발의안 점수 (샘플 데이터)"""
+    """발의안 점수 (실제 데이터 기반)"""
     try:
-        # 정치인별 발의안 점수 생성
+        # 실제 발의안 데이터에서 점수 계산
         bill_scores = {}
-        for politician in politicians_data:
-            name = politician.get('name') or politician.get('naas_nm', '')
-            if name:
-                # 해시 기반 가상 점수 생성
-                hash_val = hash(name) % 100
+        for name, bills in bills_data.items():
+            if bills:
+                main_proposals = sum(1 for bill in bills if '대표발의' in bill.get('bill_name', '') or len(bill.get('co_proposers', [])) > 0)
+                co_proposals = len(bills) - main_proposals
+                total_bills = len(bills)
+                
+                # 통과율 계산
+                passed_bills = sum(1 for bill in bills if bill.get('status') == '본회의 통과')
+                success_rate = round(passed_bills / total_bills, 2) if total_bills > 0 else 0
+                
                 bill_scores[name] = {
-                    "main_proposals": (hash_val % 20) + 1,
-                    "co_proposals": (hash_val % 30) + 5, 
-                    "total_bills": (hash_val % 50) + 6,
-                    "success_rate": round((hash_val % 80 + 20) / 100, 2)
+                    "main_proposals": main_proposals,
+                    "co_proposals": co_proposals,
+                    "total_bills": total_bills,
+                    "success_rate": success_rate
                 }
         
         return {
             "success": True,
             "data": bill_scores,
             "count": len(bill_scores),
-            "source": "NewsBot 경량 API (샘플 데이터)"
+            "source": "NewsBot 경량 API (실제 발의안 데이터)"
         }
     except Exception as e:
         logger.error(f"발의안 점수 조회 오류: {e}")
@@ -209,26 +238,13 @@ async def get_bill_scores():
 
 @app.get("/api/bills/politician/{politician_name}")
 async def get_politician_bills(politician_name: str):
-    """특정 정치인의 발의안 목록"""
+    """특정 정치인의 발의안 목록 (실제 데이터)"""
     try:
-        # 해당 정치인 찾기
-        politician = next((p for p in politicians_data 
-                         if p.get('name') == politician_name or p.get('naas_nm') == politician_name), None)
+        # 발의안 데이터에서 해당 정치인 찾기
+        if politician_name not in bills_data:
+            raise HTTPException(status_code=404, detail="해당 정치인의 발의안을 찾을 수 없습니다")
         
-        if not politician:
-            raise HTTPException(status_code=404, detail="정치인을 찾을 수 없습니다")
-        
-        # 샘플 발의안 데이터 생성
-        hash_val = hash(politician_name)
-        bills = []
-        for i in range((hash_val % 5) + 1):
-            bills.append({
-                "bill_id": f"22{hash_val % 9999:04d}{i+1:02d}",
-                "title": f"{politician_name} 의원 대표발의 법안 {i+1}",
-                "status": ["발의", "심사중", "통과", "폐기"][i % 4],
-                "date": "2024-09-01",
-                "type": "주발의" if i == 0 else "공동발의"
-            })
+        bills = bills_data[politician_name]
         
         return {
             "success": True,
@@ -237,7 +253,7 @@ async def get_politician_bills(politician_name: str):
                 "bills": bills,
                 "total_count": len(bills)
             },
-            "source": "NewsBot 경량 API (샘플 데이터)"
+            "source": "NewsBot 경량 API (실제 발의안 데이터)"
         }
     except HTTPException:
         raise
