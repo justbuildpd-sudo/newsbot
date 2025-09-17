@@ -113,12 +113,12 @@ export default function MemberDetailWidget({ memberName, onClose }) {
         return 'text-green-400'
       case '진보당':
         return 'text-pink-400'
-      case '국민의미래':
-        return 'text-teal-400'
-      case '더불어민주연합':
-        return 'text-cyan-400'
       case '새로운미래':
         return 'text-lime-400'
+      case '기본소득당':
+        return 'text-yellow-400'
+      case '사회민주당':
+        return 'text-orange-400'
       default:
         return 'text-gray-400'
     }

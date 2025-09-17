@@ -149,7 +149,13 @@ const ConnectivityWidget = ({ memberName, memberInfo }) => {
         case '개혁신당':
           return 'from-green-500 to-green-600';
         case '진보당':
+          return 'from-pink-500 to-pink-600';
+        case '새로운미래':
+          return 'from-lime-500 to-lime-600';
+        case '기본소득당':
           return 'from-yellow-500 to-yellow-600';
+        case '사회민주당':
+          return 'from-orange-500 to-orange-600';
         default:
           return 'from-gray-500 to-gray-600';
       }
@@ -165,7 +171,13 @@ const ConnectivityWidget = ({ memberName, memberInfo }) => {
         case '개혁신당':
           return 'from-green-300 to-green-400';
         case '진보당':
+          return 'from-pink-300 to-pink-400';
+        case '새로운미래':
+          return 'from-lime-300 to-lime-400';
+        case '기본소득당':
           return 'from-yellow-300 to-yellow-400';
+        case '사회민주당':
+          return 'from-orange-300 to-orange-400';
         default:
           return 'from-gray-300 to-gray-400';
       }
