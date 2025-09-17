@@ -474,6 +474,47 @@ async def get_news_stats():
         logger.error(f"뉴스 통계 조회 오류: {e}")
         raise HTTPException(status_code=500, detail="뉴스 통계 조회 실패")
 
+# 정치인 전용 검색 서비스 초기화
+try:
+    from politician_search_service import PoliticianSearchService
+    search_service = PoliticianSearchService()
+    logger.info("정치인 검색 서비스 초기화 완료")
+except Exception as e:
+    logger.error(f"검색 서비스 초기화 실패: {e}")
+    search_service = None
+
+@app.get("/api/search/politicians")
+async def search_politicians(q: str, limit: int = 10):
+    """정치인 검색 (정치인만 검색 가능)"""
+    try:
+        if not search_service:
+            raise HTTPException(status_code=503, detail="검색 서비스를 사용할 수 없습니다")
+        
+        # 검색어 유효성 검사
+        validation = search_service.validate_search_query(q)
+        if not validation['valid']:
+            return {
+                "success": False,
+                "error": validation['error'],
+                "error_code": validation['error_code'],
+                "suggestions": validation.get('suggestions', [])
+            }
+        
+        # 정치인 검색 실행
+        search_results = search_service.search_politicians(q, max_results=limit)
+        
+        return {
+            "success": search_results['success'],
+            "query": q,
+            "results": search_results['results'],
+            "total_found": search_results['total_found'],
+            "search_type": "politician_only"
+        }
+        
+    except Exception as e:
+        logger.error(f"정치인 검색 오류: {e}")
+        raise HTTPException(status_code=500, detail="검색 서비스 오류")
+
 @app.get("/api/trends/chart")
 async def get_trend_chart():
     """트렌드 차트 데이터"""
