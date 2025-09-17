@@ -673,6 +673,103 @@ async def get_politician_trend(politician_name: str):
         logger.error(f"정치인 트렌드 조회 오류: {e}")
         raise HTTPException(status_code=500, detail="정치인 트렌드 조회 실패")
 
+@app.get("/api/connectivity/{politician_name}")
+async def get_politician_connectivity(politician_name: str):
+    """정치인 연결성 분석"""
+    try:
+        # 해당 정치인 정보 찾기
+        target_politician = None
+        for politician in politicians_data:
+            if politician.get('name') == politician_name:
+                target_politician = politician
+                break
+        
+        if not target_politician:
+            return {
+                "success": False,
+                "error": "정치인을 찾을 수 없습니다"
+            }
+        
+        # 연결성 분석
+        connectivity_data = analyze_connectivity(target_politician, politicians_data)
+        
+        return {
+            "success": True,
+            "data": connectivity_data,
+            "politician": politician_name,
+            "source": "연결성 분석 시스템"
+        }
+        
+    except Exception as e:
+        logger.error(f"연결성 분석 오류: {e}")
+        raise HTTPException(status_code=500, detail="연결성 분석 실패")
+
+def analyze_connectivity(target_politician, all_politicians):
+    """정치인 연결성 분석 함수"""
+    try:
+        connections = []
+        target_committee = target_politician.get('committee', '')
+        target_party = target_politician.get('party', '')
+        
+        if not target_committee:
+            return []
+        
+        # 같은 상임위원회 의원들 찾기
+        for politician in all_politicians:
+            if (politician.get('name') != target_politician.get('name') and 
+                politician.get('committee') == target_committee):
+                
+                # 연결성 점수 계산
+                score = calculate_connectivity_score(target_politician, politician)
+                
+                connections.append({
+                    'name': politician.get('name'),
+                    'party': politician.get('party'),
+                    'district': politician.get('district'),
+                    'committee': politician.get('committee'),
+                    'connectivity_score': score,
+                    'is_same_party': politician.get('party') == target_party,
+                    'connection_type': 'committee',
+                    'connection_reason': f"{target_committee} 동료"
+                })
+        
+        # 점수순으로 정렬하고 상위 8명 반환
+        connections.sort(key=lambda x: x['connectivity_score'], reverse=True)
+        return connections[:8]
+        
+    except Exception as e:
+        logger.error(f"연결성 분석 계산 오류: {e}")
+        return []
+
+def calculate_connectivity_score(politician1, politician2):
+    """두 정치인 간의 연결성 점수 계산"""
+    try:
+        score = 70  # 기본 위원회 연결 점수
+        
+        # 같은 정당 보너스
+        if politician1.get('party') == politician2.get('party'):
+            score += 20
+        else:
+            score += 10  # 다른 정당이어도 협력 가능성
+        
+        # 지역 유사성 보너스
+        district1 = politician1.get('district', '')
+        district2 = politician2.get('district', '')
+        
+        if district1 and district2:
+            # 같은 시/도인지 확인
+            region1 = district1.split(' ')[0] if ' ' in district1 else district1
+            region2 = district2.split(' ')[0] if ' ' in district2 else district2
+            
+            if region1 == region2:
+                score += 10
+        
+        return min(100, score)
+        
+    except Exception as e:
+        logger.error(f"연결성 점수 계산 오류: {e}")
+        return 70
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     

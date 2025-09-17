@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import ConnectivityWidget from './ConnectivityWidget'
 
 export default function MemberDetailWidget({ memberName, onClose }) {
   const [memberBills, setMemberBills] = useState([])
@@ -329,6 +330,14 @@ export default function MemberDetailWidget({ memberName, onClose }) {
               </div>
             ))
           )}
+        </div>
+
+        {/* 연결성 위젯 */}
+        <div className="mt-6">
+          <ConnectivityWidget 
+            memberName={memberName} 
+            memberInfo={memberInfo} 
+          />
         </div>
       </div>
     </div>
