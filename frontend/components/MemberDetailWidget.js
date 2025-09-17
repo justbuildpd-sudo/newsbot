@@ -3,33 +3,55 @@ import { useState, useEffect } from 'react'
 export default function MemberDetailWidget({ memberName, onClose }) {
   const [memberBills, setMemberBills] = useState([])
   const [billScores, setBillScores] = useState({})
+  const [photoMapping, setPhotoMapping] = useState({})
+  const [memberInfo, setMemberInfo] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     if (memberName) {
       fetchMemberData()
+      loadPhotoMapping()
     }
   }, [memberName])
+
+  const loadPhotoMapping = async () => {
+    try {
+      const response = await fetch('/politician_photos.json')
+      const mapping = await response.json()
+      setPhotoMapping(mapping)
+    } catch (error) {
+      console.error('사진 매핑 로드 실패:', error)
+    }
+  }
 
   const fetchMemberData = async () => {
     try {
       setLoading(true)
       
-      // 의원의 발의의안 정보 가져오기
-      const billsResponse = await fetch(`http://localhost:8001/api/members/${memberName}/bills`)
-      const billsData = await billsResponse.json()
+      // 의원 기본 정보 가져오기
+      const memberResponse = await fetch('https://newsbot-backend-6j3p.onrender.com/api/assembly/members')
+      const memberData = await memberResponse.json()
       
       // 발의의안 점수 정보 가져오기
-      const scoresResponse = await fetch('http://localhost:8001/api/bills/scores')
+      const scoresResponse = await fetch('https://newsbot-backend-6j3p.onrender.com/api/bills/scores')
       const scoresData = await scoresResponse.json()
       
-      if (billsData.success) {
-        setMemberBills(billsData.data)
+      // 특정 의원 발의안 목록 가져오기
+      const billsResponse = await fetch(`https://newsbot-backend-6j3p.onrender.com/api/bills/politician/${memberName}`)
+      const billsData = await billsResponse.json()
+      
+      if (memberData.success) {
+        const member = memberData.data.find(m => m.name === memberName)
+        setMemberInfo(member)
       }
       
       if (scoresData.success) {
         setBillScores(scoresData.data[memberName] || {})
+      }
+      
+      if (billsData.success) {
+        setMemberBills(billsData.data.bills || [])
       }
       
     } catch (err) {
@@ -141,6 +163,57 @@ export default function MemberDetailWidget({ memberName, onClose }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+        </div>
+
+        {/* 의원 프로필 섹션 */}
+        <div className="mb-6 p-6 bg-dark-700 rounded-lg">
+          <div className="flex items-start space-x-6">
+            {/* 큰 프로필 사진 */}
+            <div className="flex-shrink-0">
+              <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-600 flex items-center justify-center">
+                {photoMapping[memberName] ? (
+                  <img 
+                    src={photoMapping[memberName]} 
+                    alt={memberName}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.parentElement.innerHTML = `<div class="text-white text-3xl font-bold">${memberName[0]}</div>`;
+                    }}
+                  />
+                ) : (
+                  <div className="text-white text-3xl font-bold">{memberName[0]}</div>
+                )}
+              </div>
+            </div>
+            
+            {/* 의원 정보 */}
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold text-white mb-4">{memberName}</h3>
+              {memberInfo && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-sm text-gray-400">정당</div>
+                    <div className={`text-lg font-semibold ${getPartyColor(memberInfo.party)}`}>
+                      {memberInfo.party}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400">지역구</div>
+                    <div className="text-lg text-white">{memberInfo.district || '비례대표'}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400">위원회</div>
+                    <div className="text-lg text-white">{memberInfo.committee || '정보없음'}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400">당선횟수</div>
+                    <div className="text-lg text-white">{memberInfo.terms || '1'}선</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* 발의의안 통계 */}
