@@ -76,7 +76,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* 실시간 뉴스 위젯 */}
           <div className="lg:col-span-1">
-            <NewsWidget />
+            <OptimizedNewsWidget />
           </div>
 
           {/* 최근 입법 위젯 */}
