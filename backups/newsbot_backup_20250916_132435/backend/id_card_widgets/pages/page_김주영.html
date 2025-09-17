@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김주영 정치인 카드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .card-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-button:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+        
+        .card-iframe {
+            width: 400px;
+            height: 600px;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 480px) {
+            .card-iframe {
+                width: 100%;
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="history.back()">← 뒤로가기</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ 김주영 정치인 카드</h1>
+            <p>신분증 형태의 정치인 정보 카드</p>
+        </div>
+        
+        <div class="card-section">
+            <iframe src="cards/card_김주영.html" class="card-iframe"></iframe>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,3209 @@
+[
+  {
+    "id": "9771310",
+    "name": "강경숙",
+    "name_hanja": "姜景淑",
+    "name_english": "KANG KYUNGSOOK",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771310.jpg",
+    "member_number": "3158",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "조국혁신당",
+    "committee": "교육위원회",
+    "birth_date": "1967-05-02",
+    "election_district": "비례대표",
+    "secretary": [
+      "김예닮",
+      "김희경",
+      "박문혁",
+      "이경열"
+    ],
+    "staff": [
+      "김재삼",
+      "서용선"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KANGKYUNGSOOK",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "교육정책",
+      "학교",
+      "학생",
+      "교육개혁"
+    ],
+    "description": "비례대표 지역구 조국혁신당 소속 (교육위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:55:58.120897",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771142",
+    "name": "강대식",
+    "name_hanja": "姜大植",
+    "name_english": "KANG DAESIK",
+    "district": "대구 동구군위군을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771142.jpg",
+    "member_number": "3070",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "국방위원회",
+    "birth_date": "1959-11-02",
+    "election_district": "대구 동구군위군을",
+    "secretary": [
+      "김현정",
+      "박동혁",
+      "박순권",
+      "황인택"
+    ],
+    "staff": [
+      "박홍규",
+      "유진영"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KANGDAESIK",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "국방",
+      "안보",
+      "군사",
+      "방위산업"
+    ],
+    "description": "대구 동구군위군을 지역구 국민의힘 소속 (국방위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:55:59.652147",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771174",
+    "name": "강득구",
+    "name_hanja": "姜得求",
+    "name_english": "KANG DEUKGU",
+    "district": "경기 안양시만안구",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771174.jpg",
+    "member_number": "3130",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "기후위기 특별위원회,환경노동위원회",
+    "birth_date": "1963-05-27",
+    "election_district": "경기 안양시만안구",
+    "secretary": [
+      "김유나",
+      "윤경민",
+      "홍영민"
+    ],
+    "staff": [
+      "정진태",
+      "최경순"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KANGDEUKGU",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "환경보호",
+      "노동권익",
+      "기후변화",
+      "에너지정책"
+    ],
+    "description": "경기 안양시만안구 지역구 더불어민주당 소속 (기후위기 특별위원회,환경노동위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:03.310950",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771311",
+    "name": "강명구",
+    "name_hanja": "姜明求",
+    "name_english": "KANG MYOUNGGU",
+    "district": "경북 구미시을",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771311.jpg",
+    "member_number": "3217",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "농림축산식품해양수산위원회",
+    "birth_date": "1977-06-07",
+    "election_district": "경북 구미시을",
+    "secretary": [
+      "강현지",
+      "박유진",
+      "임재연",
+      "전금오"
+    ],
+    "staff": [
+      "김호직",
+      "윤상호"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KANGMYOUNGGU",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경북 구미시을 지역구 국민의힘 소속 (농림축산식품해양수산위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:05.254933",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771233",
+    "name": "강민국",
+    "name_hanja": "姜旻局",
+    "name_english": "KANG MINKUK",
+    "district": "경남 진주시을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771233.jpg",
+    "member_number": "3197",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "정무위원회",
+    "birth_date": "1971-03-03",
+    "election_district": "경남 진주시을",
+    "secretary": [
+      "김가은",
+      "김기남",
+      "김지호",
+      "차지훈"
+    ],
+    "staff": [
+      "문현곤",
+      "정경섭"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KANGMINKUK",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경남 진주시을 지역구 국민의힘 소속 (정무위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:07.229139",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771312",
+    "name": "강선영",
+    "name_hanja": "姜善榮",
+    "name_english": "KANG SUNYOUNG",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771312.jpg",
+    "member_number": "3202",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "국방위원회,국회운영위원회,윤석열정부의비상계엄선포를통한내란혐의진상규명국정조사특별위원회",
+    "birth_date": "1966-09-24",
+    "election_district": "비례대표",
+    "secretary": [
+      "손선엽",
+      "임계영",
+      "최도윤",
+      "허은서"
+    ],
+    "staff": [
+      "이석태",
+      "최근대"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KANGSUNYOUNG",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "국방",
+      "안보",
+      "군사",
+      "방위산업"
+    ],
+    "description": "비례대표 지역구 국민의힘 소속 (국방위원회,국회운영위원회,윤석열정부의비상계엄선포를통한내란혐의진상규명국정조사특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:10.056119",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771116",
+    "name": "강선우",
+    "name_hanja": "姜仙祐",
+    "name_english": "KANG SUNWOO",
+    "district": "서울 강서구갑",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771116.jpg",
+    "member_number": "3021",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "연금개혁 특별위원회,외교통일위원회",
+    "birth_date": "1978-06-02",
+    "election_district": "서울 강서구갑",
+    "secretary": [
+      "고정현",
+      "양명선",
+      "오병주",
+      "전희수"
+    ],
+    "staff": [
+      "한경달"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KANGSUNWOO",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "서울 강서구갑 지역구 더불어민주당 소속 (연금개혁 특별위원회,외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:12.840307",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771313",
+    "name": "강승규",
+    "name_hanja": "姜升圭",
+    "name_english": "KANG SEUNGKYOO",
+    "district": "충남 홍성군예산군",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771313.jpg",
+    "member_number": "2663",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "산업통상자원중소벤처기업위원회,예산결산특별위원회",
+    "birth_date": "1963-09-20",
+    "election_district": "충남 홍성군예산군",
+    "secretary": [
+      "김순옥",
+      "홍수현",
+      "홍재훈"
+    ],
+    "staff": [
+      "신진영",
+      "여명"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KangSeungKyoo",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "충남 홍성군예산군 지역구 국민의힘 소속 (산업통상자원중소벤처기업위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:14.845969",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771168",
+    "name": "강준현",
+    "name_hanja": "康準鉉",
+    "name_english": "KANG JUNHYEON",
+    "district": "세종특별자치시을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771168.jpg",
+    "member_number": "3028",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "정무위원회",
+    "birth_date": "1964-08-19",
+    "election_district": "세종특별자치시을",
+    "secretary": [
+      "김재왕",
+      "김진희",
+      "이경은",
+      "정선우"
+    ],
+    "staff": [
+      "김모영",
+      "송재무"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KANGJUNHYEON",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "세종특별자치시을 지역구 더불어민주당 소속 (정무위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:16.252733",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771315",
+    "name": "고동진",
+    "name_hanja": "高東眞",
+    "name_english": "KOH DONGJIN",
+    "district": "서울 강남구병",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771315.jpg",
+    "member_number": "2998",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "행정안전위원회",
+    "birth_date": "1961-03-26",
+    "election_district": "서울 강남구병",
+    "secretary": [
+      "강윤경",
+      "김지혜",
+      "류진희",
+      "이성훈"
+    ],
+    "staff": [
+      "박수철",
+      "박응서"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KOHDONGJIN",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "행정",
+      "안전",
+      "지방자치",
+      "공공기관"
+    ],
+    "description": "서울 강남구병 지역구 국민의힘 소속 (행정안전위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:18.073515",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771109",
+    "name": "고민정",
+    "name_hanja": "高旼廷",
+    "name_english": "KO MINJUNG",
+    "district": "서울 광진구을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771109.jpg",
+    "member_number": "3071",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "교육위원회,예산결산특별위원회",
+    "birth_date": "1979-08-23",
+    "election_district": "서울 광진구을",
+    "secretary": [
+      "전동명",
+      "정유나",
+      "정혜진",
+      "최미정"
+    ],
+    "staff": [
+      "이상엽",
+      "정웅재"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KOMINJUNG",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "교육정책",
+      "학교",
+      "학생",
+      "교육개혁"
+    ],
+    "description": "서울 광진구을 지역구 더불어민주당 소속 (교육위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:19.411115",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771316",
+    "name": "곽규택",
+    "name_hanja": "郭圭澤",
+    "name_english": "KWAK KYUTAEK",
+    "district": "부산 서구동구",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771316.jpg",
+    "member_number": "3183",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "국회운영위원회,법제사법위원회,순직 해병 수사 방해 및 사건 은폐 등의 진실규명을 위한 국정조사특별위원회,윤석열정부의비상계엄선포를통한내란혐의진상규명국정조사특별위원회",
+    "birth_date": "1971-04-12",
+    "election_district": "부산 서구동구",
+    "secretary": [
+      "김보미",
+      "백다인",
+      "유승현",
+      "정성안"
+    ],
+    "staff": [
+      "기남형",
+      "한수근"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KWAKKYUTAEK",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "법제",
+      "사법",
+      "인권",
+      "법치주의"
+    ],
+    "description": "부산 서구동구 지역구 국민의힘 소속 (국회운영위원회,법제사법위원회,순직 해병 수사 방해 및 사건 은폐 등의 진실규명을 위한 국정조사특별위원회,윤석열정부의비상계엄선포를통한내란혐의진상규명국정조사특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:20.759365",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771317",
+    "name": "곽상언",
+    "name_hanja": "郭相彦",
+    "name_english": "KWAK SANGEON",
+    "district": "서울 종로구",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771317.jpg",
+    "member_number": "3159",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "산업통상자원중소벤처기업위원회,예산결산특별위원회",
+    "birth_date": "1971-11-18",
+    "election_district": "서울 종로구",
+    "secretary": [
+      "김범석",
+      "서명희",
+      "장상호",
+      "최요섭"
+    ],
+    "staff": [
+      "김진석",
+      "이소연"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KWAKSANGEON",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "서울 종로구 지역구 더불어민주당 소속 (산업통상자원중소벤처기업위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:22.243138",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771224",
+    "name": "구자근",
+    "name_hanja": "具滋根",
+    "name_english": "KOO JAKEUN",
+    "district": "경북 구미시갑",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771224.jpg",
+    "member_number": "3047",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "산업통상자원중소벤처기업위원회",
+    "birth_date": "1967-10-09",
+    "election_district": "경북 구미시갑",
+    "secretary": [
+      "문영수",
+      "변자경",
+      "엄재호",
+      "정지융"
+    ],
+    "staff": [
+      "이창현",
+      "정준용"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KUJAKEUN",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경북 구미시갑 지역구 국민의힘 소속 (산업통상자원중소벤처기업위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:23.592766",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770679",
+    "name": "권성동",
+    "name_hanja": "權性東",
+    "name_english": "KWEON SEONGDONG",
+    "district": "강원 강릉시",
+    "terms": "5선",
+    "image_url": "http://www.assembly.go.kr/photo/9770679.jpg",
+    "member_number": "2541",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "보건복지위원회",
+    "birth_date": "1960-04-29",
+    "election_district": "강원 강릉시",
+    "secretary": [
+      "김근희",
+      "김윤재",
+      "김형록",
+      "신윤정"
+    ],
+    "staff": [
+      "윤희진",
+      "최영철"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KWEONSEONGDONG",
+    "reelection_info": "5선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "보건",
+      "복지",
+      "의료",
+      "사회보장"
+    ],
+    "description": "강원 강릉시 지역구 국민의힘 소속 (보건복지위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:25.889131",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771108",
+    "name": "권영세",
+    "name_hanja": "權寧世",
+    "name_english": "KWON YOUNGSE",
+    "district": "서울 용산구",
+    "terms": "5선",
+    "image_url": "http://www.assembly.go.kr/photo/9771108.jpg",
+    "member_number": "299",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "기획재정위원회,정보위원회",
+    "birth_date": "1959-02-24",
+    "election_district": "서울 용산구",
+    "secretary": [
+      "강보람",
+      "김동현",
+      "김용종",
+      "박준영",
+      "이수지"
+    ],
+    "staff": [
+      "류희태",
+      "이정훈"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KWONYOUNGSE",
+    "reelection_info": "5선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "경제정책",
+      "예산",
+      "재정",
+      "세금정책"
+    ],
+    "description": "서울 용산구 지역구 국민의힘 소속 (기획재정위원회,정보위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:28.044863",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771318",
+    "name": "권영진",
+    "name_hanja": "權泳臻",
+    "name_english": "KWON YOUNGJIN",
+    "district": "대구 달서구병",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771318.jpg",
+    "member_number": "2739",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,국토교통위원회",
+    "birth_date": "1962-12-10",
+    "election_district": "대구 달서구병",
+    "secretary": [
+      "구민희",
+      "신동호",
+      "이신",
+      "임준묵"
+    ],
+    "staff": [
+      "권용성",
+      "박노철"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KwonYoungJin",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "대구 달서구병 지역구 국민의힘 소속 (12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,국토교통위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:31.146007",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770998",
+    "name": "권칠승",
+    "name_hanja": "權七勝",
+    "name_english": "KWON CHILSEUNG",
+    "district": "경기 화성시병",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9770998.jpg",
+    "member_number": "2842",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "행정안전위원회",
+    "birth_date": "1965-11-18",
+    "election_district": "경기 화성시병",
+    "secretary": [
+      "김민혁",
+      "신전학",
+      "윤현진",
+      "이우연"
+    ],
+    "staff": [
+      "김도근",
+      "김혜규"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KWONCHILSEUNG",
+    "reelection_info": "3선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "행정",
+      "안전",
+      "지방자치",
+      "공공기관"
+    ],
+    "description": "경기 화성시병 지역구 더불어민주당 소속 (행정안전위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:32.466688",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771319",
+    "name": "권향엽",
+    "name_hanja": "權香葉",
+    "name_english": "KWON HYANGYUP",
+    "district": "전남 순천시광양시곡성군구례군을",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771319.jpg",
+    "member_number": "3173",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,산업통상자원중소벤처기업위원회",
+    "birth_date": "1968-02-12",
+    "election_district": "전남 순천시광양시곡성군구례군을",
+    "secretary": [
+      "김수안",
+      "이슬기",
+      "조규민"
+    ],
+    "staff": [
+      "김덕현",
+      "박정현"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KWONHYANGYUP",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "전남 순천시광양시곡성군구례군을 지역구 더불어민주당 소속 (12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,산업통상자원중소벤처기업위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:34.326815",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771320",
+    "name": "김건",
+    "name_hanja": "金建",
+    "name_english": "KIM GUNN",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771320.jpg",
+    "member_number": "3168",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "외교통일위원회",
+    "birth_date": "1966-10-10",
+    "election_district": "비례대표",
+    "secretary": [
+      "김가영",
+      "이휘윤",
+      "조슬빈",
+      "조태희"
+    ],
+    "staff": [
+      "권오훈",
+      "김인성"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMGUNN",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "비례대표 지역구 국민의힘 소속 (외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:36.505543",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771152",
+    "name": "김교흥",
+    "name_hanja": "金敎興",
+    "name_english": "KIM KYOHEUNG",
+    "district": "인천 서구갑",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9771152.jpg",
+    "member_number": "150",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "문화체육관광위원회",
+    "birth_date": "1960-08-30",
+    "election_district": "인천 서구갑",
+    "secretary": [
+      "김성주",
+      "김은민",
+      "유경미",
+      "전소희",
+      "조재원"
+    ],
+    "staff": [
+      "김정현",
+      "유해용"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMKYOHEUNG",
+    "reelection_info": "3선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "문화",
+      "체육",
+      "관광",
+      "콘텐츠정책"
+    ],
+    "description": "인천 서구갑 지역구 더불어민주당 소속 (문화체육관광위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:39.573144",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771321",
+    "name": "김기웅",
+    "name_hanja": "金基雄",
+    "name_english": "KIM KIWOONG",
+    "district": "대구 중구남구",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771321.jpg",
+    "member_number": "3187",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "예산결산특별위원회,외교통일위원회",
+    "birth_date": "1961-09-15",
+    "election_district": "대구 중구남구",
+    "secretary": [
+      "김세은",
+      "김은총",
+      "류동우"
+    ],
+    "staff": [
+      "김태동",
+      "최연우"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMKIWOONG",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "대구 중구남구 지역구 국민의힘 소속 (예산결산특별위원회,외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:42.243300",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771322",
+    "name": "김기표",
+    "name_hanja": "金起杓",
+    "name_english": "KIM GIPYO",
+    "district": "경기 부천시을",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771322.jpg",
+    "member_number": "3236",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "법제사법위원회",
+    "birth_date": "1972-12-07",
+    "election_district": "경기 부천시을",
+    "secretary": [
+      "김민성",
+      "류정서",
+      "신선미",
+      "조민지"
+    ],
+    "staff": [
+      "송동수",
+      "허용"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMGIPYO",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "법제",
+      "사법",
+      "인권",
+      "법치주의"
+    ],
+    "description": "경기 부천시을 지역구 더불어민주당 소속 (법제사법위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:44.559229",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771164",
+    "name": "김기현",
+    "name_hanja": "金起炫",
+    "name_english": "KIM GIHYEON",
+    "district": "울산 남구을",
+    "terms": "5선",
+    "image_url": "http://www.assembly.go.kr/photo/9771164.jpg",
+    "member_number": "558",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "2025 아시아태평양경제협력체(APEC) 정상회의 지원 특별위원회,외교통일위원회",
+    "birth_date": "1959-02-21",
+    "election_district": "울산 남구을",
+    "secretary": [
+      "류보라",
+      "이상찬",
+      "허정범",
+      "홍정우"
+    ],
+    "staff": [
+      "김용환",
+      "황규환"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMGIHYEON",
+    "reelection_info": "5선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "울산 남구을 지역구 국민의힘 소속 (2025 아시아태평양경제협력체(APEC) 정상회의 지원 특별위원회,외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:46.712163",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771323",
+    "name": "김남근",
+    "name_hanja": "金南槿",
+    "name_english": "KIM NAMGEUN",
+    "district": "서울 성북구을",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771323.jpg",
+    "member_number": "3008",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "국회운영위원회,예산결산특별위원회,정무위원회",
+    "birth_date": "1963-08-26",
+    "election_district": "서울 성북구을",
+    "secretary": [
+      "권오형",
+      "남지해",
+      "이동희",
+      "이선아"
+    ],
+    "staff": [
+      "이지백",
+      "이철호"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMNAMGEUN",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "서울 성북구을 지역구 더불어민주당 소속 (국회운영위원회,예산결산특별위원회,정무위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:49.337032",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771324",
+    "name": "김남희",
+    "name_hanja": "金南希",
+    "name_english": "KIM NAMHEE",
+    "district": "경기 광명시을",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771324.jpg",
+    "member_number": "3154",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "보건복지위원회,여성가족위원회,연금개혁 특별위원회",
+    "birth_date": "1978-02-22",
+    "election_district": "경기 광명시을",
+    "secretary": [
+      "권예린",
+      "박진주",
+      "박현아",
+      "이진영"
+    ],
+    "staff": [
+      "김민식",
+      "백현석"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMNAMHEE",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "보건",
+      "복지",
+      "의료",
+      "사회보장"
+    ],
+    "description": "경기 광명시을 지역구 더불어민주당 소속 (보건복지위원회,여성가족위원회,연금개혁 특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:50.632590",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771325",
+    "name": "김대식",
+    "name_hanja": "金大植",
+    "name_english": "KIM DAISIK",
+    "district": "부산 사상구",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771325.jpg",
+    "member_number": "3004",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,교육위원회,예산결산특별위원회",
+    "birth_date": "1962-08-11",
+    "election_district": "부산 사상구",
+    "secretary": [
+      "강신혜",
+      "이정배",
+      "정은아",
+      "하도규"
+    ],
+    "staff": [
+      "이명재",
+      "조광래"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMDAISIK",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "교육정책",
+      "학교",
+      "학생",
+      "교육개혁"
+    ],
+    "description": "부산 사상구 지역구 국민의힘 소속 (12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,교육위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:53.636997",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770719",
+    "name": "김도읍",
+    "name_hanja": "金度邑",
+    "name_english": "KIM DOEUP",
+    "district": "부산 강서구",
+    "terms": "4선",
+    "image_url": "http://www.assembly.go.kr/photo/9770719.jpg",
+    "member_number": "2607",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "국토교통위원회",
+    "birth_date": "1964-07-06",
+    "election_district": "부산 강서구",
+    "secretary": [
+      "김민지",
+      "김지연",
+      "박정아",
+      "위서율"
+    ],
+    "staff": [
+      "이종환",
+      "최성준"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMDOEUP",
+    "reelection_info": "4선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "부산 강서구 지역구 국민의힘 소속 (국토교통위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:54.957524",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771326",
+    "name": "김동아",
+    "name_hanja": "金東我",
+    "name_english": "KIM DONGAH",
+    "district": "서울 서대문구갑",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771326.jpg",
+    "member_number": "3000",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "산업통상자원중소벤처기업위원회",
+    "birth_date": "1987-10-30",
+    "election_district": "서울 서대문구갑",
+    "secretary": [
+      "곽보경",
+      "박현지",
+      "양준혁",
+      "황태욱"
+    ],
+    "staff": [
+      "박재일",
+      "윤미혜"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMDONGAH",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "서울 서대문구갑 지역구 더불어민주당 소속 (산업통상자원중소벤처기업위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:56.703191",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771327",
+    "name": "김문수",
+    "name_hanja": "金文洙",
+    "name_english": "KIM MOONSOO",
+    "district": "전남 순천시광양시곡성군구례군갑",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771327.jpg",
+    "member_number": "3094",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "교육위원회",
+    "birth_date": "1968-10-01",
+    "election_district": "전남 순천시광양시곡성군구례군갑",
+    "secretary": [
+      "강인수",
+      "김부송",
+      "박기옥",
+      "백정호"
+    ],
+    "staff": [
+      "김창민",
+      "이병도"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMMOONSOO",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "교육정책",
+      "학교",
+      "학생",
+      "교육개혁"
+    ],
+    "description": "전남 순천시광양시곡성군구례군갑 지역구 더불어민주당 소속 (교육위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:56:58.353846",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771136",
+    "name": "김미애",
+    "name_hanja": "金美愛",
+    "name_english": "KIM MIAE",
+    "district": "부산 해운대구을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771136.jpg",
+    "member_number": "3103",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,보건복지위원회,연금개혁 특별위원회",
+    "birth_date": "1969-10-06",
+    "election_district": "부산 해운대구을",
+    "secretary": [
+      "강민경",
+      "김성래",
+      "서채연",
+      "양주혜"
+    ],
+    "staff": [
+      "신영훈",
+      "원우혁"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMMIAE",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "보건",
+      "복지",
+      "의료",
+      "사회보장"
+    ],
+    "description": "부산 해운대구을 지역구 국민의힘 소속 (12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,보건복지위원회,연금개혁 특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:01.012938",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771120",
+    "name": "김민석",
+    "name_hanja": "金民錫",
+    "name_english": "KIM MINSEOK",
+    "district": "서울 영등포구을",
+    "terms": "4선",
+    "image_url": "http://www.assembly.go.kr/photo/9771120.jpg",
+    "member_number": "469",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "국방위원회",
+    "birth_date": "1964-05-29",
+    "election_district": "서울 영등포구을",
+    "secretary": [
+      "김동현",
+      "김민하"
+    ],
+    "staff": [
+      "서정도",
+      "이은혜"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMMINSEOK",
+    "reelection_info": "4선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "국방",
+      "안보",
+      "군사",
+      "방위산업"
+    ],
+    "description": "서울 영등포구을 지역구 더불어민주당 소속 (국방위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:03.730012",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771328",
+    "name": "김민전",
+    "name_hanja": "金玟甸",
+    "name_english": "KIM MEENGEON",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771328.jpg",
+    "member_number": "3227",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "교육위원회",
+    "birth_date": "1965-05-09",
+    "election_district": "비례대표",
+    "secretary": [
+      "김현진",
+      "이완호",
+      "이창재",
+      "최현민"
+    ],
+    "staff": [
+      "김철민",
+      "최준서"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMMEENGEON",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "교육정책",
+      "학교",
+      "학생",
+      "교육개혁"
+    ],
+    "description": "비례대표 지역구 국민의힘 소속 (교육위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:05.743399",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770941",
+    "name": "김병기",
+    "name_hanja": "金炳基",
+    "name_english": "KIM BYUNGKEE",
+    "district": "서울 동작구갑",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9770941.jpg",
+    "member_number": "2902",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "국방위원회,국회운영위원회,정보위원회",
+    "birth_date": "1961-07-10",
+    "election_district": "서울 동작구갑",
+    "secretary": [
+      "김경희",
+      "이초롱",
+      "조성윤"
+    ],
+    "staff": [
+      "김정겸",
+      "오용운"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMBYUNGKEE",
+    "reelection_info": "3선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "국방",
+      "안보",
+      "군사",
+      "방위산업"
+    ],
+    "description": "서울 동작구갑 지역구 더불어민주당 소속 (국방위원회,국회운영위원회,정보위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:08.460620",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771268",
+    "name": "김병주",
+    "name_hanja": "金柄周",
+    "name_english": "KIM BYUNGJOO",
+    "district": "경기 남양주시을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771268.jpg",
+    "member_number": "3150",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "국방위원회,순직 해병 수사 방해 및 사건 은폐 등의 진실규명을 위한 국정조사특별위원회,윤석열정부의비상계엄선포를통한내란혐의진상규명국정조사특별위원회",
+    "birth_date": "1962-02-07",
+    "election_district": "경기 남양주시을",
+    "secretary": [
+      "이민희",
+      "이유리",
+      "전종호",
+      "황동현"
+    ],
+    "staff": [
+      "신상엽",
+      "조성만"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMBYUNGJOO",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "국방",
+      "안보",
+      "군사",
+      "방위산업"
+    ],
+    "description": "경기 남양주시을 지역구 더불어민주당 소속 (국방위원회,순직 해병 수사 방해 및 사건 은폐 등의 진실규명을 위한 국정조사특별위원회,윤석열정부의비상계엄선포를통한내란혐의진상규명국정조사특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:10.486017",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771329",
+    "name": "김상욱",
+    "name_hanja": "金相旭",
+    "name_english": "KIM SANGWOOK",
+    "district": "울산 남구갑",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771329.jpg",
+    "member_number": "3190",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,예산결산특별위원회,외교통일위원회",
+    "birth_date": "1980-01-01",
+    "election_district": "울산 남구갑",
+    "secretary": [
+      "김태우",
+      "류정민",
+      "송효리",
+      "정민철"
+    ],
+    "staff": [
+      "최형준"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSANGWOOK",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "울산 남구갑 지역구 더불어민주당 소속 (12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,예산결산특별위원회,외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:13.160927",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770725",
+    "name": "김상훈",
+    "name_hanja": "金相勳",
+    "name_english": "KIM SANGHOON",
+    "district": "대구 서구",
+    "terms": "4선",
+    "image_url": "http://www.assembly.go.kr/photo/9770725.jpg",
+    "member_number": "2591",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "정무위원회",
+    "birth_date": "1963-01-25",
+    "election_district": "대구 서구",
+    "secretary": [
+      "권기림",
+      "김민영",
+      "박정결",
+      "최승민"
+    ],
+    "staff": [
+      "서태은",
+      "최병용"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSANGHOON",
+    "reelection_info": "4선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "대구 서구 지역구 국민의힘 소속 (정무위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:15.062145",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771024",
+    "name": "김석기",
+    "name_hanja": "金碩基",
+    "name_english": "KIM SEOKKI",
+    "district": "경북 경주시",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9771024.jpg",
+    "member_number": "2878",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "외교통일위원회",
+    "birth_date": "1954-08-06",
+    "election_district": "경북 경주시",
+    "secretary": [
+      "김기홍",
+      "박선정",
+      "박치웅",
+      "이재성"
+    ],
+    "staff": [
+      "신창해",
+      "이준호"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSEOKKI",
+    "reelection_info": "3선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "경북 경주시 지역구 국민의힘 소속 (외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:16.952981",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771195",
+    "name": "김선교",
+    "name_hanja": "金善敎",
+    "name_english": "KIM SUNGYO",
+    "district": "경기 여주시양평군",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771195.jpg",
+    "member_number": "3010",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "농림축산식품해양수산위원회",
+    "birth_date": "1960-09-18",
+    "election_district": "경기 여주시양평군",
+    "secretary": [
+      "박인선",
+      "박지영",
+      "안진호",
+      "이선규"
+    ],
+    "staff": [
+      "문병진",
+      "홍순기"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSUNGYO",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경기 여주시양평군 지역구 국민의힘 소속 (농림축산식품해양수산위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:19.616517",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771330",
+    "name": "김선민",
+    "name_hanja": "金宣旼",
+    "name_english": "KIM SUNMIN",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771330.jpg",
+    "member_number": "3096",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "조국혁신당",
+    "committee": "보건복지위원회",
+    "birth_date": "1964-05-24",
+    "election_district": "비례대표",
+    "secretary": [
+      "구연수",
+      "박수정",
+      "오송희",
+      "이규광"
+    ],
+    "staff": [
+      "김명신",
+      "박상현"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSUNMIN",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "보건",
+      "복지",
+      "의료",
+      "사회보장"
+    ],
+    "description": "비례대표 지역구 조국혁신당 소속 (보건복지위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:20.949964",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770985",
+    "name": "김성원",
+    "name_hanja": "金成願",
+    "name_english": "KIM SUNGWON",
+    "district": "경기 동두천시양주시연천군을",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9770985.jpg",
+    "member_number": "2911",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "산업통상자원중소벤처기업위원회",
+    "birth_date": "1973-10-15",
+    "election_district": "경기 동두천시양주시연천군을",
+    "secretary": [
+      "이경학",
+      "이희운",
+      "현지연"
+    ],
+    "staff": [
+      "김준표",
+      "정성전"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSUNGWON",
+    "reelection_info": "3선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경기 동두천시양주시연천군을 지역구 국민의힘 소속 (산업통상자원중소벤처기업위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:23.335645",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771089",
+    "name": "김성환",
+    "name_hanja": "金星煥",
+    "name_english": "KIM SUNGWHAN",
+    "district": "서울 노원구을",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9771089.jpg",
+    "member_number": "2887",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "산업통상자원중소벤처기업위원회",
+    "birth_date": "1965-10-15",
+    "election_district": "서울 노원구을",
+    "secretary": [
+      "공경남",
+      "성명숙",
+      "정다인",
+      "최인아"
+    ],
+    "staff": [
+      "서학선",
+      "이규철"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSUNGWHAN",
+    "reelection_info": "3선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "서울 노원구을 지역구 더불어민주당 소속 (산업통상자원중소벤처기업위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:24.637841",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771331",
+    "name": "김성회",
+    "name_hanja": "金城會",
+    "name_english": "KIM SUNGHOI",
+    "district": "경기 고양시갑",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771331.jpg",
+    "member_number": "3175",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "기후위기 특별위원회,순직 해병 수사 방해 및 사건 은폐 등의 진실규명을 위한 국정조사특별위원회,예산결산특별위원회,행정안전위원회",
+    "birth_date": "1972-11-20",
+    "election_district": "경기 고양시갑",
+    "secretary": [
+      "김민준",
+      "김지원",
+      "김혜진",
+      "문승효"
+    ],
+    "staff": [
+      "봉재현",
+      "정성일"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSUNGHOI",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "행정",
+      "안전",
+      "지방자치",
+      "공공기관"
+    ],
+    "description": "경기 고양시갑 지역구 더불어민주당 소속 (기후위기 특별위원회,순직 해병 수사 방해 및 사건 은폐 등의 진실규명을 위한 국정조사특별위원회,예산결산특별위원회,행정안전위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:27.042229",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771332",
+    "name": "김소희",
+    "name_hanja": "金素熙",
+    "name_english": "KIM SOHEE",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771332.jpg",
+    "member_number": "3218",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "기후위기 특별위원회,환경노동위원회",
+    "birth_date": "1973-09-16",
+    "election_district": "비례대표",
+    "secretary": [
+      "구교순",
+      "백영재",
+      "심윤아",
+      "이정석"
+    ],
+    "staff": [
+      "서다영",
+      "장진영"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSOHEE",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "환경보호",
+      "노동권익",
+      "기후변화",
+      "에너지정책"
+    ],
+    "description": "비례대표 지역구 국민의힘 소속 (기후위기 특별위원회,환경노동위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:28.440561",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771144",
+    "name": "김승수",
+    "name_hanja": "金承洙",
+    "name_english": "KIM SEUNGSU",
+    "district": "대구 북구을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771144.jpg",
+    "member_number": "3242",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "문화체육관광위원회",
+    "birth_date": "1965-07-05",
+    "election_district": "대구 북구을",
+    "secretary": [
+      "박성일",
+      "오승석",
+      "전기영",
+      "정어윈"
+    ],
+    "staff": [
+      "김준호",
+      "우기송",
+      "임현"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSEUNGSU",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "문화",
+      "체육",
+      "관광",
+      "콘텐츠정책"
+    ],
+    "description": "대구 북구을 지역구 국민의힘 소속 (문화체육관광위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:29.936427",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771169",
+    "name": "김승원",
+    "name_hanja": "金勝源",
+    "name_english": "KIM SEUNGWON",
+    "district": "경기 수원시갑",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771169.jpg",
+    "member_number": "3080",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "예산결산특별위원회,정무위원회",
+    "birth_date": "1969-07-08",
+    "election_district": "경기 수원시갑",
+    "secretary": [
+      "방준영",
+      "유지현",
+      "전가희",
+      "하진용"
+    ],
+    "staff": [
+      "강래원",
+      "권종민"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMSEUNGWON",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경기 수원시갑 지역구 더불어민주당 소속 (예산결산특별위원회,정무위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:32.605636",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771111",
+    "name": "김영배",
+    "name_hanja": "金永培",
+    "name_english": "KIM YOUNGBAE",
+    "district": "서울 성북구갑",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771111.jpg",
+    "member_number": "3196",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "국회운영위원회,외교통일위원회",
+    "birth_date": "1967-03-08",
+    "election_district": "서울 성북구갑",
+    "secretary": [
+      "구서로",
+      "김태식",
+      "노성민",
+      "윤석진"
+    ],
+    "staff": [
+      "목소영",
+      "하동욱"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYOUNGBAE",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "서울 성북구갑 지역구 더불어민주당 소속 (국회운영위원회,외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:35.427721",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770981",
+    "name": "김영진",
+    "name_hanja": "金榮鎭",
+    "name_english": "KIM YOUNGJIN",
+    "district": "경기 수원시병",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9770981.jpg",
+    "member_number": "2971",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "기획재정위원회,정보위원회",
+    "birth_date": "1967-09-10",
+    "election_district": "경기 수원시병",
+    "secretary": [
+      "김혜선",
+      "서동우",
+      "이용진",
+      "이효병"
+    ],
+    "staff": [
+      "최찬민",
+      "최호연"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYOUNGJIN",
+    "reelection_info": "3선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "경제정책",
+      "예산",
+      "재정",
+      "세금정책"
+    ],
+    "description": "경기 수원시병 지역구 더불어민주당 소속 (기획재정위원회,정보위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:38.496564",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770934",
+    "name": "김영호",
+    "name_hanja": "金映豪",
+    "name_english": "KIM YOUNGHO",
+    "district": "서울 서대문구을",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9770934.jpg",
+    "member_number": "2865",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "교육위원회",
+    "birth_date": "1967-09-13",
+    "election_district": "서울 서대문구을",
+    "secretary": [
+      "김정현",
+      "원동원",
+      "임세나"
+    ],
+    "staff": [
+      "김병운",
+      "김종학"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYOUNGHO",
+    "reelection_info": "3선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "교육정책",
+      "학교",
+      "학생",
+      "교육개혁"
+    ],
+    "description": "서울 서대문구을 지역구 더불어민주당 소속 (교육위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:40.856574",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771333",
+    "name": "김영환",
+    "name_hanja": "金永煥",
+    "name_english": "KIM YOUNGWHAN",
+    "district": "경기 고양시정",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771333.jpg",
+    "member_number": "3282",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "기획재정위원회",
+    "birth_date": "1971-07-07",
+    "election_district": "경기 고양시정",
+    "secretary": [
+      "김수현",
+      "정민구",
+      "정수현",
+      "정은선"
+    ],
+    "staff": [
+      "류종철",
+      "민현석"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYOUNGWHAN",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "경제정책",
+      "예산",
+      "재정",
+      "세금정책"
+    ],
+    "description": "경기 고양시정 지역구 더불어민주당 소속 (기획재정위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:43.847017",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771249",
+    "name": "김예지",
+    "name_hanja": "金睿智",
+    "name_english": "KIM YEAJI",
+    "district": "비례대표",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771249.jpg",
+    "member_number": "3149",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "보건복지위원회",
+    "birth_date": "1980-12-13",
+    "election_district": "비례대표",
+    "secretary": [
+      "김지현",
+      "박종성",
+      "복윤정",
+      "정찬길"
+    ],
+    "staff": [
+      "이가연",
+      "황동연"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYEAJI",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "보건",
+      "복지",
+      "의료",
+      "사회보장"
+    ],
+    "description": "비례대표 지역구 국민의힘 소속 (보건복지위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:46.173236",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771334",
+    "name": "김용만",
+    "name_hanja": "金容萬",
+    "name_english": "KIM YONGMAN",
+    "district": "경기 하남시을",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771334.jpg",
+    "member_number": "3170",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "예산결산특별위원회,정무위원회",
+    "birth_date": "1986-08-14",
+    "election_district": "경기 하남시을",
+    "secretary": [
+      "이정주",
+      "장병민",
+      "추지수",
+      "홍성범"
+    ],
+    "staff": [
+      "이혜림",
+      "한웅희"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYONGMAN",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경기 하남시을 지역구 더불어민주당 소속 (예산결산특별위원회,정무위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:47.494102",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771186",
+    "name": "김용민",
+    "name_hanja": "金容民",
+    "name_english": "KIM YONGMIN",
+    "district": "경기 남양주시병",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771186.jpg",
+    "member_number": "2980",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "법제사법위원회",
+    "birth_date": "1976-06-05",
+    "election_district": "경기 남양주시병",
+    "secretary": [
+      "강유정",
+      "김다원",
+      "박수철",
+      "최혜영"
+    ],
+    "staff": [
+      "김명진",
+      "박준수"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYONGMIN",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "법제",
+      "사법",
+      "인권",
+      "법치주의"
+    ],
+    "description": "경기 남양주시병 지역구 더불어민주당 소속 (법제사법위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:49.293065",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771335",
+    "name": "김용태",
+    "name_hanja": "金龍泰",
+    "name_english": "KIM YONGTAE",
+    "district": "경기 포천시가평군",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771335.jpg",
+    "member_number": "3121",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "교육위원회,기후위기 특별위원회,연금개혁 특별위원회",
+    "birth_date": "1990-10-21",
+    "election_district": "경기 포천시가평군",
+    "secretary": [
+      "백경훈",
+      "유재혁",
+      "이성준",
+      "장관임",
+      "조창성"
+    ],
+    "staff": [
+      "김성중",
+      "최승현"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/YONGTAEKIM",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "교육정책",
+      "학교",
+      "학생",
+      "교육개혁"
+    ],
+    "description": "경기 포천시가평군 지역구 국민의힘 소속 (교육위원회,기후위기 특별위원회,연금개혁 특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:51.027646",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771336",
+    "name": "김우영",
+    "name_hanja": "金宇榮",
+    "name_english": "KIM WOOYOUNG",
+    "district": "서울 은평구을",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771336.jpg",
+    "member_number": "3206",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "과학기술정보방송통신위원회",
+    "birth_date": "1969-08-05",
+    "election_district": "서울 은평구을",
+    "secretary": [
+      "김보경",
+      "김한재",
+      "박정호",
+      "이동원"
+    ],
+    "staff": [
+      "이주원",
+      "정경숙"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMWOOYOUNG",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "과학기술",
+      "정보통신",
+      "방송",
+      "디지털정책"
+    ],
+    "description": "서울 은평구을 지역구 더불어민주당 소속 (과학기술정보방송통신위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:53.921952",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771214",
+    "name": "김원이",
+    "name_hanja": "金元二",
+    "name_english": "KIM WONI",
+    "district": "전남 목포시",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771214.jpg",
+    "member_number": "3110",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "기후위기 특별위원회,산업통상자원중소벤처기업위원회",
+    "birth_date": "1968-11-11",
+    "election_district": "전남 목포시",
+    "secretary": [
+      "김지수",
+      "백은우",
+      "송현직",
+      "홍원빈"
+    ],
+    "staff": [
+      "김동현",
+      "양기호"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMWONI",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "전남 목포시 지역구 더불어민주당 소속 (기후위기 특별위원회,산업통상자원중소벤처기업위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:55.865927",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771337",
+    "name": "김위상",
+    "name_hanja": "金渭相",
+    "name_english": "KIM WISANG",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771337.jpg",
+    "member_number": "3177",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "예산결산특별위원회,환경노동위원회",
+    "birth_date": "1959-11-24",
+    "election_district": "비례대표",
+    "secretary": [
+      "김기웅",
+      "이지훈",
+      "최미아",
+      "한상훈"
+    ],
+    "staff": [
+      "한길완",
+      "허성은"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMWISANG",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "환경보호",
+      "노동권익",
+      "기후변화",
+      "에너지정책"
+    ],
+    "description": "비례대표 지역구 국민의힘 소속 (예산결산특별위원회,환경노동위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:57.601489",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771338",
+    "name": "김윤",
+    "name_hanja": "金輪",
+    "name_english": "KIM YOON",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771338.jpg",
+    "member_number": "3165",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "보건복지위원회,예산결산특별위원회",
+    "birth_date": "1966-05-24",
+    "election_district": "비례대표",
+    "secretary": [
+      "김경혜",
+      "김형원",
+      "박경훈",
+      "조인호"
+    ],
+    "staff": [
+      "양승신",
+      "허희수"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYOON",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "보건",
+      "복지",
+      "의료",
+      "사회보장"
+    ],
+    "description": "비례대표 지역구 더불어민주당 소속 (보건복지위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:57:59.570157",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771206",
+    "name": "김윤덕",
+    "name_hanja": "金潤德",
+    "name_english": "KIM YUNDUK",
+    "district": "전북 전주시갑",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9771206.jpg",
+    "member_number": "2813",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "문화체육관광위원회",
+    "birth_date": "1966-05-23",
+    "election_district": "전북 전주시갑",
+    "secretary": [
+      "강수빈",
+      "김수민",
+      "엄진향",
+      "진윤호"
+    ],
+    "staff": [
+      "천진심",
+      "홍성진"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMYUNDUCK",
+    "reelection_info": "3선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "문화",
+      "체육",
+      "관광",
+      "콘텐츠정책"
+    ],
+    "description": "전북 전주시갑 지역구 더불어민주당 소속 (문화체육관광위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:01.375058",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771171",
+    "name": "김은혜",
+    "name_hanja": "金恩慧",
+    "name_english": "KIM EUNHYE",
+    "district": "경기 성남시분당구을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771171.jpg",
+    "member_number": "3059",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,국토교통위원회,국회운영위원회",
+    "birth_date": "1971-01-06",
+    "election_district": "경기 성남시분당구을",
+    "secretary": [
+      "백진규",
+      "신승구",
+      "신승원",
+      "최승연"
+    ],
+    "staff": [
+      "박기녕",
+      "이영현"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMEUNHYE",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경기 성남시분당구을 지역구 국민의힘 소속 (12.29여객기참사진상규명과피해자및유가족의피해구제를위한특별위원회,국토교통위원회,국회운영위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:04.366358",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771339",
+    "name": "김장겸",
+    "name_hanja": "金張謙",
+    "name_english": "KIM JANGKYOM",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771339.jpg",
+    "member_number": "3184",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "과학기술정보방송통신위원회",
+    "birth_date": "1961-05-08",
+    "election_district": "비례대표",
+    "secretary": [
+      "김영민",
+      "송준범",
+      "유주형"
+    ],
+    "staff": [
+      "김연주",
+      "정계성"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJANGKYOM",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "과학기술",
+      "정보통신",
+      "방송",
+      "디지털정책"
+    ],
+    "description": "비례대표 지역구 국민의힘 소속 (과학기술정보방송통신위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:07.316327",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771340",
+    "name": "김재섭",
+    "name_hanja": "金宰燮",
+    "name_english": "KIM JAESUB",
+    "district": "서울 도봉구갑",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771340.jpg",
+    "member_number": "3235",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "연금개혁 특별위원회,정무위원회",
+    "birth_date": "1987-06-28",
+    "election_district": "서울 도봉구갑",
+    "secretary": [
+      "권혁재",
+      "안지홍",
+      "전효수",
+      "차성경",
+      "황다경"
+    ],
+    "staff": [
+      "강신형",
+      "김민철",
+      "박소연"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJAESUB",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "서울 도봉구갑 지역구 국민의힘 소속 (연금개혁 특별위원회,정무위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:09.065173",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771341",
+    "name": "김재원",
+    "name_hanja": "金載原",
+    "name_english": "KIM JAEWON",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771341.jpg",
+    "member_number": "3038",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "조국혁신당",
+    "committee": "2025 아시아태평양경제협력체(APEC) 정상회의 지원 특별위원회,문화체육관광위원회,예산결산특별위원회",
+    "birth_date": "1975-08-02",
+    "election_district": "비례대표",
+    "secretary": [
+      "신동훈",
+      "안소라",
+      "이창용",
+      "장훈"
+    ],
+    "staff": [
+      "문수훈",
+      "전병국"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/JAEWONK",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "문화",
+      "체육",
+      "관광",
+      "콘텐츠정책"
+    ],
+    "description": "비례대표 지역구 조국혁신당 소속 (2025 아시아태평양경제협력체(APEC) 정상회의 지원 특별위원회,문화체육관광위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:11.455923",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771023",
+    "name": "김정재",
+    "name_hanja": "金汀才",
+    "name_english": "KIM JUNGJAE",
+    "district": "경북 포항시북구",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9771023.jpg",
+    "member_number": "2970",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "국토교통위원회",
+    "birth_date": "1966-02-15",
+    "election_district": "경북 포항시북구",
+    "secretary": [
+      "김기완",
+      "김은지",
+      "안현대",
+      "이현주"
+    ],
+    "staff": [
+      "김재원",
+      "이상신"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJUNGJAE",
+    "reelection_info": "3선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경북 포항시북구 지역구 국민의힘 소속 (국토교통위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:14.177445",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771090",
+    "name": "김정호",
+    "name_hanja": "金禎鎬",
+    "name_english": "KIM JUNGHO",
+    "district": "경남 김해시을",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9771090.jpg",
+    "member_number": "2939",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "기후위기 특별위원회,산불피해지원대책 특별위원회,산업통상자원중소벤처기업위원회",
+    "birth_date": "1960-06-18",
+    "election_district": "경남 김해시을",
+    "secretary": [
+      "김동우",
+      "김정은",
+      "도재민",
+      "장인정"
+    ],
+    "staff": [
+      "곽상민",
+      "손낙구"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJUNGHO",
+    "reelection_info": "3선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경남 김해시을 지역구 더불어민주당 소속 (기후위기 특별위원회,산불피해지원대책 특별위원회,산업통상자원중소벤처기업위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:17.509526",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771009",
+    "name": "김종민",
+    "name_hanja": "金鍾民",
+    "name_english": "KIM JONGMIN",
+    "district": "세종특별자치시갑",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9771009.jpg",
+    "member_number": "2833",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "무소속",
+    "committee": "기후위기 특별위원회,산업통상자원중소벤처기업위원회",
+    "birth_date": "1964-05-12",
+    "election_district": "세종특별자치시갑",
+    "secretary": [
+      "김나래",
+      "김형호",
+      "진재성"
+    ],
+    "staff": [
+      "이동영",
+      "정운몽"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJONGMIN",
+    "reelection_info": "3선제22대",
+    "political_orientation": "중도성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "세종특별자치시갑 지역구 무소속 소속 (기후위기 특별위원회,산업통상자원중소벤처기업위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:20.296758",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771342",
+    "name": "김종양",
+    "name_hanja": "金鍾陽",
+    "name_english": "KIM JONGYANG",
+    "district": "경남 창원시의창구",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771342.jpg",
+    "member_number": "3142",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "국토교통위원회,예산결산특별위원회",
+    "birth_date": "1961-10-30",
+    "election_district": "경남 창원시의창구",
+    "secretary": [
+      "김리윤",
+      "장지원",
+      "함영규"
+    ],
+    "staff": [
+      "신승준",
+      "신정인"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJONGYANG",
+    "reelection_info": "초선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경남 창원시의창구 지역구 국민의힘 소속 (국토교통위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:23.602710",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771192",
+    "name": "김주영",
+    "name_hanja": "金周暎",
+    "name_english": "KIM JUYOUNG",
+    "district": "경기 김포시갑",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771192.jpg",
+    "member_number": "3084",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "환경노동위원회",
+    "birth_date": "1961-10-15",
+    "election_district": "경기 김포시갑",
+    "secretary": [
+      "김지우",
+      "송다미",
+      "이장희",
+      "임정섭"
+    ],
+    "staff": [
+      "이경호",
+      "이은영"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJUYOUNG",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "환경보호",
+      "노동권익",
+      "기후변화",
+      "에너지정책"
+    ],
+    "description": "경기 김포시갑 지역구 더불어민주당 소속 (환경노동위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:25.083144",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771343",
+    "name": "김준혁",
+    "name_hanja": "金俊爀",
+    "name_english": "KIM JUNHYUK",
+    "district": "경기 수원시정",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771343.jpg",
+    "member_number": "3180",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "교육위원회,국회운영위원회",
+    "birth_date": "1969-03-07",
+    "election_district": "경기 수원시정",
+    "secretary": [
+      "김혁로",
+      "박정우",
+      "이믿음",
+      "조원희"
+    ],
+    "staff": [
+      "김명욱",
+      "김선회"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJUNHYUK",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "교육정책",
+      "학교",
+      "학생",
+      "교육개혁"
+    ],
+    "description": "경기 수원시정 지역구 더불어민주당 소속 (교육위원회,국회운영위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:26.504309",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771344",
+    "name": "김준형",
+    "name_hanja": "金峻亨",
+    "name_english": "KIM JOONHYUNG",
+    "district": "비례대표",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771344.jpg",
+    "member_number": "3005",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "조국혁신당",
+    "committee": "외교통일위원회",
+    "birth_date": "1963-03-29",
+    "election_district": "비례대표",
+    "secretary": [
+      "유진영",
+      "이수현",
+      "이희진",
+      "임미소"
+    ],
+    "staff": [
+      "박지용",
+      "박찬호"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMJOONHYUNG",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "비례대표 지역구 조국혁신당 소속 (외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:28.767100",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770741",
+    "name": "김태년",
+    "name_hanja": "金太年",
+    "name_english": "KIM TAENYEON",
+    "district": "경기 성남시수정구",
+    "terms": "5선",
+    "image_url": "http://www.assembly.go.kr/photo/9770741.jpg",
+    "member_number": "556",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "기획재정위원회",
+    "birth_date": "1965-03-20",
+    "election_district": "경기 성남시수정구",
+    "secretary": [
+      "고이화",
+      "김두성",
+      "배지은",
+      "유지수"
+    ],
+    "staff": [
+      "강경훈",
+      "황현진"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMTAENYEON",
+    "reelection_info": "5선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "경제정책",
+      "예산",
+      "재정",
+      "세금정책"
+    ],
+    "description": "경기 성남시수정구 지역구 더불어민주당 소속 (기획재정위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:30.756208",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771345",
+    "name": "김태선",
+    "name_hanja": "金台善",
+    "name_english": "KIM TAESEON",
+    "district": "울산 동구",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771345.jpg",
+    "member_number": "3120",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "2025 아시아태평양경제협력체(APEC) 정상회의 지원 특별위원회,환경노동위원회",
+    "birth_date": "1979-08-28",
+    "election_district": "울산 동구",
+    "secretary": [
+      "이민경",
+      "임동건",
+      "조희선",
+      "주소희"
+    ],
+    "staff": [
+      "김대연",
+      "원인재"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMTAESEON",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "환경보호",
+      "노동권익",
+      "기후변화",
+      "에너지정책"
+    ],
+    "description": "울산 동구 지역구 더불어민주당 소속 (2025 아시아태평양경제협력체(APEC) 정상회의 지원 특별위원회,환경노동위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:32.310608",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771237",
+    "name": "김태호",
+    "name_hanja": "金台鎬",
+    "name_english": "KIM TAEHO",
+    "district": "경남 양산시을",
+    "terms": "4선",
+    "image_url": "http://www.assembly.go.kr/photo/9771237.jpg",
+    "member_number": "2456",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "외교통일위원회",
+    "birth_date": "1962-08-21",
+    "election_district": "경남 양산시을",
+    "secretary": [
+      "권용태",
+      "김정민",
+      "최연화",
+      "최장현"
+    ],
+    "staff": [
+      "김경수",
+      "이창진"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMTAEHO",
+    "reelection_info": "4선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "외교",
+      "통일",
+      "국제관계",
+      "북한정책"
+    ],
+    "description": "경남 양산시을 지역구 국민의힘 소속 (외교통일위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:34.537702",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771296",
+    "name": "김한규",
+    "name_hanja": "金翰奎",
+    "name_english": "KIM HANKYU",
+    "district": "제주 제주시을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771296.jpg",
+    "member_number": "3033",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "산업통상자원중소벤처기업위원회,여성가족위원회,예산결산특별위원회",
+    "birth_date": "1974-07-01",
+    "election_district": "제주 제주시을",
+    "secretary": [
+      "김명환",
+      "모다빈",
+      "박기완",
+      "최웅식"
+    ],
+    "staff": [
+      "오영진",
+      "황종섭"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMHANKYU",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "여성",
+      "가족",
+      "성평등",
+      "아동정책"
+    ],
+    "description": "제주 제주시을 지역구 더불어민주당 소속 (산업통상자원중소벤처기업위원회,여성가족위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:36.724272",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771346",
+    "name": "김현",
+    "name_hanja": "金玄",
+    "name_english": "KIM HYUN",
+    "district": "경기 안산시을",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771346.jpg",
+    "member_number": "2578",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "과학기술정보방송통신위원회",
+    "birth_date": "1965-10-15",
+    "election_district": "경기 안산시을",
+    "secretary": [
+      "김민수",
+      "김이성",
+      "변지은",
+      "정다정"
+    ],
+    "staff": [
+      "양삼동",
+      "이기정"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMHyun",
+    "reelection_info": "재선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "과학기술",
+      "정보통신",
+      "방송",
+      "디지털정책"
+    ],
+    "description": "경기 안산시을 지역구 더불어민주당 소속 (과학기술정보방송통신위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:38.069455",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771347",
+    "name": "김현정",
+    "name_hanja": "金鉉正",
+    "name_english": "KIM HYUNJUNG",
+    "district": "경기 평택시병 ",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771347.jpg",
+    "member_number": "3185",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "정무위원회",
+    "birth_date": "1969-06-17",
+    "election_district": "경기 평택시병 ",
+    "secretary": [
+      "공혜빈",
+      "김진석",
+      "노주엽",
+      "정혁준"
+    ],
+    "staff": [
+      "장용득",
+      "홍태식"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMHYUNJUNG",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "경기 평택시병  지역구 더불어민주당 소속 (정무위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:40.798563",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771223",
+    "name": "김형동",
+    "name_hanja": "金亨東",
+    "name_english": "KIM HYUNGDONG",
+    "district": "경북 안동시예천군",
+    "terms": "재선",
+    "image_url": "http://www.assembly.go.kr/photo/9771223.jpg",
+    "member_number": "3271",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "2025 아시아태평양경제협력체(APEC) 정상회의 지원 특별위원회,산불피해지원대책 특별위원회,환경노동위원회",
+    "birth_date": "1975-03-25",
+    "election_district": "경북 안동시예천군",
+    "secretary": [
+      "남종희",
+      "여창민",
+      "이미숙",
+      "최아녕"
+    ],
+    "staff": [
+      "김동학",
+      "오효택"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMHYUNGDONG",
+    "reelection_info": "재선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "환경보호",
+      "노동권익",
+      "기후변화",
+      "에너지정책"
+    ],
+    "description": "경북 안동시예천군 지역구 국민의힘 소속 (2025 아시아태평양경제협력체(APEC) 정상회의 지원 특별위원회,산불피해지원대책 특별위원회,환경노동위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:43.720273",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771348",
+    "name": "김희정",
+    "name_hanja": "金姬廷",
+    "name_english": "KIM HEEJUNG",
+    "district": "부산 연제구",
+    "terms": "3선",
+    "image_url": "http://www.assembly.go.kr/photo/9771348.jpg",
+    "member_number": "130",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "국토교통위원회",
+    "birth_date": "1971-04-13",
+    "election_district": "부산 연제구",
+    "secretary": [
+      "김준형",
+      "이미향",
+      "조대웅",
+      "조영우"
+    ],
+    "staff": [
+      "송효근",
+      "전광우"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/KIMHeeJung",
+    "reelection_info": "3선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "정치",
+      "국정",
+      "의정"
+    ],
+    "description": "부산 연제구 지역구 국민의힘 소속 (국토교통위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:45.055503",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771349",
+    "name": "나경원",
+    "name_hanja": "羅景垣",
+    "name_english": "NA KYUNGWON",
+    "district": "서울 동작구을",
+    "terms": "5선",
+    "image_url": "http://www.assembly.go.kr/photo/9771349.jpg",
+    "member_number": "131",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "국민의힘",
+    "committee": "법제사법위원회",
+    "birth_date": "1963-12-06",
+    "election_district": "서울 동작구을",
+    "secretary": [
+      "김선아",
+      "김형근",
+      "이가원",
+      "한진영"
+    ],
+    "staff": [
+      "김광인",
+      "채영권"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/NAKYUNGWON",
+    "reelection_info": "5선제22대",
+    "political_orientation": "보수성향",
+    "key_issues": [
+      "법제",
+      "사법",
+      "인권",
+      "법치주의"
+    ],
+    "description": "서울 동작구을 지역구 국민의힘 소속 (법제사법위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:46.400155",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9770752",
+    "name": "남인순",
+    "name_hanja": "南仁順",
+    "name_english": "NAM INSOON",
+    "district": "서울 송파구병",
+    "terms": "4선",
+    "image_url": "http://www.assembly.go.kr/photo/9770752.jpg",
+    "member_number": "2618",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "보건복지위원회,연금개혁 특별위원회",
+    "birth_date": "1958-11-05",
+    "election_district": "서울 송파구병",
+    "secretary": [
+      "강성현",
+      "김영윤",
+      "박상은",
+      "정다인"
+    ],
+    "staff": [
+      "김봉겸",
+      "김은경"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/NAMINSOON",
+    "reelection_info": "4선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "보건",
+      "복지",
+      "의료",
+      "사회보장"
+    ],
+    "description": "서울 송파구병 지역구 더불어민주당 소속 (보건복지위원회,연금개혁 특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:49.108834",
+    "data_source": "국회 공식 API"
+  },
+  {
+    "id": "9771350",
+    "name": "노종면",
+    "name_hanja": "盧宗勉",
+    "name_english": "NOH JONGMYUN",
+    "district": "인천 부평구갑",
+    "terms": "초선",
+    "image_url": "http://www.assembly.go.kr/photo/9771350.jpg",
+    "member_number": "3191",
+    "mention_count": 0,
+    "influence_score": 0,
+    "party": "더불어민주당",
+    "committee": "과학기술정보방송통신위원회,예산결산특별위원회",
+    "birth_date": "1967-09-15",
+    "election_district": "인천 부평구갑",
+    "secretary": [
+      "김민재",
+      "김주경",
+      "이인석",
+      "정대성",
+      "한소진"
+    ],
+    "staff": [
+      "이상범",
+      "이시성"
+    ],
+    "homepage": "https://www.assembly.go.kr/members/22nd/NOHJONGMYUN",
+    "reelection_info": "초선제22대",
+    "political_orientation": "진보성향",
+    "key_issues": [
+      "과학기술",
+      "정보통신",
+      "방송",
+      "디지털정책"
+    ],
+    "description": "인천 부평구갑 지역구 더불어민주당 소속 (과학기술정보방송통신위원회,예산결산특별위원회)",
+    "phone": "",
+    "email": "",
+    "collected_at": "2025-09-15T02:58:51.334662",
+    "data_source": "국회 공식 API"
+  }
+]

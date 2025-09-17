@@ -1,20 +1,25 @@
 import { useState, useEffect } from 'react'
 import MemberDetailWidget from './MemberDetailWidget'
+import useOptimizedData from '../hooks/useOptimizedData'
 
 const PoliticianProfileWidget = () => {
-  const [politicians, setPoliticians] = useState([])
-  const [billScores, setBillScores] = useState({})
-  const [photoMapping, setPhotoMapping] = useState({})
-  const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(0)
   const [hasMore, setHasMore] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [selectedMember, setSelectedMember] = useState(null)
+  const [photoMapping, setPhotoMapping] = useState({})
   const itemsPerPage = 10
 
+  // 최적화된 데이터 훅 사용
+  const { 
+    data: { politicians, billScores, news, trends }, 
+    loading, 
+    errors, 
+    isLoading,
+    refreshData 
+  } = useOptimizedData()
+
   useEffect(() => {
-    loadPoliticians(0)
-    loadBillScores()
     loadPhotoMapping()
   }, [])
 
