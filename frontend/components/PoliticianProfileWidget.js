@@ -4,6 +4,7 @@ import MemberDetailWidget from './MemberDetailWidget'
 const PoliticianProfileWidget = () => {
   const [politicians, setPoliticians] = useState([])
   const [billScores, setBillScores] = useState({})
+  const [photoMapping, setPhotoMapping] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(0)
   const [hasMore, setHasMore] = useState(true)
@@ -14,7 +15,19 @@ const PoliticianProfileWidget = () => {
   useEffect(() => {
     loadPoliticians(0)
     loadBillScores()
+    loadPhotoMapping()
   }, [])
+
+  const loadPhotoMapping = async () => {
+    try {
+      const response = await fetch('/politician_photos.json')
+      const mapping = await response.json()
+      setPhotoMapping(mapping)
+      console.log('사진 매핑 로드 완료:', Object.keys(mapping).length + '명')
+    } catch (error) {
+      console.error('사진 매핑 로드 실패:', error)
+    }
+  }
 
   const loadBillScores = async () => {
     try {
@@ -130,10 +143,10 @@ const PoliticianProfileWidget = () => {
                 {/* 프로필 영역 - 정당명 텍스트 표시 */}
                 <div className="flex-shrink-0">
                   <div className={`w-12 h-12 rounded-full overflow-hidden flex items-center justify-center text-sm font-bold ${getPartyColor(politician.party)}`}>
-                    {politician.photo_url ? (
+                    {photoMapping[politician.name] ? (
                       <img 
-                        src={politician.photo_url} 
-                        alt={politician.name || politician.naas_nm}
+                        src={photoMapping[politician.name]} 
+                        alt={politician.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.target.style.display = 'none';
