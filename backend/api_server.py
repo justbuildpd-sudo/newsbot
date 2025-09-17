@@ -115,8 +115,10 @@ def load_politicians_data():
     """정치인 데이터 로드"""
     global politicians_data
     
-    # 여러 경로에서 데이터 파일 찾기 (사진 URL 포함 데이터 우선)
+    # 여러 경로에서 데이터 파일 찾기 (완전 수정된 데이터 우선)
     possible_paths = [
+        'complete_assembly_members.json',  # 이름과 정당 정보 완전 수정된 데이터
+        'fixed_assembly_members.json',  # 정당 정보 수정된 데이터
         '22nd_assembly_members_300.json',  # 백엔드 폴더 내
         '../22nd_assembly_members_300.json',  # 상위 폴더
         'politicians_data_with_party.json',
