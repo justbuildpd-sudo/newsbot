@@ -1,0 +1,17 @@
+name: Disable GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  disable-pages:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Disable Pages Build
+      run: |
+        echo "GitHub Pages build disabled"
+        echo "This project uses Vercel for deployment"
+        exit 0
