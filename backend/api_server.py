@@ -1,716 +1,345 @@
-from fastapi import FastAPI, HTTPException, Request
+#!/usr/bin/env python3
+"""
+NewsBot 경량 API 서버 - Render 배포 전용
+국회의원 데이터와 기본 평가만 제공하는 최소한의 서버
+"""
+
+import os
+import json
+import logging
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fastapi.responses import Response
 import uvicorn
-from news_service import NewsService
-from stable_news_service import stable_news_service
-from politician_service import politician_service
-from politician_analyzer import politician_analyzer
-from rate_limiter import rate_limiter
-from monitoring import system_monitor
-from database import db
-from assembly_api_service import assembly_api
-from processed_assembly_service import processed_assembly_service
-from processed_full_assembly_service import processed_full_assembly_service
-from meeting_processor import MeetingProcessor
-import json
-import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
-app = FastAPI(title="NewsBot API", version="1.0.0")
+# 로깅 설정
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# FastAPI 앱 생성
+app = FastAPI(
+    title="NewsBot 경량 API",
+    description="국회의원 데이터 및 기본 평가 시스템",
+    version="1.0.0"
+)
 
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 프로덕션에서는 특정 도메인만 허용
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 뉴스 서비스 인스턴스
-news_service = NewsService()
+# 전역 데이터 저장
+politicians_data = []
+bills_data = {}
 
-# 상임위원회 발화록 처리기
-meeting_processor = MeetingProcessor("/Users/hopidaay/InsightForge/qa_service/data/processed_meetings")
+def load_bills_data():
+    """발의안 데이터 로드"""
+    global bills_data
+    
+    # 발의안 데이터 파일 찾기 (개선된 데이터 우선)
+    possible_paths = [
+        'enhanced_bills_data_22nd.json',
+        'bills_data_22nd.json',
+        '../enhanced_bills_data_22nd.json',
+        '../bills_data_22nd.json',
+        './backend/enhanced_bills_data_22nd.json',
+        './backend/bills_data_22nd.json'
+    ]
+    
+    for path in possible_paths:
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                bills_data = json.load(f)
+            logger.info(f"발의안 데이터 로드 성공: {len(bills_data)}명 ({path})")
+            return
+        except FileNotFoundError:
+            continue
+    
+    logger.warning("발의안 데이터 파일을 찾을 수 없음")
 
-# Rate Limiting 및 모니터링 미들웨어
-@app.middleware("http")
-async def rate_limit_middleware(request: Request, call_next):
-    start_time = time.time()
+def load_politicians_data():
+    """정치인 데이터 로드"""
+    global politicians_data
     
-    # 클라이언트 IP 추출
-    client_ip = request.client.host
-    if request.headers.get("x-forwarded-for"):
-        client_ip = request.headers.get("x-forwarded-for").split(",")[0].strip()
+    # 여러 경로에서 데이터 파일 찾기 (사진 URL 포함 데이터 우선)
+    possible_paths = [
+        '22nd_assembly_members_300.json',  # 백엔드 폴더 내
+        '../22nd_assembly_members_300.json',  # 상위 폴더
+        'politicians_data_with_party.json',
+        'data/politicians.json',
+        '../politicians_data_with_party.json'
+    ]
     
-    # Rate Limiting 확인
-    is_allowed, message = rate_limiter.is_allowed(client_ip)
+    for path in possible_paths:
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                politicians_data = json.load(f)
+            logger.info(f"정치인 데이터 로드 성공: {len(politicians_data)}명 ({path})")
+            return
+        except FileNotFoundError:
+            continue
     
-    if not is_allowed:
-        # 보안 이벤트 로깅
-        system_monitor.log_security_event("rate_limit_exceeded", {
-            "ip": client_ip,
-            "path": request.url.path,
-            "user_agent": request.headers.get("user-agent", "")
-        })
-        
-        return JSONResponse(
-            status_code=429,
-            content={
-                "success": False,
-                "error": "Rate limit exceeded",
-                "message": message,
-                "retry_after": 60
-            }
-        )
-    
-    # 요청 처리
-    response = await call_next(request)
-    
-    # 응답 시간 기록
-    response_time = time.time() - start_time
-    system_monitor.record_request(response_time, response.status_code)
-    
-    return response
+    # 데이터 파일이 없으면 샘플 데이터 생성 (사진 URL 포함)
+    politicians_data = [
+        {
+            "name": "정청래",
+            "party": "더불어민주당", 
+            "district": "서울 마포구을",
+            "committee": "기획재정위원회",
+            "id": "sample1",
+            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample1.jpg"
+        },
+        {
+            "name": "김영배", 
+            "party": "더불어민주당",
+            "district": "서울 강남구갑",
+            "committee": "기획재정위원회", 
+            "id": "sample2",
+            "photo_url": "https://www.assembly.go.kr/static/portal/img/openassm/new/sample2.jpg"
+        }
+    ]
+    logger.warning("데이터 파일을 찾을 수 없어 샘플 데이터 사용")
+
+# 서버 시작 시 데이터 로드
+load_politicians_data()
+load_bills_data()
 
 @app.get("/")
 async def root():
-    return {"message": "NewsBot API Server", "status": "running"}
-
-@app.get("/api/news")
-async def get_news():
-    """정치 관련 뉴스 가져오기 (안정적 버전)"""
-    try:
-        # 안정적인 뉴스 서비스 사용
-        news = stable_news_service.get_cached_news()
-        return {
-            "success": True,
-            "data": news,
-            "count": len(news),
-            "timestamp": datetime.now().isoformat(),
-            "source": "안정적 뉴스 서비스"
-        }
-    except Exception as e:
-        # 백업으로 기존 서비스 사용
-        try:
-            news = news_service.get_cached_news()
-            return {
-                "success": True,
-                "data": news,
-                "count": len(news),
-                "timestamp": datetime.now().isoformat(),
-                "source": "백업 뉴스 서비스"
-            }
-        except Exception as backup_error:
-            raise HTTPException(status_code=500, detail=f"뉴스 가져오기 실패: {str(e)}")
-
-@app.get("/api/news/refresh")
-async def refresh_news():
-    """뉴스 새로고침"""
-    try:
-        # 캐시 초기화하고 새로운 뉴스 가져오기
-        news_service.news_cache = {}
-        news = news_service.get_political_news()
-        
-        # 캐시에 저장
-        for article in news:
-            news_id = hashlib.md5(article['title'].encode()).hexdigest()
-            news_service.news_cache[news_id] = article
-        
-        return {
-            "success": True,
-            "data": news,
-            "count": len(news),
-            "message": "뉴스가 새로고침되었습니다",
-            "timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"뉴스 새로고침 실패: {str(e)}")
-
-
-@app.get("/api/news/stats")
-async def get_news_stats():
-    """뉴스 통계 정보"""
-    try:
-        news = news_service.get_cached_news()
-        
-        # 키워드별 통계
-        keyword_stats = {}
-        for article in news:
-            for keyword in news_service.political_keywords:
-                if keyword in article['title'].lower():
-                    keyword_stats[keyword] = keyword_stats.get(keyword, 0) + 1
-        
-        return {
-            "success": True,
-            "stats": {
-                "total_news": len(news),
-                "keyword_stats": keyword_stats,
-                "last_cleanup": news_service.last_cleanup.isoformat(),
-                "next_cleanup": (news_service.last_cleanup + news_service.cleanup_interval).isoformat()
-            },
-            "timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"통계 가져오기 실패: {str(e)}")
-
-@app.get("/api/news/content")
-async def get_news_content(url: str):
-    """뉴스 기사 전문 가져오기"""
-    try:
-        content = news_service.get_news_content(url)
-        return {
-            "success": True,
-            "data": content,
-            "timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"뉴스 내용 가져오기 실패: {str(e)}")
-
-@app.get("/api/news/with-politicians")
-async def get_news_with_politicians():
-    """뉴스별 언급된 정치인 정보 포함하여 반환"""
-    try:
-        news_data = news_service.get_cached_news()
-        news_with_politicians = politician_analyzer.get_news_with_politicians(news_data)
-        
-        response_data = {
-            "success": True,
-            "data": news_with_politicians,
-            "total_count": len(news_with_politicians),
-            "timestamp": datetime.now().isoformat()
-        }
-        
-        # 캐시 제어 헤더 추가
-        response = JSONResponse(content=response_data)
-        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        return response
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"뉴스-정치인 매칭 실패: {str(e)}")
-
-@app.get("/api/news/politician-mentions")
-async def get_politician_mentions():
-    """정치인별 뉴스 언급 통계"""
-    try:
-        news_data = news_service.get_cached_news()
-        mentioned_politicians = politician_analyzer.analyze_news_mentions(news_data)
-        
-        response_data = {
-            "success": True,
-            "data": mentioned_politicians,
-            "total_politicians": len(mentioned_politicians),
-            "timestamp": datetime.now().isoformat()
-        }
-        
-        # 캐시 제어 헤더 추가
-        response = JSONResponse(content=response_data)
-        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        return response
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치인 언급 분석 실패: {str(e)}")
+    """루트 페이지"""
+    return {
+        "message": "NewsBot 경량 API 서버",
+        "status": "running",
+        "politicians_count": len(politicians_data),
+        "version": "1.0.0"
+    }
 
 @app.get("/api/health")
 async def health_check():
-    """서버 상태 확인 (최적화)"""
-    try:
-        # 기본 상태 정보
-        health_status = {
-            "status": "healthy",
-            "timestamp": datetime.now().isoformat(),
-            "version": "1.0.0",
-            "uptime": "running"
-        }
-        
-        # 뉴스 서비스 상태
-        try:
-            news_count = len(news_service.news_cache)
-            health_status["news_service"] = {
-                "status": "healthy",
-                "cached_news": news_count,
-                "last_fetch": news_service.last_news_fetch.isoformat() if news_service.last_news_fetch else None
-            }
-        except Exception as e:
-            health_status["news_service"] = {"status": "error", "error": str(e)}
-        
-        # 정치인 분석기 상태
-        try:
-            if hasattr(politician_analyzer, '_initialized') and politician_analyzer._initialized:
-                health_status["politician_analyzer"] = {
-                    "status": "healthy",
-                    "politicians_count": len(politician_analyzer.politicians),
-                    "mapping_count": len(politician_analyzer.name_mapping)
-                }
-            else:
-                health_status["politician_analyzer"] = {"status": "not_initialized"}
-        except Exception as e:
-            health_status["politician_analyzer"] = {"status": "error", "error": str(e)}
-        
-        # 시스템 모니터링 (간소화)
-        try:
-            stats = system_monitor.get_system_stats()
-            health_status["system"] = {
-                "memory_usage": stats.get("memory_usage", "unknown"),
-                "cpu_usage": stats.get("cpu_usage", "unknown")
-            }
-        except:
-            health_status["system"] = {"status": "monitoring_unavailable"}
-        
-        return health_status
-        
-    except Exception as e:
-        return {
-            "status": "error",
-            "timestamp": datetime.now().isoformat(),
-            "error": str(e)
-        }
-
-@app.get("/api/monitoring/stats")
-async def get_monitoring_stats():
-    """모니터링 통계 확인"""
-    stats = system_monitor.get_system_stats()
-    alerts = system_monitor.check_alerts()
-    recent_errors = system_monitor.get_recent_errors()
-    
+    """서버 상태 확인"""
     return {
-        "success": True,
-        "data": {
-            "system_stats": stats,
-            "alerts": alerts,
-            "recent_errors": recent_errors
-        },
-        "timestamp": datetime.now().isoformat()
+        "status": "healthy",
+        "politicians_count": len(politicians_data),
+        "data_loaded": len(politicians_data) > 0,
+        "version": "1.0.0"
     }
-
-@app.get("/api/rate-limit/stats")
-async def get_rate_limit_stats():
-    """Rate Limiting 통계 확인"""
-    stats = rate_limiter.get_stats()
-    return {
-        "success": True,
-        "data": stats,
-        "timestamp": datetime.now().isoformat()
-    }
-
-@app.post("/api/rate-limit/reset")
-async def reset_rate_limits():
-    """Rate Limiting 초기화 (관리자용)"""
-    # 실제 운영에서는 인증이 필요
-    rate_limiter.blocked_ips.clear()
-    rate_limiter.ip_requests.clear()
-    return {
-        "success": True,
-        "message": "Rate limits have been reset",
-        "timestamp": datetime.now().isoformat()
-    }
-
-# 정치인 관련 API 엔드포인트
-@app.get("/api/politicians")
-async def get_politicians():
-    """모든 정치인 목록을 반환합니다. (전체 309명)"""
-    try:
-        # 전체 국회의원 데이터 사용
-        politicians = processed_full_assembly_service.get_all_members()
-        
-        return {
-            "success": True,
-            "data": politicians,
-            "total_count": len(politicians),
-            "source": "22대 국회의원 전체 데이터 (309명)"
-        }
-    except Exception as e:
-        # 오류 발생 시 빈 배열 반환 (서비스 중단 방지)
-        return {
-            "success": False,
-            "data": [],
-            "total_count": 0,
-            "error": f"정치인 목록 조회 오류: {str(e)}",
-            "message": "일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-        }
-
-@app.get("/api/politicians/featured")
-async def get_featured_politicians(limit: int = 6):
-    """주요 정치인 목록을 반환합니다. (정당별 대표)"""
-    try:
-        # 전체 국회의원 데이터에서 정당별 대표 의원들 선택
-        politicians = processed_full_assembly_service.get_top_members(limit)
-        return {
-            "success": True,
-            "data": politicians,
-            "count": len(politicians),
-            "source": "22대 국회의원 전체 데이터 (정당별 대표)"
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"주요 정치인 조회 오류: {str(e)}")
-
-@app.get("/api/politicians/{politician_id}")
-async def get_politician_by_id(politician_id: int):
-    """특정 정치인 정보를 반환합니다."""
-    try:
-        politician = politician_service.get_politician_by_id(politician_id)
-        if not politician:
-            raise HTTPException(status_code=404, detail="정치인을 찾을 수 없습니다")
-        
-        return {
-            "success": True,
-            "data": politician
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치인 조회 오류: {str(e)}")
-
-@app.get("/api/politicians/search")
-async def search_politicians(q: str):
-    """정치인을 검색합니다."""
-    try:
-        if not q or len(q.strip()) < 2:
-            raise HTTPException(status_code=400, detail="검색어는 2글자 이상이어야 합니다")
-        
-        politicians = politician_service.search_politicians(q.strip())
-        return {
-            "success": True,
-            "data": politicians,
-            "query": q,
-            "count": len(politicians)
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치인 검색 오류: {str(e)}")
-
-@app.get("/api/politicians/party/{party}")
-async def get_politicians_by_party(party: str):
-    """정당별 정치인 목록을 반환합니다."""
-    try:
-        politicians = politician_service.get_politicians_by_party(party)
-        return {
-            "success": True,
-            "data": politicians,
-            "party": party,
-            "count": len(politicians)
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정당별 정치인 조회 오류: {str(e)}")
-
-@app.get("/api/politicians/stats")
-async def get_politician_stats():
-    """정치인 통계 정보를 반환합니다."""
-    try:
-        stats = politician_service.get_politician_summary()
-        return {
-            "success": True,
-            "data": stats
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치인 통계 조회 오류: {str(e)}")
-
-# 핫이슈 랭킹 관련 API는 제거됨 - 의미 없는 기능
-
-@app.post("/api/politicians/init")
-async def initialize_politicians():
-    """정치인 데이터 초기화"""
-    try:
-        # 정치인 분석기 캐시 초기화
-        politician_analyzer.reset_cache()
-        return {"success": True, "message": "정치인 분석기 캐시 초기화 완료"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치인 데이터 초기화 실패: {str(e)}")
 
 @app.get("/api/assembly/members")
 async def get_assembly_members():
-    """국회의원 현황 조회 (실시간 API)"""
+    """국회의원 목록 조회"""
     try:
-        members = assembly_api.get_member_list()
         return {
             "success": True,
-            "data": members,
-            "total_count": len(members),
-            "source": "국회 공공데이터포털 실시간 API"
+            "data": politicians_data,
+            "total_count": len(politicians_data),
+            "source": "NewsBot 경량 API"
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"국회의원 조회 실패: {str(e)}")
-
-@app.get("/api/assembly/members/party/{party_name}")
-async def get_assembly_members_by_party(party_name: str):
-    """소속정당별 국회의원 목록 조회 (실시간 API)"""
-    try:
-        members = assembly_api.get_members_by_party(party_name)
-        return {
-            "success": True,
-            "data": members,
-            "total_count": len(members),
-            "party": party_name,
-            "source": "국회 공공데이터포털 실시간 API"
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정당별 국회의원 조회 실패: {str(e)}")
+        logger.error(f"국회의원 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="국회의원 데이터 조회 실패")
 
 @app.get("/api/assembly/members/{member_id}")
-async def get_assembly_member_detail(member_id: str):
-    """국회의원 상세 정보 조회 (실시간 API)"""
+async def get_assembly_member(member_id: str):
+    """특정 국회의원 조회"""
     try:
-        member = assembly_api.get_member_detail(member_id)
+        member = next((p for p in politicians_data if p.get('id') == member_id or p.get('name') == member_id), None)
+        
         if member:
             return {
                 "success": True,
                 "data": member,
-                "source": "국회 공공데이터포털 실시간 API"
+                "source": "NewsBot 경량 API"
             }
         else:
-            raise HTTPException(status_code=404, detail="국회의원 정보를 찾을 수 없습니다")
+            raise HTTPException(status_code=404, detail="국회의원을 찾을 수 없습니다")
+            
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"국회의원 상세 조회 실패: {str(e)}")
+        logger.error(f"국회의원 상세 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="국회의원 상세 조회 실패")
 
-@app.get("/api/assembly/members/{member_id}/committee-activities")
-async def get_member_committee_activities(member_id: str):
-    """특정 국회의원의 상임위원회 활동 조회"""
+@app.get("/api/assembly/stats")
+async def get_assembly_stats():
+    """국회의원 통계"""
     try:
-        # 의원 정보에서 부서코드 가져오기
-        member = assembly_api.get_member_detail(member_id)
-        if not member:
-            raise HTTPException(status_code=404, detail="국회의원을 찾을 수 없습니다")
-        
-        dept_cd = member.get('dept_code', '')
-        if not dept_cd:
-            raise HTTPException(status_code=400, detail="부서코드가 없습니다")
-        
-        activities = assembly_api.get_committee_activities(dept_cd)
+        # 정당별 분포 계산
+        party_stats = {}
+        for politician in politicians_data:
+            party = politician.get('party', '정당정보없음')
+            party_stats[party] = party_stats.get(party, 0) + 1
         
         return {
             "success": True,
             "data": {
-                "member_name": member.get('name', ''),
-                "member_party": member.get('party', ''),
-                "member_district": member.get('district', ''),
-                "activities": activities,
-                "total_count": len(activities)
+                "total_politicians": len(politicians_data),
+                "party_distribution": party_stats
             },
-            "source": "국회 공공데이터포털 상임위원회 활동 API"
+            "source": "NewsBot 경량 API"
+        }
+    except Exception as e:
+        logger.error(f"통계 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="통계 조회 실패")
+
+@app.get("/api/politicians")
+async def get_politicians():
+    """정치인 목록 (호환성)"""
+    return await get_assembly_members()
+
+@app.get("/api/politicians/featured")
+async def get_featured_politicians():
+    """주요 정치인 목록"""
+    try:
+        # 상위 6명만 반환
+        featured = politicians_data[:6]
+        return {
+            "success": True,
+            "data": featured,
+            "count": len(featured),
+            "source": "NewsBot 경량 API"
+        }
+    except Exception as e:
+        logger.error(f"주요 정치인 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="주요 정치인 조회 실패")
+
+@app.get("/api/bills/scores")
+async def get_bill_scores():
+    """발의안 점수 (개선된 실제 데이터 기반)"""
+    try:
+        # 개선된 발의안 데이터에서 점수 계산
+        bill_scores = {}
+        for name, bills in bills_data.items():
+            if bills:
+                # 주발의자인 경우 (공동발의자가 있는 경우)
+                main_proposals = sum(1 for bill in bills if len(bill.get('co_proposers', [])) > 0)
+                # 공동발의 (주발의가 아닌 경우)
+                co_proposals = len(bills) - main_proposals
+                total_bills = len(bills)
+                
+                # 통과율 계산 (본회의 통과, 정부이송 포함)
+                passed_bills = sum(1 for bill in bills 
+                                 if bill.get('status') in ['본회의 통과', '정부이송', '공포'])
+                success_rate = round(passed_bills / total_bills, 2) if total_bills > 0 else 0
+                
+                # 최근 활동 점수 (최근 3개월 내 발의안)
+                recent_bills = sum(1 for bill in bills 
+                                 if is_recent_bill(bill.get('propose_date', '')))
+                
+                bill_scores[name] = {
+                    "main_proposals": main_proposals,
+                    "co_proposals": co_proposals,
+                    "total_bills": total_bills,
+                    "success_rate": success_rate,
+                    "recent_activity": recent_bills
+                }
+        
+        return {
+            "success": True,
+            "data": bill_scores,
+            "count": len(bill_scores),
+            "source": "NewsBot 경량 API (개선된 발의안 데이터)",
+            "last_updated": datetime.now().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"발의안 점수 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="발의안 점수 조회 실패")
+
+def is_recent_bill(propose_date):
+    """최근 3개월 내 발의안인지 확인"""
+    try:
+        if not propose_date:
+            return False
+        bill_date = datetime.strptime(propose_date, '%Y-%m-%d')
+        three_months_ago = datetime.now() - timedelta(days=90)
+        return bill_date >= three_months_ago
+    except:
+        return False
+
+@app.get("/api/bills/politician/{politician_name}")
+async def get_politician_bills(politician_name: str):
+    """특정 정치인의 발의안 목록 (개선된 데이터)"""
+    try:
+        # 발의안 데이터에서 해당 정치인 찾기
+        if politician_name not in bills_data:
+            raise HTTPException(status_code=404, detail="해당 정치인의 발의안을 찾을 수 없습니다")
+        
+        bills = bills_data[politician_name]
+        
+        # 발의안을 최신순으로 정렬
+        sorted_bills = sorted(bills, key=lambda x: x.get('propose_date', ''), reverse=True)
+        
+        # 통계 계산
+        stats = {
+            "total_bills": len(bills),
+            "main_proposals": sum(1 for bill in bills if len(bill.get('co_proposers', [])) > 0),
+            "recent_bills": sum(1 for bill in bills if is_recent_bill(bill.get('propose_date', ''))),
+            "passed_bills": sum(1 for bill in bills 
+                              if bill.get('status') in ['본회의 통과', '정부이송', '공포']),
+            "committees": list(set(bill.get('committee', '') for bill in bills if bill.get('committee')))
+        }
+        
+        return {
+            "success": True,
+            "data": {
+                "politician": politician_name,
+                "bills": sorted_bills,
+                "statistics": stats,
+                "total_count": len(bills)
+            },
+            "source": "NewsBot 경량 API (개선된 발의안 데이터)",
+            "last_updated": datetime.now().isoformat()
         }
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"상임위원회 활동 조회 실패: {str(e)}")
+        logger.error(f"정치인 발의안 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="발의안 조회 실패")
 
-@app.get("/api/meetings/speakers")
-async def get_meeting_speakers():
-    """상임위원회 발언자 목록 조회"""
+@app.get("/api/bills/recent")
+async def get_recent_bills(limit: int = 20):
+    """최근 발의안 목록"""
     try:
-        speaker_data = meeting_processor.load_speaker_data()
+        all_bills = []
+        
+        # 모든 의원의 발의안 수집
+        for politician_name, bills in bills_data.items():
+            for bill in bills:
+                bill_copy = bill.copy()
+                bill_copy['politician'] = politician_name
+                all_bills.append(bill_copy)
+        
+        # 최신순으로 정렬
+        sorted_bills = sorted(all_bills, 
+                            key=lambda x: x.get('propose_date', ''), 
+                            reverse=True)[:limit]
         
         return {
             "success": True,
-            "data": speaker_data,
-            "total_speakers": len(speaker_data),
-            "timestamp": datetime.now().isoformat()
+            "data": sorted_bills,
+            "total_count": len(sorted_bills),
+            "source": "NewsBot 경량 API (개선된 발의안 데이터)"
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"발언자 목록 조회 실패: {str(e)}")
-
-@app.get("/api/meetings/records")
-async def get_meeting_records():
-    """상임위원회 회의록 조회"""
-    try:
-        meeting_records = meeting_processor.load_meeting_records()
-        
-        return {
-            "success": True,
-            "data": meeting_records,
-            "total_meetings": len(meeting_records),
-            "timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"회의록 조회 실패: {str(e)}")
-
-@app.get("/api/meetings/politician-speeches")
-async def get_politician_speeches():
-    """정치인별 발언 매칭 조회"""
-    try:
-        # 정치인 목록 로드
-        politician_list = assembly_api.get_member_list()
-        
-        # 발언자 데이터 로드
-        speaker_data = meeting_processor.load_speaker_data()
-        
-        # 정치인과 발언 매칭
-        matched_speeches = meeting_processor.match_politicians_with_speeches(politician_list)
-        
-        return {
-            "success": True,
-            "data": matched_speeches,
-            "total_politicians": len(matched_speeches),
-            "total_speeches": sum(data['total_speeches'] for data in matched_speeches.values()),
-            "timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치인 발언 매칭 실패: {str(e)}")
-
-@app.get("/api/meetings/related-persons")
-async def get_related_persons():
-    """관련인물 목록 조회"""
-    try:
-        # 정치인 목록 로드
-        politician_list = assembly_api.get_member_list()
-        
-        # 발언자 데이터 로드
-        speaker_data = meeting_processor.load_speaker_data()
-        
-        # 정치인과 발언 매칭
-        matched_speeches = meeting_processor.match_politicians_with_speeches(politician_list)
-        
-        # 관련인물 추출
-        related_persons = meeting_processor.extract_related_persons()
-        
-        return {
-            "success": True,
-            "data": related_persons,
-            "total_related_persons": len(related_persons),
-            "timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"관련인물 조회 실패: {str(e)}")
-
-@app.get("/api/meetings/summary")
-async def get_meeting_summary():
-    """상임위원회 발화록 요약 조회"""
-    try:
-        # 모든 데이터 로드
-        speaker_data = meeting_processor.load_speaker_data()
-        meeting_records = meeting_processor.load_meeting_records()
-        politician_list = assembly_api.get_member_list()
-        matched_speeches = meeting_processor.match_politicians_with_speeches(politician_list)
-        related_persons = meeting_processor.extract_related_persons()
-        
-        # 요약 생성
-        summary = meeting_processor.generate_speech_summary()
-        
-        return {
-            "success": True,
-            "data": summary,
-            "timestamp": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"발화록 요약 조회 실패: {str(e)}")
-
-# 추가 API 엔드포인트
-@app.get("/api/assembly/statistics")
-async def get_assembly_statistics():
-    """국회의원 통계 정보 (전체 309명)"""
-    try:
-        stats = processed_full_assembly_service.get_statistics()
-        return {
-            "success": True,
-            "data": stats,
-            "source": "22대 국회의원 전체 데이터 (309명)"
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"통계 조회 실패: {str(e)}")
-
-@app.get("/api/assembly/members/committee/{committee}")
-async def get_assembly_members_by_committee(committee: str):
-    """위원회별 국회의원 목록 조회"""
-    try:
-        members = processed_assembly_service.get_members_by_committee(committee)
-        return {
-            "success": True,
-            "data": members,
-            "total_count": len(members),
-            "committee": committee,
-            "source": "가공된 국회 공식 API 데이터"
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"위원회별 국회의원 조회 실패: {str(e)}")
-
-@app.get("/api/assembly/members/orientation/{orientation}")
-async def get_assembly_members_by_orientation(orientation: str):
-    """정치 성향별 국회의원 목록 조회"""
-    try:
-        members = processed_assembly_service.get_members_by_orientation(orientation)
-        return {
-            "success": True,
-            "data": members,
-            "total_count": len(members),
-            "orientation": orientation,
-            "source": "가공된 국회 공식 API 데이터"
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"정치 성향별 국회의원 조회 실패: {str(e)}")
-
-@app.get("/api/assembly/search")
-async def search_assembly_members(query: str):
-    """국회의원 검색"""
-    try:
-        members = processed_assembly_service.search_members(query)
-        return {
-            "success": True,
-            "data": members,
-            "total_count": len(members),
-            "query": query,
-            "source": "가공된 국회 공식 API 데이터"
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"국회의원 검색 실패: {str(e)}")
-
-# 실시간 국회 API 엔드포인트들
-@app.get("/api/assembly/realtime/members")
-async def get_realtime_assembly_members():
-    """실시간 국회의원 현황 조회"""
-    try:
-        members = assembly_api.get_member_list()
-        return {
-            "success": True,
-            "data": members,
-            "total_count": len(members),
-            "source": "국회 공공데이터포털 실시간 API",
-            "last_updated": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"실시간 국회의원 조회 실패: {str(e)}")
-
-@app.get("/api/assembly/realtime/members/party/{party_name}")
-async def get_realtime_assembly_members_by_party(party_name: str):
-    """실시간 소속정당별 국회의원 목록 조회"""
-    try:
-        members = assembly_api.get_members_by_party(party_name)
-        return {
-            "success": True,
-            "data": members,
-            "total_count": len(members),
-            "party": party_name,
-            "source": "국회 공공데이터포털 실시간 API",
-            "last_updated": datetime.now().isoformat()
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"실시간 정당별 국회의원 조회 실패: {str(e)}")
-
-@app.get("/api/assembly/realtime/members/{member_id}")
-async def get_realtime_assembly_member_detail(member_id: str):
-    """실시간 국회의원 상세 정보 조회"""
-    try:
-        member = assembly_api.get_member_detail(member_id)
-        if member:
-            return {
-                "success": True,
-                "data": member,
-                "source": "국회 공공데이터포털 실시간 API",
-                "last_updated": datetime.now().isoformat()
-            }
-        else:
-            raise HTTPException(status_code=404, detail="국회의원 정보를 찾을 수 없습니다")
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"실시간 국회의원 상세 조회 실패: {str(e)}")
-
+        logger.error(f"최근 발의안 조회 오류: {e}")
+        raise HTTPException(status_code=500, detail="최근 발의안 조회 실패")
 
 if __name__ == "__main__":
-    import hashlib  # news_service에서 사용
-    uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)
+    port = int(os.environ.get("PORT", 8000))
+    
+    print("🚀 NewsBot 경량 API 서버 시작")
+    print(f"📊 정치인 데이터: {len(politicians_data)}명")
+    print(f"🌐 서버 주소: http://0.0.0.0:{port}")
+    print(f"📖 API 문서: http://0.0.0.0:{port}/docs")
+    print("=" * 50)
+    
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=port,
+        log_level="info"
+    )
