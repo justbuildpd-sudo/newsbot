@@ -363,6 +363,66 @@ export default function MemberDetailWidget({ memberName, onClose }) {
             memberInfo={memberInfo} 
           />
         </div>
+
+        {/* 개인정보 섹션 (가장 하단) */}
+        {memberInfo && (
+          <div className="mt-8 p-6 bg-dark-700 rounded-lg border-t-2 border-gray-600">
+            <h3 className="text-lg font-semibold text-white mb-4">📞 연락처 정보</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* 이메일 */}
+              {(memberInfo.email || memberInfo.email_personal) && (
+                <div className="bg-dark-600 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400 mb-2">📧 이메일</div>
+                  <div className="text-white break-all">
+                    {memberInfo.email_personal || memberInfo.email}
+                  </div>
+                </div>
+              )}
+              
+              {/* 홈페이지 */}
+              {memberInfo.homepage && memberInfo.homepage !== 'null' && (
+                <div className="bg-dark-600 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400 mb-2">🌐 홈페이지</div>
+                  <a 
+                    href={memberInfo.homepage} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary-400 hover:text-primary-300 transition-colors break-all"
+                  >
+                    {memberInfo.homepage}
+                  </a>
+                </div>
+              )}
+              
+              {/* 사무실 전화 */}
+              {(memberInfo.phone || memberInfo.phone_office) && (
+                <div className="bg-dark-600 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400 mb-2">📞 사무실 전화</div>
+                  <div className="text-white">
+                    {memberInfo.phone_office || memberInfo.phone}
+                  </div>
+                </div>
+              )}
+              
+              {/* 사무실 */}
+              {memberInfo.office_room && (
+                <div className="bg-dark-600 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400 mb-2">🏢 사무실</div>
+                  <div className="text-white">
+                    {memberInfo.office_room}
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* 개인정보 보호 안내 */}
+            <div className="mt-4 pt-4 border-t border-dark-600">
+              <p className="text-xs text-gray-500 text-center">
+                ℹ️ 위 연락처 정보는 국회 공식 자료에서 제공되는 공개 정보입니다
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
