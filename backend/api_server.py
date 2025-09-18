@@ -37,6 +37,7 @@ app.add_middleware(
 from assembly_member_api import assembly_api
 from bills_info_api import bills_api  
 from naver_api_service import naver_api
+# from election_api_service import election_api  # 보류: 선거 개시 전 데이터 비공개
 
 # 전역 데이터 저장 (개별 API에서 관리)
 politicians_data = []
