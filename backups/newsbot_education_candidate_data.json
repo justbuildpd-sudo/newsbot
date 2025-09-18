@@ -1,0 +1,2008 @@
+[
+ {
+  "id": "education_민병희_강원도",
+  "name": "민병희",
+  "category": "education_candidate",
+  "party": null,
+  "district": "강원도",
+  "age": 64,
+  "gender": "남",
+  "occupation": "강원도교육감",
+  "election_data": {
+   "vote_count": 426465,
+   "vote_rate": 54.12,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "민병희",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_高承儀_인천광역시",
+  "name": "高承儀",
+  "category": "education_candidate",
+  "party": null,
+  "district": "인천광역시",
+  "age": 66,
+  "gender": "남",
+  "occupation": "재단법인 덕신장학회 이사장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "高承儀",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_김지철_충청남도",
+  "name": "김지철",
+  "category": "education_candidate",
+  "party": null,
+  "district": "충청남도",
+  "age": 66,
+  "gender": "남",
+  "occupation": "충청남도교육감",
+  "election_data": {
+   "vote_count": 421123,
+   "vote_rate": 44.07,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "김지철",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_洪德律_대구광역시",
+  "name": "洪德律",
+  "category": "education_candidate",
+  "party": null,
+  "district": "대구광역시",
+  "age": 60,
+  "gender": "남",
+  "occupation": "대구대학교 교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "洪德律",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_張錫雄_전라남도",
+  "name": "張錫雄",
+  "category": "education_candidate",
+  "party": null,
+  "district": "전라남도",
+  "age": 63,
+  "gender": "남",
+  "occupation": "전남교육포럼 혁신과 미래 대표",
+  "election_data": {
+   "vote_count": 394395,
+   "vote_rate": 38.36,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "張錫雄",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_朴宣映_서울특별시",
+  "name": "朴宣映",
+  "category": "education_candidate",
+  "party": null,
+  "district": "서울특별시",
+  "age": 62,
+  "gender": "여",
+  "occupation": "동국대학교 법학과 부교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "朴宣映",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_都成勳_인천광역시",
+  "name": "都成勳",
+  "category": "education_candidate",
+  "party": null,
+  "district": "인천광역시",
+  "age": 57,
+  "gender": "남",
+  "occupation": "참교육 장학사업회 상임이사",
+  "election_data": {
+   "vote_count": 570789,
+   "vote_rate": 43.77,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "都成勳",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_薛東浩_대전광역시",
+  "name": "薛東浩",
+  "category": "education_candidate",
+  "party": null,
+  "district": "대전광역시",
+  "age": 67,
+  "gender": "남",
+  "occupation": "대전광역시교육감",
+  "election_data": {
+   "vote_count": 363708,
+   "vote_rate": 52.99,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "薛東浩",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_姜恩姬_대구광역시",
+  "name": "姜恩姬",
+  "category": "education_candidate",
+  "party": null,
+  "district": "대구광역시",
+  "age": 53,
+  "gender": "여",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": 464296,
+   "vote_rate": 40.73,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "姜恩姬",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_박성호_경상남도",
+  "name": "박성호",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상남도",
+  "age": 61,
+  "gender": "남",
+  "occupation": "대학교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "박성호",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_曺喜昖_서울특별시",
+  "name": "曺喜昖",
+  "category": "education_candidate",
+  "party": null,
+  "district": "서울특별시",
+  "age": 61,
+  "gender": "남",
+  "occupation": "서울특별시교육감",
+  "election_data": {
+   "vote_count": 2271413,
+   "vote_rate": 46.58,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "曺喜昖",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_구광렬_울산광역시",
+  "name": "구광렬",
+  "category": "education_candidate",
+  "party": null,
+  "district": "울산광역시",
+  "age": 62,
+  "gender": "남",
+  "occupation": "울산대학교 교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "구광렬",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_金思悅_대구광역시",
+  "name": "金思悅",
+  "category": "education_candidate",
+  "party": null,
+  "district": "대구광역시",
+  "age": 61,
+  "gender": "남",
+  "occupation": "경북대학교 자연과학대학 생명과학부 교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "金思悅",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_崔泳太_광주광역시",
+  "name": "崔泳太",
+  "category": "education_candidate",
+  "party": null,
+  "district": "광주광역시",
+  "age": 63,
+  "gender": "남",
+  "occupation": "대학교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "崔泳太",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_金善有_경상남도",
+  "name": "金善有",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상남도",
+  "age": 64,
+  "gender": "남",
+  "occupation": "진주교육대학교 교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "金善有",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_함진홍_부산광역시",
+  "name": "함진홍",
+  "category": "education_candidate",
+  "party": null,
+  "district": "부산광역시",
+  "age": 58,
+  "gender": "여",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "함진홍",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_金鉉馥_경기도",
+  "name": "金鉉馥",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경기도",
+  "age": 53,
+  "gender": "남",
+  "occupation": "(재)문화나눔재단 상임이사",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "金鉉馥",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_曺永達_서울특별시",
+  "name": "曺永達",
+  "category": "education_candidate",
+  "party": null,
+  "district": "서울특별시",
+  "age": 57,
+  "gender": "남",
+  "occupation": "서울대학교 사범대학 사회교육과 교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "曺永達",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_李美英_전라북도",
+  "name": "李美英",
+  "category": "education_candidate",
+  "party": null,
+  "district": "전라북도",
+  "age": 58,
+  "gender": "여",
+  "occupation": "교육시민운동가",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "李美英",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_朴孝錫_부산광역시",
+  "name": "朴孝錫",
+  "category": "education_candidate",
+  "party": null,
+  "district": "부산광역시",
+  "age": 50,
+  "gender": "남",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "朴孝錫",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_황호진_전라북도",
+  "name": "황호진",
+  "category": "education_candidate",
+  "party": null,
+  "district": "전라북도",
+  "age": 56,
+  "gender": "남",
+  "occupation": "담쟁이교육포럼이사장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "황호진",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_노옥희_울산광역시",
+  "name": "노옥희",
+  "category": "education_candidate",
+  "party": null,
+  "district": "울산광역시",
+  "age": 60,
+  "gender": "여",
+  "occupation": "더불어숲작은도서관 대표",
+  "election_data": {
+   "vote_count": 211590,
+   "vote_rate": 35.55,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "노옥희",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_張平圭_울산광역시",
+  "name": "張平圭",
+  "category": "education_candidate",
+  "party": null,
+  "district": "울산광역시",
+  "age": 54,
+  "gender": "남",
+  "occupation": "울산 혁신교육연구소 대표",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "張平圭",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_安翔涉_경상북도",
+  "name": "安翔涉",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상북도",
+  "age": 55,
+  "gender": "남",
+  "occupation": "경북교육연구소 이사장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "安翔涉",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_신경호_강원도",
+  "name": "신경호",
+  "category": "education_candidate",
+  "party": null,
+  "district": "강원도",
+  "age": 65,
+  "gender": "남",
+  "occupation": "강원미래교육연구원 원장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "신경호",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_최순자_인천광역시",
+  "name": "최순자",
+  "category": "education_candidate",
+  "party": null,
+  "district": "인천광역시",
+  "age": 65,
+  "gender": "여",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "최순자",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_이경희_경상북도",
+  "name": "이경희",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상북도",
+  "age": 65,
+  "gender": "남",
+  "occupation": "무",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "이경희",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_李廷先_광주광역시",
+  "name": "李廷先",
+  "category": "education_candidate",
+  "party": null,
+  "district": "광주광역시",
+  "age": 59,
+  "gender": "남",
+  "occupation": "대학교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "李廷先",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_高錫珪_전라남도",
+  "name": "高錫珪",
+  "category": "education_candidate",
+  "party": null,
+  "district": "전라남도",
+  "age": 61,
+  "gender": "남",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "高錫珪",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_金聲振_부산광역시",
+  "name": "金聲振",
+  "category": "education_candidate",
+  "party": null,
+  "district": "부산광역시",
+  "age": 60,
+  "gender": "남",
+  "occupation": "부산대학교 교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "金聲振",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_李在卿_전라북도",
+  "name": "李在卿",
+  "category": "education_candidate",
+  "party": null,
+  "district": "전라북도",
+  "age": 63,
+  "gender": "남",
+  "occupation": "(사)전북청소년사랑육성회 이사장(현)",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "李在卿",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_정찬모_울산광역시",
+  "name": "정찬모",
+  "category": "education_candidate",
+  "party": null,
+  "district": "울산광역시",
+  "age": 65,
+  "gender": "남",
+  "occupation": "자영업",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "정찬모",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_오인성_전라남도",
+  "name": "오인성",
+  "category": "education_candidate",
+  "party": null,
+  "district": "전라남도",
+  "age": 62,
+  "gender": "남",
+  "occupation": "무",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "오인성",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_成光鎭_대전광역시",
+  "name": "成光鎭",
+  "category": "education_candidate",
+  "party": null,
+  "district": "대전광역시",
+  "age": 60,
+  "gender": "남",
+  "occupation": "대전교육연구소 소장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "成光鎭",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_明魯熙_충청남도",
+  "name": "明魯熙",
+  "category": "education_candidate",
+  "party": null,
+  "district": "충청남도",
+  "age": 58,
+  "gender": "남",
+  "occupation": "충청남도 미래교육 연구원장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "明魯熙",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_김승환_전라북도",
+  "name": "김승환",
+  "category": "education_candidate",
+  "party": null,
+  "district": "전라북도",
+  "age": 64,
+  "gender": "남",
+  "occupation": "전라북도교육감",
+  "election_data": {
+   "vote_count": 385151,
+   "vote_rate": 40.06,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "김승환",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_최태호_세종특별자치시",
+  "name": "최태호",
+  "category": "education_candidate",
+  "party": null,
+  "district": "세종특별자치시",
+  "age": 58,
+  "gender": "남",
+  "occupation": "교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "최태호",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_崔敎振_세종특별자치시",
+  "name": "崔敎振",
+  "category": "education_candidate",
+  "party": null,
+  "district": "세종특별자치시",
+  "age": 64,
+  "gender": "남",
+  "occupation": "세종특별자치시교육감",
+  "election_data": {
+   "vote_count": 64207,
+   "vote_rate": 50.07,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "崔敎振",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_徐巨錫_전라북도",
+  "name": "徐巨錫",
+  "category": "education_candidate",
+  "party": null,
+  "district": "전라북도",
+  "age": 64,
+  "gender": "남",
+  "occupation": "석좌교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "徐巨錫",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_박종훈_경상남도",
+  "name": "박종훈",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상남도",
+  "age": 57,
+  "gender": "남",
+  "occupation": "경상남도교육감",
+  "election_data": {
+   "vote_count": 843735,
+   "vote_rate": 48.39,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "박종훈",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_임해규_경기도",
+  "name": "임해규",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경기도",
+  "age": 58,
+  "gender": "남",
+  "occupation": "경기교육포럼 대표",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "임해규",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_김석준_부산광역시",
+  "name": "김석준",
+  "category": "education_candidate",
+  "party": null,
+  "district": "부산광역시",
+  "age": 61,
+  "gender": "남",
+  "occupation": "부산광역시 교육감",
+  "election_data": {
+   "vote_count": 793013,
+   "vote_rate": 47.79,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "김석준",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_趙三來_충청남도",
+  "name": "趙三來",
+  "category": "education_candidate",
+  "party": null,
+  "district": "충청남도",
+  "age": 66,
+  "gender": "남",
+  "occupation": "공주대학교 명예교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "趙三來",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_金光洙_제주특별자치도",
+  "name": "金光洙",
+  "category": "education_candidate",
+  "party": null,
+  "district": "제주특별자치도",
+  "age": 65,
+  "gender": "남",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "金光洙",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_裵鍾洙_경기도",
+  "name": "裵鍾洙",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경기도",
+  "age": 70,
+  "gender": "남",
+  "occupation": "서울교육대학교 명예교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "裵鍾洙",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_李孝煥_경상남도",
+  "name": "李孝煥",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상남도",
+  "age": 60,
+  "gender": "남",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "李孝煥",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_權五榮_울산광역시",
+  "name": "權五榮",
+  "category": "education_candidate",
+  "party": null,
+  "district": "울산광역시",
+  "age": 73,
+  "gender": "남",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "權五榮",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_李碩文_제주특별자치도",
+  "name": "李碩文",
+  "category": "education_candidate",
+  "party": null,
+  "district": "제주특별자치도",
+  "age": 59,
+  "gender": "남",
+  "occupation": "제주특별자치도교육감",
+  "election_data": {
+   "vote_count": 174868,
+   "vote_rate": 51.2,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "李碩文",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_宋柱明_경기도",
+  "name": "宋柱明",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경기도",
+  "age": 54,
+  "gender": "남",
+  "occupation": "한신대학교 교수",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "宋柱明",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_송명석_세종특별자치시",
+  "name": "송명석",
+  "category": "education_candidate",
+  "party": null,
+  "district": "세종특별자치시",
+  "age": 55,
+  "gender": "남",
+  "occupation": "세종교육연구소장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "송명석",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_문경구_경상북도",
+  "name": "문경구",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상북도",
+  "age": 54,
+  "gender": "남",
+  "occupation": "(사)인성교육문화진흥원교육원장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "문경구",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_김병우_충청북도",
+  "name": "김병우",
+  "category": "education_candidate",
+  "party": null,
+  "district": "충청북도",
+  "age": 60,
+  "gender": "남",
+  "occupation": "충청북도교육감",
+  "election_data": {
+   "vote_count": 429605,
+   "vote_rate": 57.13,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "김병우",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_李在禎_경기도",
+  "name": "李在禎",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경기도",
+  "age": 74,
+  "gender": "남",
+  "occupation": "경기도교육감",
+  "election_data": {
+   "vote_count": 2385410,
+   "vote_rate": 40.81,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "李在禎",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_김석기_울산광역시",
+  "name": "김석기",
+  "category": "education_candidate",
+  "party": null,
+  "district": "울산광역시",
+  "age": 72,
+  "gender": "남",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "김석기",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_李瓚敎_경상북도",
+  "name": "李瓚敎",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상북도",
+  "age": 59,
+  "gender": "남",
+  "occupation": "경북혁신교육연구소 공감 소장",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "李瓚敎",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_張輝國_광주광역시",
+  "name": "張輝國",
+  "category": "education_candidate",
+  "party": null,
+  "district": "광주광역시",
+  "age": 67,
+  "gender": "남",
+  "occupation": "광주광역시교육감",
+  "election_data": {
+   "vote_count": 258321,
+   "vote_rate": 37.97,
+   "is_elected": true,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 85
+  },
+  "search_keywords": [
+   "張輝國",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_沈義輔_충청북도",
+  "name": "沈義輔",
+  "category": "education_candidate",
+  "party": null,
+  "district": "충청북도",
+  "age": 64,
+  "gender": "남",
+  "occupation": "교육활동가",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "沈義輔",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_林宗植_경상북도",
+  "name": "林宗植",
+  "category": "education_candidate",
+  "party": null,
+  "district": "경상북도",
+  "age": 62,
+  "gender": "남",
+  "occupation": "경북대학교 겸임교수",
+  "election_data": {
+   "vote_count": 388078,
+   "vote_rate": 28.2,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "林宗植",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ },
+ {
+  "id": "education_박흥수_울산광역시",
+  "name": "박흥수",
+  "category": "education_candidate",
+  "party": null,
+  "district": "울산광역시",
+  "age": 63,
+  "gender": "남",
+  "occupation": "무직",
+  "election_data": {
+   "vote_count": null,
+   "vote_rate": null,
+   "is_elected": false,
+   "election_info": {
+    "election_name": "제7회 전국동시지방선거 교육감선거",
+    "election_day": "20180613",
+    "election_type": "11"
+   }
+  },
+  "political_profile": {
+   "political_level": "교육감",
+   "specialized_field": "교육정책",
+   "search_priority": 75
+  },
+  "search_keywords": [
+   "박흥수",
+   null,
+   "education_candidate"
+  ],
+  "meta": {
+   "category_description": "제7회 교육감선거 출마자",
+   "data_source": "7th_education_election_lod"
+  }
+ }
+]

@@ -1,0 +1,6 @@
+시스템 정보:
+날짜: Thu Sep 18 15:34:59 KST 2025
+디렉토리: /Users/hopidaay/newsbot-kr
+Python 버전: Python 3.11.6
+디스크 사용량: /dev/disk3s5   228Gi    55Gi   153Gi    27%    841k  1.6G    0%   /System/Volumes/Data
+백엔드 크기: 259M	backend
