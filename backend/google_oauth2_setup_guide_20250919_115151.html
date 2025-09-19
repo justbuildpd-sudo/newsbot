@@ -1,0 +1,228 @@
+
+            <!DOCTYPE html>
+            <html lang="ko">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Google OAuth2 설정 가이드</title>
+                <script src="https://cdn.tailwindcss.com"></script>
+                <style>
+                    .step-card { transition: all 0.3s ease; }
+                    .step-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+                    .copy-button { transition: all 0.2s ease; }
+                    .copy-button:hover { background-color: #3b82f6; }
+                </style>
+            </head>
+            <body class="bg-gradient-to-br from-blue-50 to-indigo-100">
+                <div class="container mx-auto px-4 py-8">
+                    <header class="text-center mb-12">
+                        <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                            🔐 Google OAuth2 설정 가이드
+                        </h1>
+                        <p class="text-xl text-gray-600 mb-4">NewsBot-KR 시스템용 Google API 인증 설정</p>
+                        <div class="bg-blue-100 border border-blue-200 rounded-lg p-4 inline-block">
+                            <div class="text-sm text-blue-800">
+                                <strong>계정:</strong> justbuild.pd@gmail.com<br>
+                                <strong>프로젝트:</strong> newsbot-kr-analytics<br>
+                                <strong>목적:</strong> 데이터 업로드 및 시각화 자동화
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Step 1: Google Cloud Console 접속 -->
+                        <div class="step-card bg-white rounded-xl shadow-lg p-8 mb-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mr-4">1</div>
+                                <h2 class="text-2xl font-bold text-gray-800">Google Cloud Console 접속</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <p class="text-gray-600">Google Cloud Console에 접속하여 새 프로젝트를 생성합니다.</p>
+                                
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <code class="text-blue-600">https://console.cloud.google.com/</code>
+                                        <button class="copy-button bg-blue-500 text-white px-3 py-1 rounded text-sm" 
+                                                onclick="copyToClipboard('https://console.cloud.google.com/')">복사</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-yellow-800 mb-2">프로젝트 정보</h4>
+                                    <ul class="text-yellow-700 text-sm space-y-1">
+                                        <li><strong>프로젝트 이름:</strong> newsbot-kr-analytics</li>
+                                        <li><strong>프로젝트 ID:</strong> newsbot-kr-analytics-20250919</li>
+                                        <li><strong>설명:</strong> 3차원 통합 선거 예측 시스템 - 데이터 분석 및 시각화</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: API 활성화 -->
+                        <div class="step-card bg-white rounded-xl shadow-lg p-8 mb-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-green-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mr-4">2</div>
+                                <h2 class="text-2xl font-bold text-gray-800">필수 API 활성화</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <p class="text-gray-600">다음 API들을 활성화해야 합니다:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-gray-800">Google Drive API</h4>
+                                        <p class="text-sm text-gray-600">파일 업로드, 폴더 관리, 권한 설정</p>
+                                        <code class="text-xs text-blue-600">drive.googleapis.com</code>
+                                    </div>
+                
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-gray-800">Google Sheets API</h4>
+                                        <p class="text-sm text-gray-600">CSV → Sheets 변환, 데이터 조작</p>
+                                        <code class="text-xs text-blue-600">sheets.googleapis.com</code>
+                                    </div>
+                
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-gray-800">Google Data Studio API</h4>
+                                        <p class="text-sm text-gray-600">대시보드 자동 생성 (베타)</p>
+                                        <code class="text-xs text-blue-600">datastudio.googleapis.com</code>
+                                    </div>
+                
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h4 class="font-semibold text-gray-800">Google Maps API</h4>
+                                        <p class="text-sm text-gray-600">지리적 시각화, 좌표 변환</p>
+                                        <code class="text-xs text-blue-600">maps-backend.googleapis.com</code>
+                                    </div>
+                
+                                </div>
+                                
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-blue-800 mb-2">API 활성화 방법</h4>
+                                    <ol class="text-blue-700 text-sm space-y-1 list-decimal list-inside">
+                                        <li>좌측 메뉴에서 "API 및 서비스" → "라이브러리" 클릭</li>
+                                        <li>각 API를 검색하여 "사용 설정" 클릭</li>
+                                        <li>모든 API 활성화 완료 후 다음 단계 진행</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: OAuth2 클라이언트 생성 -->
+                        <div class="step-card bg-white rounded-xl shadow-lg p-8 mb-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-purple-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mr-4">3</div>
+                                <h2 class="text-2xl font-bold text-gray-800">OAuth2 클라이언트 ID 생성</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <p class="text-gray-600">OAuth2 인증을 위한 클라이언트 ID를 생성합니다.</p>
+                                
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <code class="text-blue-600">https://console.cloud.google.com/apis/credentials</code>
+                                        <button class="copy-button bg-blue-500 text-white px-3 py-1 rounded text-sm" 
+                                                onclick="copyToClipboard('https://console.cloud.google.com/apis/credentials')">복사</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-purple-800 mb-2">설정 정보</h4>
+                                    <ul class="text-purple-700 text-sm space-y-1">
+                                        <li><strong>애플리케이션 유형:</strong> 데스크톱 애플리케이션</li>
+                                        <li><strong>이름:</strong> NewsBot-KR OAuth Client</li>
+                                        <li><strong>승인된 리디렉션 URI:</strong></li>
+                                        <ul class="ml-4 mt-1 space-y-1">
+            <li><code class='text-xs bg-white px-1 rounded'>http://localhost:8080/oauth2callback</code></li><li><code class='text-xs bg-white px-1 rounded'>urn:ietf:wg:oauth:2.0:oob</code></li>
+                                        </ul>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 4: credentials.json 다운로드 -->
+                        <div class="step-card bg-white rounded-xl shadow-lg p-8 mb-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-orange-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mr-4">4</div>
+                                <h2 class="text-2xl font-bold text-gray-800">credentials.json 다운로드</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <p class="text-gray-600">생성된 OAuth2 클라이언트의 JSON 파일을 다운로드합니다.</p>
+                                
+                                <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-orange-800 mb-2">다운로드 위치</h4>
+                                    <div class="bg-white p-2 rounded border">
+                                        <code class="text-sm">/Users/hopidaay/newsbot-kr/backend/credentials.json</code>
+                                    </div>
+                                    <p class="text-orange-700 text-sm mt-2">
+                                        다운로드한 JSON 파일을 위 경로에 <strong>credentials.json</strong> 이름으로 저장하세요.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 5: OAuth2 동의 화면 설정 -->
+                        <div class="step-card bg-white rounded-xl shadow-lg p-8 mb-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-red-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mr-4">5</div>
+                                <h2 class="text-2xl font-bold text-gray-800">OAuth2 동의 화면 설정</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <p class="text-gray-600">OAuth2 동의 화면을 설정하고 테스트 사용자를 추가합니다.</p>
+                                
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="flex justify-between items-center">
+                                        <code class="text-blue-600">https://console.cloud.google.com/apis/credentials/consent</code>
+                                        <button class="copy-button bg-blue-500 text-white px-3 py-1 rounded text-sm" 
+                                                onclick="copyToClipboard('https://console.cloud.google.com/apis/credentials/consent')">복사</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-red-800 mb-2">중요 설정</h4>
+                                    <ul class="text-red-700 text-sm space-y-1">
+                                        <li><strong>사용자 유형:</strong> 외부 (External)</li>
+                                        <li><strong>앱 이름:</strong> NewsBot-KR Analytics</li>
+                                        <li><strong>테스트 사용자 추가:</strong> <code>justbuild.pd@gmail.com</code></li>
+                                        <li><strong>범위(Scopes):</strong> 기본 프로필, 이메일, Drive, Sheets</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 6: 인증 테스트 -->
+                        <div class="step-card bg-white rounded-xl shadow-lg p-8">
+                            <div class="flex items-center mb-6">
+                                <div class="bg-teal-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold mr-4">6</div>
+                                <h2 class="text-2xl font-bold text-gray-800">OAuth2 인증 테스트</h2>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <p class="text-gray-600">설정이 완료되면 OAuth2 인증을 테스트합니다.</p>
+                                
+                                <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-teal-800 mb-2">테스트 명령어</h4>
+                                    <div class="bg-white p-2 rounded border">
+                                        <code class="text-sm">cd /Users/hopidaay/newsbot-kr/backend && python3 google_oauth2_setup.py --test</code>
+                                    </div>
+                                    <p class="text-teal-700 text-sm mt-2">
+                                        위 명령어를 실행하면 브라우저가 열리고 OAuth2 인증 플로우가 시작됩니다.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <script>
+                    function copyToClipboard(text) {
+                        navigator.clipboard.writeText(text).then(function() {
+                            alert('클립보드에 복사되었습니다: ' + text);
+                        });
+                    }
+                </script>
+            </body>
+            </html>
+            

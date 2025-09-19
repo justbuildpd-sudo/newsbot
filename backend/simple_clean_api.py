@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-NewsBot 완전 새로운 API 서버 - 정공법 해결
+NewsBot 완전 새로운 API 서버 - 정공법 해결 + 렌더 프로세스 관리
 """
 
 import json
@@ -8,6 +8,9 @@ import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import logging
+
+# 렌더 프로세스 관리 임포트
+from render_process_manager import setup_render_process_management, get_render_status, shutdown_render_process
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -79,8 +82,17 @@ def load_clean_data():
 
 @app.on_event("startup")
 async def startup_event():
-    """서버 시작 시 데이터 로드"""
+    """서버 시작 시 데이터 로드 및 렌더 프로세스 관리 시작"""
     logger.info("🚀 NewsBot Clean API 서버 시작")
+    
+    # 렌더 프로세스 관리 설정
+    process_setup_success = setup_render_process_management()
+    if process_setup_success:
+        logger.info("✅ 렌더 프로세스 관리 시작 성공")
+    else:
+        logger.warning("⚠️ 렌더 프로세스 관리 시작 실패")
+    
+    # 데이터 로드
     success = load_clean_data()
     if success:
         logger.info(f"✅ 서버 준비 완료: {len(politicians_data)}명 의원 데이터")
@@ -179,6 +191,40 @@ async def reload_data():
         return {
             "success": False,
             "error": f"재로드 실패: {str(e)}"
+        }
+
+@app.get("/api/render/status")
+async def get_render_process_status():
+    """렌더 프로세스 상태 조회"""
+    try:
+        status = get_render_status()
+        return {
+            "success": True,
+            "render_status": status,
+            "message": "렌더 프로세스 상태 조회 완료"
+        }
+    except Exception as e:
+        logger.error(f"렌더 상태 조회 오류: {e}")
+        return {
+            "success": False,
+            "error": f"상태 조회 실패: {str(e)}"
+        }
+
+@app.post("/api/render/shutdown")
+async def request_render_shutdown():
+    """렌더 프로세스 그레이스풀 셧다운 요청"""
+    try:
+        logger.info("🛑 API를 통한 렌더 셧다운 요청")
+        shutdown_render_process("API_REQUEST")
+        return {
+            "success": True,
+            "message": "렌더 프로세스 셧다운 요청 완료"
+        }
+    except Exception as e:
+        logger.error(f"렌더 셧다운 요청 오류: {e}")
+        return {
+            "success": False,
+            "error": f"셧다운 요청 실패: {str(e)}"
         }
 
 if __name__ == "__main__":

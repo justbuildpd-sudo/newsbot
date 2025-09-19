@@ -1,0 +1,141 @@
+
+            <!DOCTYPE html>
+            <html lang="ko">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Google Data Studio 대시보드 설정 가이드</title>
+                <script src="https://cdn.tailwindcss.com"></script>
+            </head>
+            <body class="bg-gray-50">
+                <div class="container mx-auto px-4 py-8">
+                    <header class="text-center mb-8">
+                        <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                            🏠 Google Data Studio 대시보드 설정 가이드
+                        </h1>
+                        <p class="text-xl text-gray-600">3차원 통합 선거 예측 시스템</p>
+                        <div class="mt-4 text-sm text-gray-500">
+                            계정: justbuild.pd@gmail.com | 생성일: 2025-09-19 11:32
+                        </div>
+                    </header>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+                        <h2 class="text-2xl font-bold text-blue-800 mb-4">📊 대시보드 개요</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">3</div>
+                                <div class="text-sm text-gray-600">페이지</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600">16</div>
+                                <div class="text-sm text-gray-600">차트</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="text-2xl font-bold text-purple-600">3</div>
+                                <div class="text-sm text-gray-600">데이터 소스</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <div class="text-2xl font-bold text-orange-600">5</div>
+                                <div class="text-sm text-gray-600">계산된 필드</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-8">
+            
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    1
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Google Drive 파일 확인</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">justbuild.pd@gmail.com 계정의 Google Drive에서 업로드된 파일들 확인</p>
+                <div class='bg-gray-50 p-4 rounded-lg'><h4 class='font-semibold mb-2'>확인할 파일:</h4><ul class='list-disc list-inside'><li>지역별_요약_데이터.csv</li><li>시계열_데이터.csv</li><li>상관관계_매트릭스.csv</li></ul></div></div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    2
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Google Sheets 변환</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">CSV 파일들을 Google Sheets로 변환</p>
+                <div class='bg-gray-50 p-4 rounded-lg'><h4 class='font-semibold mb-2'>수행할 작업:</h4><ul class='list-disc list-inside'><li>CSV 파일 우클릭 → "연결 프로그램" → "Google 스프레드시트"</li><li>각 시트의 이름을 확인: 지역별_요약_시트, 시계열_데이터_시트, 상관관계_매트릭스_시트</li></ul></div></div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    3
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Google Data Studio 접속</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">datastudio.google.com 접속하여 새 보고서 생성</p>
+                </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    4
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">데이터 소스 연결</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Google Sheets 커넥터를 사용하여 각 시트 연결</p>
+                </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    5
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">계산된 필드 생성</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">고급 분석을 위한 계산된 필드들 추가</p>
+                </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    6
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">페이지 및 차트 구성</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">3개 페이지와 차트들을 이 설정 파일에 따라 구성</p>
+                </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    7
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">필터 및 인터랙션 설정</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">사용자 인터랙션을 위한 필터들 추가</p>
+                </div>
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    8
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">스타일링 및 최종 확인</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">색상, 폰트, 레이아웃 조정 후 공유 설정</p>
+                </div>
+                    </div>
+                    
+                    <div class="mt-12 bg-red-50 border border-red-200 rounded-lg p-6">
+                        <h2 class="text-2xl font-bold text-red-800 mb-4">🔧 문제 해결</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-red-700 mb-2">Data Not Loading</h4>
+                                <ul class="list-disc list-inside text-sm">
+                <li>Google Sheets 권한 확인</li><li>데이터 소스 새로고침</li><li>필드 타입 확인</li></ul></div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-red-700 mb-2">Charts Not Displaying</h4>
+                                <ul class="list-disc list-inside text-sm">
+                <li>필드 매핑 확인</li><li>데이터 필터 확인</li><li>차트 타입과 데이터 호환성 확인</li></ul></div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold text-red-700 mb-2">Performance Issues</h4>
+                                <ul class="list-disc list-inside text-sm">
+                <li>데이터 샘플링 활성화</li><li>불필요한 필드 제거</li><li>계산된 필드 최적화</li></ul></div>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>
+            

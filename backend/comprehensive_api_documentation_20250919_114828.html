@@ -1,0 +1,222 @@
+
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>NewsBot-KR 종합 API 관리 문서</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+            <style>
+                .api-card { transition: all 0.3s ease; }
+                .api-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+                .status-active { background: #10B981; }
+                .status-setup-required { background: #F59E0B; }
+                .status-investigation-needed { background: #EF4444; }
+                .priority-immediate { border-left: 4px solid #EF4444; }
+                .priority-high { border-left: 4px solid #F59E0B; }
+                .priority-medium { border-left: 4px solid #10B981; }
+            </style>
+        </head>
+        <body class="bg-gray-50">
+            <div class="container mx-auto px-4 py-8">
+                <header class="text-center mb-12">
+                    <h1 class="text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 bg-clip-text text-transparent mb-4">
+                        🔑 NewsBot-KR 종합 API 관리
+                    </h1>
+                    <p class="text-xl text-gray-700 mb-4">모든 API 키 통합 관리 및 OAuth2 설정 가이드</p>
+                    <div class="flex justify-center space-x-6 text-sm">
+                        <span class="bg-blue-100 px-4 py-2 rounded-full">📧 justbuild.pd@gmail.com</span>
+                        <span class="bg-green-100 px-4 py-2 rounded-full">📅 2025-09-19</span>
+                        <span class="bg-purple-100 px-4 py-2 rounded-full">🔐 암호화 보안</span>
+                    </div>
+                </header>
+                
+                <!-- API 현황 대시보드 -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                        <div class="text-3xl font-bold text-blue-600 mb-2">5</div>
+                        <div class="text-gray-600">복원된 API</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                        <div class="text-3xl font-bold text-orange-600 mb-2">3</div>
+                        <div class="text-gray-600">추가 필요 API</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                        <div class="text-3xl font-bold text-green-600 mb-2">4</div>
+                        <div class="text-gray-600">용도별 가이드</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                        <div class="text-3xl font-bold text-purple-600 mb-2">1</div>
+                        <div class="text-gray-600">OAuth2 설정</div>
+                    </div>
+                </div>
+        
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">✅ 복원된 API 키들</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+                        <div class="api-card bg-white rounded-xl shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">통계청 KOSIS API</h3>
+                                <span class="status-active text-white px-3 py-1 rounded-full text-sm">active</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">인구주택총조사, 경제활동인구조사 등 국가통계 데이터</p>
+                            <div class="space-y-2">
+                                <div class="text-sm font-semibold text-gray-700">주요 용도:</div>
+                                <div class="flex flex-wrap gap-2">
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">인구 통계</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">가구 통계</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">지역별 통계</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">시계열 분석</span>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="api-card bg-white rounded-xl shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">네이버 검색 API</h3>
+                                <span class="status-active text-white px-3 py-1 rounded-full text-sm">active</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">네이버 뉴스 검색, 블로그 검색, 웹 검색 서비스</p>
+                            <div class="space-y-2">
+                                <div class="text-sm font-semibold text-gray-700">주요 용도:</div>
+                                <div class="flex flex-wrap gap-2">
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">뉴스 검색</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">여론 분석</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">정치인 언급량</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">이슈 트렌드</span>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="api-card bg-white rounded-xl shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">공공데이터포털 API</h3>
+                                <span class="status-active text-white px-3 py-1 rounded-full text-sm">active</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">정부 공공데이터 통합 서비스</p>
+                            <div class="space-y-2">
+                                <div class="text-sm font-semibold text-gray-700">주요 용도:</div>
+                                <div class="flex flex-wrap gap-2">
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">공공데이터</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">재해정보</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">행정구역</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">시설정보</span>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="api-card bg-white rounded-xl shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">News API</h3>
+                                <span class="status-active text-white px-3 py-1 rounded-full text-sm">active</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">글로벌 뉴스 데이터 서비스</p>
+                            <div class="space-y-2">
+                                <div class="text-sm font-semibold text-gray-700">주요 용도:</div>
+                                <div class="flex flex-wrap gap-2">
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">해외 뉴스</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">글로벌 트렌드</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">국제 정치</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">경제 뉴스</span>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="api-card bg-white rounded-xl shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">Google APIs</h3>
+                                <span class="status-setup-required text-white px-3 py-1 rounded-full text-sm">setup_required</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">Google Drive, Data Studio, Maps, OAuth2 통합</p>
+                            <div class="space-y-2">
+                                <div class="text-sm font-semibold text-gray-700">주요 용도:</div>
+                                <div class="flex flex-wrap gap-2">
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">데이터 저장</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">시각화</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">지도 서비스</span><span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">번역</span>
+                                </div>
+                            </div>
+                        </div>
+            </div></div>
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">🔐 OAuth2 설정 가이드</h2>
+                    <div class="bg-white rounded-xl shadow-md p-8">
+        
+                        <div class="mb-6 p-6 border border-gray-200 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    1
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">Google Cloud Console 프로젝트 생성</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">console.cloud.google.com에서 새 프로젝트 생성</p>
+            <a href="https://console.cloud.google.com/projectcreate" class="text-blue-600 hover:underline" target="_blank">🔗 https://console.cloud.google.com/projectcreate</a></div>
+                        <div class="mb-6 p-6 border border-gray-200 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    2
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">API 활성화</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Drive API, Sheets API, Data Studio API 활성화</p>
+            </div>
+                        <div class="mb-6 p-6 border border-gray-200 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    3
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">OAuth2 클라이언트 ID 생성</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">사용자 인증 정보 → OAuth 2.0 클라이언트 ID → 데스크톱 애플리케이션</p>
+            <a href="https://console.cloud.google.com/apis/credentials" class="text-blue-600 hover:underline" target="_blank">🔗 https://console.cloud.google.com/apis/credentials</a></div>
+                        <div class="mb-6 p-6 border border-gray-200 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    4
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">credentials.json 다운로드</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">생성된 클라이언트 ID의 JSON 파일 다운로드</p>
+            </div>
+                        <div class="mb-6 p-6 border border-gray-200 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4">
+                                    5
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800">OAuth2 동의 화면 설정</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">테스트 사용자에 justbuild.pd@gmail.com 추가</p>
+            <a href="https://console.cloud.google.com/apis/credentials/consent" class="text-blue-600 hover:underline" target="_blank">🔗 https://console.cloud.google.com/apis/credentials/consent</a></div></div></div>
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">🎯 다음 단계</h2>
+                    <div class="space-y-4">
+        
+                        <div class="bg-white rounded-xl shadow-md p-6 priority-immediate">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">Google Cloud Console OAuth2 설정</h3>
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">IMMEDIATE</span>
+                            </div>
+                            <p class="text-gray-600 mb-2">credentials.json 파일 생성 및 OAuth2 인증 완료</p>
+                            <div class="text-sm text-gray-500">예상 소요시간: 30분</div>
+                        </div>
+            
+                        <div class="bg-white rounded-xl shadow-md p-6 priority-high">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">국회 의안정보시스템 API 키 발급</h3>
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">HIGH</span>
+                            </div>
+                            <p class="text-gray-600 mb-2">의원/법안 정보 API 키 신청 및 등록</p>
+                            <div class="text-sm text-gray-500">예상 소요시간: 1시간</div>
+                        </div>
+            
+                        <div class="bg-white rounded-xl shadow-md p-6 priority-high">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">중앙선거관리위원회 API 키 발급</h3>
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">HIGH</span>
+                            </div>
+                            <p class="text-gray-600 mb-2">선거 결과 API 키 신청 및 등록</p>
+                            <div class="text-sm text-gray-500">예상 소요시간: 1시간</div>
+                        </div>
+            
+                        <div class="bg-white rounded-xl shadow-md p-6 priority-medium">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">SGIS API 인증키 발급</h3>
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">MEDIUM</span>
+                            </div>
+                            <p class="text-gray-600 mb-2">통계청 SGIS 주택/가구 통계 API 키 신청</p>
+                            <div class="text-sm text-gray-500">예상 소요시간: 45분</div>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+        

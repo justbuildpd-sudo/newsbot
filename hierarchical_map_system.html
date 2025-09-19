@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계층적 지도 시스템 - 4단계 드릴다운</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+        }
+        .hex-region {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .hex-region:hover {
+            filter: brightness(1.2);
+            transform: scale(1.05);
+        }
+        .popup-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .popup-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .breadcrumb {
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px 8px 0 0;
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1001;
+            white-space: nowrap;
+        }
+        .level-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- 메인 컨테이너 -->
+    <div class="container mx-auto px-4 py-6">
+        <!-- 헤더 -->
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🗺️ 계층적 지도 시스템</h1>
+            <p class="text-gray-600">전국 → 광역 → 기초 → 행정동 4단계 드릴다운 지도</p>
+            
+            <!-- 네비게이션 브레드크럼 -->
+            <div id="breadcrumb" class="breadcrumb mt-4 inline-block">
+                <span id="breadcrumbContent">🇰🇷 대한민국 전국</span>
+            </div>
+        </header>
+
+        <!-- 레벨 표시기 -->
+        <div class="level-indicator" id="levelIndicator">
+            Level 1: 전국 (17개 시도)
+        </div>
+
+        <!-- 메인 지도 영역 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold" id="mapTitle">전국 시도별 현황</h2>
+                <div class="flex space-x-2">
+                    <button onclick="goBack()" id="backBtn" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">
+                        ← 뒤로
+                    </button>
+                    <button onclick="resetToNational()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                        🏠 전국
+                    </button>
+                </div>
+            </div>
+            
+            <div class="map-container">
+                <svg id="mainMapSvg" viewBox="0 0 1200 800" class="w-full h-full border border-gray-200 rounded-lg bg-gray-50">
+                    <!-- 범례 -->
+                    <g id="mapLegend" transform="translate(20, 20)">
+                        <rect x="0" y="0" width="180" height="140" fill="white" stroke="#ccc" stroke-width="1" rx="6" opacity="0.95"/>
+                        <text x="90" y="18" text-anchor="middle" class="text-sm font-bold fill-gray-800">인구 규모</text>
+                        
+                        <circle cx="15" cy="35" r="6" fill="#1E40AF"/>
+                        <text x="25" y="40" class="text-xs fill-gray-700">1000만+ (초대형)</text>
+                        
+                        <circle cx="15" cy="55" r="6" fill="#3B82F6"/>
+                        <text x="25" y="60" class="text-xs fill-gray-700">500-1000만 (대형)</text>
+                        
+                        <circle cx="15" cy="75" r="6" fill="#60A5FA"/>
+                        <text x="25" y="80" class="text-xs fill-gray-700">200-500만 (중형)</text>
+                        
+                        <circle cx="15" cy="95" r="6" fill="#93C5FD"/>
+                        <text x="25" y="100" class="text-xs fill-gray-700">100-200만 (소형)</text>
+                        
+                        <circle cx="15" cy="115" r="6" fill="#DBEAFE"/>
+                        <text x="25" y="120" class="text-xs fill-gray-700">100만 미만 (소규모)</text>
+                    </g>
+
+                    <!-- 메인 지도 콘텐츠 (동적 생성) -->
+                    <g id="mapContent"></g>
+                </svg>
+                
+                <div id="tooltip" class="tooltip hidden"></div>
+            </div>
+        </div>
+
+        <!-- 통계 대시보드 -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <div class="text-2xl font-bold text-blue-600" id="currentLevel">1</div>
+                <div class="text-sm text-gray-600">현재 레벨</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <div class="text-2xl font-bold text-green-600" id="totalUnits">17</div>
+                <div class="text-sm text-gray-600">총 단위</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <div class="text-2xl font-bold text-purple-600" id="selectedUnit">0</div>
+                <div class="text-sm text-gray-600">선택됨</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <div class="text-2xl font-bold text-orange-600" id="totalPopulation">51,057,692</div>
+                <div class="text-sm text-gray-600">총 인구</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                <div class="text-2xl font-bold text-red-600" id="avgDensity">527</div>
+                <div class="text-sm text-gray-600">평균 밀도</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 팝업 모달들 -->
+    <!-- 광역 지도 팝업 -->
+    <div id="metropolitanPopup" class="popup-modal hidden">
+        <div class="popup-content w-4/5 h-4/5">
+            <div class="breadcrumb">
+                <span id="metroTitle">광역 지도</span>
+                <button onclick="closeMetropolitanPopup()" class="float-right text-white hover:text-gray-200 text-xl font-bold">×</button>
+            </div>
+            <div class="p-6">
+                <svg id="metropolitanMapSvg" viewBox="0 0 800 600" class="w-full h-96 border border-gray-200 rounded-lg bg-gray-50">
+                    <g id="metroMapContent"></g>
+                </svg>
+                <div class="mt-4 text-sm text-gray-600">
+                    시군구를 클릭하면 기초 지도로 이동합니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 기초 지도 팝업 -->
+    <div id="localPopup" class="popup-modal hidden">
+        <div class="popup-content w-4/5 h-4/5">
+            <div class="breadcrumb">
+                <span id="localTitle">기초 지도</span>
+                <button onclick="closeLocalPopup()" class="float-right text-white hover:text-gray-200 text-xl font-bold">×</button>
+            </div>
+            <div class="p-6">
+                <svg id="localMapSvg" viewBox="0 0 800 600" class="w-full h-96 border border-gray-200 rounded-lg bg-gray-50">
+                    <g id="localMapContent"></g>
+                </svg>
+                <div class="mt-4 text-sm text-gray-600">
+                    읍면동을 클릭하면 상세 정보를 확인할 수 있습니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 동별 상세 팝업 -->
+    <div id="dongDetailPopup" class="popup-modal hidden">
+        <div class="popup-content w-3/4 h-3/4">
+            <div class="breadcrumb">
+                <span id="dongTitle">행정동 상세</span>
+                <button onclick="closeDongPopup()" class="float-right text-white hover:text-gray-200 text-xl font-bold">×</button>
+            </div>
+            <div id="dongDetailContent" class="p-6">
+                <!-- 동적 생성 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 계층적 지도 데이터
+        const hierarchicalData = {
+            // Level 1: 전국 (17개 시도)
+            national: {
+                level: 1,
+                title: "전국 시도별 현황",
+                units: [
+                    {id: "seoul", name: "서울특별시", x: 300, y: 150, population: 9720846, districts: 25},
+                    {id: "busan", name: "부산광역시", x: 900, y: 550, population: 3349016, districts: 18},
+                    {id: "daegu", name: "대구광역시", x: 750, y: 450, population: 2410700, districts: 10},
+                    {id: "incheon", name: "인천광역시", x: 200, y: 200, population: 2954955, districts: 13},
+                    {id: "gwangju", name: "광주광역시", x: 400, y: 500, population: 1441970, districts: 7},
+                    {id: "daejeon", name: "대전광역시", x: 500, y: 350, population: 1454679, districts: 6},
+                    {id: "ulsan", name: "울산광역시", x: 850, y: 480, population: 1134225, districts: 5},
+                    {id: "sejong", name: "세종특별자치시", x: 450, y: 320, population: 373090, districts: 1},
+                    {id: "gyeonggi", name: "경기도", x: 350, y: 200, population: 13427014, districts: 60},
+                    {id: "gangwon", name: "강원특별자치도", x: 650, y: 200, population: 1536270, districts: 8},
+                    {id: "chungbuk", name: "충청북도", x: 550, y: 300, population: 1591625, districts: 8},
+                    {id: "chungnam", name: "충청남도", x: 400, y: 320, population: 2118930, districts: 11},
+                    {id: "jeonbuk", name: "전북특별자치도", x: 450, y: 420, population: 1792476, districts: 10},
+                    {id: "jeonnam", name: "전라남도", x: 400, y: 550, population: 1856473, districts: 12},
+                    {id: "gyeongbuk", name: "경상북도", x: 700, y: 350, population: 2660941, districts: 13},
+                    {id: "gyeongnam", name: "경상남도", x: 750, y: 520, population: 3347727, districts: 16},
+                    {id: "jeju", name: "제주특별자치도", x: 300, y: 720, population: 672948, districts: 2}
+                ]
+            },
+            
+            // Level 2: 광역 내 시군구
+            metropolitan: {
+                seoul: {
+                    level: 2,
+                    title: "서울특별시 자치구",
+                    parent: "서울특별시",
+                    units: [
+                        {id: "jongno", name: "종로구", x: 150, y: 100, population: 150000, dong_count: 16},
+                        {id: "jung", name: "중구", x: 200, y: 120, population: 130000, dong_count: 15},
+                        {id: "seongdong", name: "성동구", x: 250, y: 110, population: 290000, dong_count: 17},
+                        {id: "gwangjin", name: "광진구", x: 300, y: 100, population: 350000, dong_count: 15},
+                        {id: "dongdaemun", name: "동대문구", x: 180, y: 80, population: 340000, dong_count: 14},
+                        {id: "seongbuk", name: "성북구", x: 160, y: 60, population: 420000, dong_count: 20},
+                        {id: "dobong", name: "도봉구", x: 140, y: 40, population: 320000, dong_count: 8},
+                        {id: "nowon", name: "노원구", x: 200, y: 20, population: 540000, dong_count: 19},
+                        {id: "gangnam", name: "강남구", x: 320, y: 200, population: 540000, dong_count: 22},
+                        {id: "seocho", name: "서초구", x: 280, y: 220, population: 400000, dong_count: 18},
+                        {id: "songpa", name: "송파구", x: 360, y: 190, population: 660000, dong_count: 28},
+                        {id: "gangdong", name: "강동구", x: 400, y: 180, population: 440000, dong_count: 24}
+                    ]
+                },
+                gyeonggi: {
+                    level: 2,
+                    title: "경기도 시군",
+                    parent: "경기도",
+                    units: [
+                        {id: "suwon", name: "수원시", x: 200, y: 200, population: 1200000, dong_count: 42},
+                        {id: "seongnam", name: "성남시", x: 250, y: 180, population: 950000, dong_count: 50},
+                        {id: "goyang", name: "고양시", x: 150, y: 120, population: 1070000, dong_count: 35},
+                        {id: "yongin", name: "용인시", x: 280, y: 220, population: 1080000, dong_count: 38},
+                        {id: "bucheon", name: "부천시", x: 120, y: 160, population: 820000, dong_count: 32},
+                        {id: "ansan", name: "안산시", x: 100, y: 200, population: 650000, dong_count: 25},
+                        {id: "anyang", name: "안양시", x: 180, y: 190, population: 560000, dong_count: 31},
+                        {id: "namyangju", name: "남양주시", x: 320, y: 140, population: 720000, dong_count: 27},
+                        {id: "hwaseong", name: "화성시", x: 150, y: 250, population: 920000, dong_count: 29},
+                        {id: "pyeongtaek", name: "평택시", x: 200, y: 280, population: 580000, dong_count: 14}
+                    ]
+                }
+            },
+            
+            // Level 3: 시군구 내 읍면동
+            local: {
+                gangnam: {
+                    level: 3,
+                    title: "강남구 행정동",
+                    parent: "서울특별시 > 강남구",
+                    units: [
+                        {id: "sinsa", name: "신사동", x: 150, y: 100, population: 25000, characteristics: "고급주거"},
+                        {id: "nonhyeon", name: "논현동", x: 200, y: 120, population: 28000, characteristics: "상업지역"},
+                        {id: "apgujeong", name: "압구정동", x: 250, y: 110, population: 32000, characteristics: "부촌"},
+                        {id: "cheongdam", name: "청담동", x: 300, y: 130, population: 22000, characteristics: "고급상업"},
+                        {id: "samsung", name: "삼성동", x: 180, y: 180, population: 35000, characteristics: "업무지구"},
+                        {id: "daechi", name: "대치동", x: 250, y: 200, population: 45000, characteristics: "교육특구"},
+                        {id: "yeoksam", name: "역삼동", x: 120, y: 160, population: 38000, characteristics: "업무중심"},
+                        {id: "dogok", name: "도곡동", x: 320, y: 180, population: 28000, characteristics: "주거지역"},
+                        {id: "gaepo", name: "개포동", x: 280, y: 240, population: 42000, characteristics: "아파트단지"}
+                    ]
+                },
+                suwon: {
+                    level: 3,
+                    title: "수원시 행정동",
+                    parent: "경기도 > 수원시",
+                    units: [
+                        {id: "paldal", name: "팔달구", x: 200, y: 150, population: 200000, characteristics: "구도심"},
+                        {id: "yeongtong", name: "영통구", x: 250, y: 180, population: 350000, characteristics: "신도시"},
+                        {id: "jangan", name: "장안구", x: 150, y: 120, population: 300000, characteristics: "주거중심"},
+                        {id: "gwonseon", name: "권선구", x: 280, y: 200, population: 350000, characteristics: "혼합지역"}
+                    ]
+                }
+            }
+        };
+
+        let currentLevel = 1;
+        let currentPath = [];
+        let selectedRegion = null;
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 계층적 지도 시스템 초기화');
+            initializeNationalMap();
+        });
+
+        function initializeNationalMap() {
+            currentLevel = 1;
+            currentPath = [];
+            
+            const svg = d3.select("#mainMapSvg");
+            const content = svg.select("#mapContent");
+            content.selectAll("*").remove();
+            
+            // 전국 시도 육각형 생성
+            const nationalData = hierarchicalData.national;
+            
+            nationalData.units.forEach(region => {
+                const hexSize = Math.max(20, Math.min(40, Math.log(region.population) * 3));
+                const hexPath = createHexPath(region.x, region.y, hexSize);
+                
+                const group = content.append("g")
+                    .attr("class", "hex-region")
+                    .attr("data-region-id", region.id);
+                
+                // 육각형
+                group.append("path")
+                    .attr("d", hexPath)
+                    .attr("fill", getPopulationColor(region.population))
+                    .attr("stroke", "#374151")
+                    .attr("stroke-width", "2")
+                    .on("click", () => drillDownToMetropolitan(region))
+                    .on("mouseenter", (event) => showRegionTooltip(event, region))
+                    .on("mouseleave", hideTooltip);
+                
+                // 지역명
+                group.append("text")
+                    .attr("x", region.x)
+                    .attr("y", region.y - 5)
+                    .attr("text-anchor", "middle")
+                    .attr("class", "text-xs font-bold fill-white")
+                    .style("text-shadow", "1px 1px 1px rgba(0,0,0,0.7)")
+                    .text(region.name.replace(/특별시|광역시|특별자치시|특별자치도|도/g, ''));
+                
+                // 인구수
+                group.append("text")
+                    .attr("x", region.x)
+                    .attr("y", region.y + 8)
+                    .attr("text-anchor", "middle")
+                    .attr("class", "text-xs fill-white")
+                    .style("text-shadow", "1px 1px 1px rgba(0,0,0,0.7)")
+                    .text((region.population / 10000).toFixed(0) + '만');
+            });
+            
+            updateLevelIndicator(1, "전국", 17);
+            updateBreadcrumb("🇰🇷 대한민국 전국");
+        }
+
+        function drillDownToMetropolitan(region) {
+            console.log(`🔍 ${region.name} 광역 지도로 드릴다운`);
+            
+            currentPath.push({level: 1, region: region});
+            selectedRegion = region;
+            
+            // 광역 지도 데이터 확인
+            const metroData = hierarchicalData.metropolitan[region.id];
+            if (!metroData) {
+                alert(`${region.name}의 상세 지도 데이터가 준비되지 않았습니다.`);
+                return;
+            }
+            
+            // 광역 팝업 표시
+            showMetropolitanPopup(region, metroData);
+        }
+
+        function showMetropolitanPopup(region, metroData) {
+            const popup = document.getElementById('metropolitanPopup');
+            const title = document.getElementById('metroTitle');
+            
+            title.textContent = metroData.title;
+            
+            // 광역 지도 생성
+            const svg = d3.select("#metropolitanMapSvg");
+            const content = svg.select("#metroMapContent");
+            content.selectAll("*").remove();
+            
+            metroData.units.forEach(district => {
+                const hexSize = Math.max(15, Math.min(25, Math.log(district.population) * 2));
+                const hexPath = createHexPath(district.x, district.y, hexSize);
+                
+                const group = content.append("g")
+                    .attr("class", "district-hex")
+                    .attr("data-district-id", district.id);
+                
+                group.append("path")
+                    .attr("d", hexPath)
+                    .attr("fill", getPopulationColor(district.population))
+                    .attr("stroke", "#374151")
+                    .attr("stroke-width", "1.5")
+                    .attr("class", "cursor-pointer hover:opacity-80")
+                    .on("click", () => drillDownToLocal(district))
+                    .on("mouseenter", (event) => showDistrictTooltip(event, district))
+                    .on("mouseleave", hideTooltip);
+                
+                group.append("text")
+                    .attr("x", district.x)
+                    .attr("y", district.y)
+                    .attr("text-anchor", "middle")
+                    .attr("class", "text-xs font-bold fill-white pointer-events-none")
+                    .style("text-shadow", "1px 1px 1px rgba(0,0,0,0.7)")
+                    .text(district.name.replace(/구|시|군/g, ''));
+            });
+            
+            popup.classList.remove('hidden');
+            updateLevelIndicator(2, metroData.title, metroData.units.length);
+        }
+
+        function drillDownToLocal(district) {
+            console.log(`🔍 ${district.name} 기초 지도로 드릴다운`);
+            
+            currentPath.push({level: 2, district: district});
+            
+            // 기초 지도 데이터 확인
+            const localData = hierarchicalData.local[district.id];
+            if (!localData) {
+                alert(`${district.name}의 상세 지도 데이터가 준비되지 않았습니다.`);
+                return;
+            }
+            
+            closeMetropolitanPopup();
+            showLocalPopup(district, localData);
+        }
+
+        function showLocalPopup(district, localData) {
+            const popup = document.getElementById('localPopup');
+            const title = document.getElementById('localTitle');
+            
+            title.textContent = localData.title;
+            
+            // 기초 지도 생성
+            const svg = d3.select("#localMapSvg");
+            const content = svg.select("#localMapContent");
+            content.selectAll("*").remove();
+            
+            localData.units.forEach(dong => {
+                const circle = content.append("circle")
+                    .attr("cx", dong.x)
+                    .attr("cy", dong.y)
+                    .attr("r", Math.max(8, Math.min(15, Math.log(dong.population) * 1.5)))
+                    .attr("fill", getPopulationColor(dong.population))
+                    .attr("stroke", "#374151")
+                    .attr("stroke-width", "1")
+                    .attr("class", "cursor-pointer hover:opacity-80")
+                    .on("click", () => showDongDetail(dong))
+                    .on("mouseenter", (event) => showDongTooltip(event, dong))
+                    .on("mouseleave", hideTooltip);
+                
+                content.append("text")
+                    .attr("x", dong.x)
+                    .attr("y", dong.y + 25)
+                    .attr("text-anchor", "middle")
+                    .attr("class", "text-xs fill-gray-700")
+                    .text(dong.name);
+            });
+            
+            popup.classList.remove('hidden');
+            updateLevelIndicator(3, localData.title, localData.units.length);
+        }
+
+        function showDongDetail(dong) {
+            console.log(`📍 ${dong.name} 상세 정보 표시`);
+            
+            closeLocalPopup();
+            
+            const popup = document.getElementById('dongDetailPopup');
+            const title = document.getElementById('dongTitle');
+            const content = document.getElementById('dongDetailContent');
+            
+            title.textContent = `${dong.name} 상세 분석`;
+            
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-blue-50 p-6 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-blue-600">${dong.population.toLocaleString()}</div>
+                            <div class="text-blue-800 font-medium">총 인구</div>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-green-600">${(dong.population / 1000).toFixed(1)}K</div>
+                            <div class="text-green-800 font-medium">인구 밀도</div>
+                        </div>
+                        <div class="bg-purple-50 p-6 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-purple-600">${dong.characteristics}</div>
+                            <div class="text-purple-800 font-medium">지역 특성</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-4">📈 2014-2025년 인구 변화 시뮬레이션</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            ${Array.from({length: 12}, (_, i) => {
+                                const year = 2014 + i;
+                                const simulatedPop = dong.population + Math.floor(Math.random() * 10000 - 5000);
+                                const changeRate = (Math.random() * 6 - 3).toFixed(1);
+                                return `
+                                    <div class="bg-white p-3 rounded border">
+                                        <div class="font-medium">${year}년</div>
+                                        <div>${simulatedPop.toLocaleString()}명</div>
+                                        <div class="${changeRate > 0 ? 'text-green-600' : 'text-red-600'}">
+                                            ${changeRate > 0 ? '+' : ''}${changeRate}%
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-3">🗳️ 선거 영향 분석</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="font-medium mb-2">인구학적 요인</div>
+                                <ul class="text-sm space-y-1">
+                                    <li>• 인구 안정성: 높음</li>
+                                    <li>• 연령 구조: 중장년 중심</li>
+                                    <li>• 경제 수준: 상위</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="font-medium mb-2">예측 결과</div>
+                                <ul class="text-sm space-y-1">
+                                    <li>• 투표율: 75%+ 예상</li>
+                                    <li>• 정치 성향: 보수 우세</li>
+                                    <li>• 변동성: 낮음</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            popup.classList.remove('hidden');
+            updateLevelIndicator(4, `${dong.name} 상세`, 1);
+        }
+
+        function createHexPath(x, y, size) {
+            const points = [];
+            for (let i = 0; i < 6; i++) {
+                const angle = (Math.PI / 3) * i;
+                const px = x + size * Math.cos(angle);
+                const py = y + size * Math.sin(angle);
+                points.push(`${px},${py}`);
+            }
+            return `M${points.join('L')}Z`;
+        }
+
+        function getPopulationColor(population) {
+            if (population > 10000000) return '#1E40AF';      // 초대형 (1000만+)
+            if (population > 5000000) return '#3B82F6';       // 대형 (500-1000만)
+            if (population > 2000000) return '#60A5FA';       // 중형 (200-500만)
+            if (population > 1000000) return '#93C5FD';       // 소형 (100-200만)
+            if (population > 500000) return '#DBEAFE';        // 소규모 (50-100만)
+            return '#F1F5F9';                                 // 미니 (50만 미만)
+        }
+
+        function showRegionTooltip(event, region) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = `
+                <div><strong>${region.name}</strong></div>
+                <div>인구: ${region.population.toLocaleString()}명</div>
+                <div>선거구: ${region.districts}개</div>
+                <div>평균: ${Math.round(region.population / region.districts).toLocaleString()}명/구</div>
+                <div class="text-xs mt-1 opacity-75">클릭하여 광역 지도 보기</div>
+            `;
+            
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY - 10 + 'px';
+            tooltip.classList.remove('hidden');
+        }
+
+        function showDistrictTooltip(event, district) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = `
+                <div><strong>${district.name}</strong></div>
+                <div>인구: ${district.population.toLocaleString()}명</div>
+                <div>행정동: ${district.dong_count}개</div>
+                <div class="text-xs mt-1 opacity-75">클릭하여 기초 지도 보기</div>
+            `;
+            
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY - 10 + 'px';
+            tooltip.classList.remove('hidden');
+        }
+
+        function showDongTooltip(event, dong) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = `
+                <div><strong>${dong.name}</strong></div>
+                <div>인구: ${dong.population.toLocaleString()}명</div>
+                <div>특성: ${dong.characteristics}</div>
+                <div class="text-xs mt-1 opacity-75">클릭하여 상세 분석</div>
+            `;
+            
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY - 10 + 'px';
+            tooltip.classList.remove('hidden');
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.add('hidden');
+        }
+
+        function updateLevelIndicator(level, title, count) {
+            currentLevel = level;
+            const indicator = document.getElementById('levelIndicator');
+            const levelNames = {1: "전국", 2: "광역", 3: "기초", 4: "행정동"};
+            
+            indicator.textContent = `Level ${level}: ${levelNames[level]} (${count}개)`;
+            
+            document.getElementById('currentLevel').textContent = level;
+            document.getElementById('totalUnits').textContent = count;
+            document.getElementById('mapTitle').textContent = title;
+            
+            // 뒤로 버튼 표시/숨김
+            const backBtn = document.getElementById('backBtn');
+            if (level > 1) {
+                backBtn.classList.remove('hidden');
+            } else {
+                backBtn.classList.add('hidden');
+            }
+        }
+
+        function updateBreadcrumb(path) {
+            document.getElementById('breadcrumbContent').textContent = path;
+        }
+
+        function goBack() {
+            if (currentPath.length === 0) return;
+            
+            const lastLevel = currentPath.pop();
+            
+            if (currentPath.length === 0) {
+                // 전국으로 돌아가기
+                resetToNational();
+            } else {
+                // 이전 레벨로
+                const prevLevel = currentPath[currentPath.length - 1];
+                // 이전 레벨 복원 로직
+            }
+        }
+
+        function resetToNational() {
+            currentPath = [];
+            selectedRegion = null;
+            
+            // 모든 팝업 닫기
+            closeAllPopups();
+            
+            // 전국 지도 재초기화
+            initializeNationalMap();
+        }
+
+        function closeMetropolitanPopup() {
+            document.getElementById('metropolitanPopup').classList.add('hidden');
+        }
+
+        function closeLocalPopup() {
+            document.getElementById('localPopup').classList.add('hidden');
+        }
+
+        function closeDongPopup() {
+            document.getElementById('dongDetailPopup').classList.add('hidden');
+        }
+
+        function closeAllPopups() {
+            closeMetropolitanPopup();
+            closeLocalPopup();
+            closeDongPopup();
+        }
+
+        // 팝업 외부 클릭 시 닫기
+        document.querySelectorAll('.popup-modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+        });
+
+        console.log('🏗️ 4단계 계층적 지도 시스템 로드 완료');
+        console.log('📊 Level 1: 전국 17개 시도');
+        console.log('📊 Level 2: 광역 내 시군구');
+        console.log('📊 Level 3: 기초 내 읍면동');
+        console.log('📊 Level 4: 동별 상세 분석');
+    </script>
+</body>
+</html>

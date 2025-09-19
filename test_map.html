@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>육각형 그리드 지도 테스트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hex-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+            gap: 2px;
+        }
+        .hex {
+            width: 30px;
+            height: 26px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .hex:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        .hex-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform: rotateY(0deg) rotateZ(30deg);
+            transition: all 0.3s ease;
+        }
+        .hex-inner:before,
+        .hex-inner:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+        }
+        .hex-inner:before {
+            bottom: 100%;
+            border-bottom: 7.5px solid;
+        }
+        .hex-inner:after {
+            top: 100%;
+            border-top: 7.5px solid;
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">
+            🗺️ 육각형 그리드 선거구 지도 테스트
+        </h1>
+        
+        <!-- 검색 바 -->
+        <div class="max-w-md mx-auto mb-8">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="정치인명, 선거구명, 정당명으로 검색..."
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                <button onclick="searchPoliticians()" class="absolute right-2 top-2 text-gray-400 hover:text-blue-500">
+                    🔍
+                </button>
+            </div>
+            <div id="searchResults" class="mt-2 bg-white rounded-lg shadow-md hidden"></div>
+        </div>
+
+        <!-- 통계 정보 -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-2xl font-bold text-blue-600" id="totalPoliticians">300</div>
+                <div class="text-sm text-gray-600">총 의원</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-2xl font-bold text-green-600" id="totalDistricts">253</div>
+                <div class="text-sm text-gray-600">선거구</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-2xl font-bold text-purple-600" id="totalParties">8</div>
+                <div class="text-sm text-gray-600">정당</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                <div class="text-2xl font-bold text-orange-600" id="selectedCount">0</div>
+                <div class="text-sm text-gray-600">선택됨</div>
+            </div>
+        </div>
+
+        <!-- 지도 영역 -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-semibold mb-4">선거구 지도</h2>
+                    
+                    <!-- SVG 기반 육각형 그리드 지도 -->
+                    <div class="relative">
+                        <svg id="mapSvg" viewBox="0 0 800 600" class="w-full h-96 border border-gray-200 rounded-lg bg-gray-50">
+                            <!-- 서울특별시 영역 -->
+                            <g id="seoul-region">
+                                <text x="200" y="30" text-anchor="middle" class="text-sm font-bold fill-gray-700">서울특별시</text>
+                                <!-- 서울 선거구들 (25개) -->
+                            </g>
+                            
+                            <!-- 부산광역시 영역 -->
+                            <g id="busan-region">
+                                <text x="650" y="450" text-anchor="middle" class="text-sm font-bold fill-gray-700">부산광역시</text>
+                                <!-- 부산 선거구들 (18개) -->
+                            </g>
+                            
+                            <!-- 경기도 영역 -->
+                            <g id="gyeonggi-region">
+                                <text x="400" y="200" text-anchor="middle" class="text-sm font-bold fill-gray-700">경기도</text>
+                                <!-- 경기도 선거구들 (60개) -->
+                            </g>
+                            
+                            <!-- 범례 -->
+                            <g id="legend" transform="translate(600, 50)">
+                                <rect x="0" y="0" width="180" height="120" fill="white" stroke="#ccc" stroke-width="1" rx="5"/>
+                                <text x="90" y="15" text-anchor="middle" class="text-sm font-bold">정당별 색상</text>
+                                
+                                <circle cx="15" cy="30" r="8" fill="#E53E3E"/>
+                                <text x="30" y="35" class="text-xs">국민의힘</text>
+                                
+                                <circle cx="15" cy="50" r="8" fill="#3182CE"/>
+                                <text x="30" y="55" class="text-xs">더불어민주당</text>
+                                
+                                <circle cx="15" cy="70" r="8" fill="#D69E2E"/>
+                                <text x="30" y="75" class="text-xs">정의당</text>
+                                
+                                <circle cx="15" cy="90" r="8" fill="#38A169"/>
+                                <text x="30" y="95" class="text-xs">국민의당</text>
+                                
+                                <circle cx="15" cy="110" r="8" fill="#6B7280"/>
+                                <text x="30" y="115" class="text-xs">기타</text>
+                            </g>
+                        </svg>
+                        
+                        <!-- 툴팁 -->
+                        <div id="tooltip" class="tooltip hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 사이드바 -->
+            <div class="lg:col-span-1">
+                <div class="space-y-6">
+                    <!-- 선택된 선거구 정보 -->
+                    <div id="selectedDistrictInfo" class="bg-white rounded-lg shadow-md p-6 hidden">
+                        <h3 class="text-lg font-semibold mb-4">선택된 선거구</h3>
+                        <div id="districtDetails"></div>
+                    </div>
+
+                    <!-- 사용법 안내 -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-blue-900 mb-4">사용 방법</h3>
+                        <div class="space-y-2 text-sm text-blue-800">
+                            <div class="flex items-start">
+                                <span class="mr-2">🔍</span>
+                                <span>검색창에서 정치인, 정당, 선거구명으로 검색</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="mr-2">🗺️</span>
+                                <span>지도의 육각형을 클릭하여 해당 지역 의원 확인</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="mr-2">👤</span>
+                                <span>의원 이름을 클릭하면 상세 정보 조회</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="mr-2">🎨</span>
+                                <span>색상은 정당별로 구분되어 표시</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 시스템 정보 -->
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-semibold mb-4">시스템 정보</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">지도 유형:</span>
+                                <span class="font-medium">육각형 그리드</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">데이터 업데이트:</span>
+                                <span class="font-medium" id="lastUpdate"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">검색 지원:</span>
+                                <span class="font-medium text-green-600">활성화</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 정치인 상세 모달 -->
+        <div id="politicianModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+                <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 relative">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-white hover:text-gray-200 text-2xl font-bold">×</button>
+                    <div id="modalContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 샘플 정치인 데이터
+        const samplePoliticians = [
+            {
+                name: '김철수',
+                party: '더불어민주당',
+                district: '서울특별시 강남구갑',
+                region: '서울특별시',
+                phone: '02-788-1234',
+                email: 'kim@assembly.go.kr',
+                office: '국회의사당 본관 123호'
+            },
+            {
+                name: '이영희',
+                party: '국민의힘',
+                district: '부산광역시 해운대구을',
+                region: '부산광역시',
+                phone: '051-123-4567',
+                email: 'lee@assembly.go.kr',
+                office: '국회의사당 본관 456호'
+            },
+            {
+                name: '박민수',
+                party: '정의당',
+                district: '경기도 수원시갑',
+                region: '경기도',
+                phone: '031-234-5678',
+                email: 'park@assembly.go.kr',
+                office: '국회의사당 본관 789호'
+            },
+            {
+                name: '최지영',
+                party: '국민의당',
+                district: '인천광역시 남동구갑',
+                region: '인천광역시',
+                phone: '032-345-6789',
+                email: 'choi@assembly.go.kr',
+                office: '국회의사당 본관 321호'
+            },
+            {
+                name: '정한국',
+                party: '개혁신당',
+                district: '대구광역시 중구남구',
+                region: '대구광역시',
+                phone: '053-456-7890',
+                email: 'jung@assembly.go.kr',
+                office: '국회의사당 본관 654호'
+            }
+        ];
+
+        // 정당별 색상
+        const partyColors = {
+            '국민의힘': '#E53E3E',
+            '더불어민주당': '#3182CE',
+            '정의당': '#D69E2E',
+            '국민의당': '#38A169',
+            '개혁신당': '#805AD5',
+            '기타': '#6B7280'
+        };
+
+        // 육각형 그리드 데이터
+        const hexGridData = [
+            // 서울특별시
+            { id: 'seoul_01', name: '종로구', x: 150, y: 60, region: '서울특별시' },
+            { id: 'seoul_02', name: '중구·성동구갑', x: 180, y: 60, region: '서울특별시' },
+            { id: 'seoul_03', name: '성동구을', x: 210, y: 60, region: '서울특별시' },
+            { id: 'seoul_04', name: '광진구갑', x: 240, y: 60, region: '서울특별시' },
+            { id: 'seoul_05', name: '광진구을', x: 270, y: 60, region: '서울특별시' },
+            
+            // 부산광역시
+            { id: 'busan_01', name: '중구·영도구', x: 620, y: 420, region: '부산광역시' },
+            { id: 'busan_02', name: '서구·동구', x: 650, y: 420, region: '부산광역시' },
+            { id: 'busan_03', name: '부산진구갑', x: 680, y: 420, region: '부산광역시' },
+            
+            // 경기도
+            { id: 'gyeonggi_01', name: '수원시갑', x: 350, y: 180, region: '경기도' },
+            { id: 'gyeonggi_02', name: '수원시을', x: 380, y: 180, region: '경기도' },
+            { id: 'gyeonggi_03', name: '성남시갑', x: 410, y: 180, region: '경기도' }
+        ];
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMap();
+            updateLastUpdate();
+        });
+
+        function initializeMap() {
+            const svg = document.getElementById('mapSvg');
+            
+            hexGridData.forEach(hex => {
+                // 랜덤하게 정치인 할당
+                const politician = samplePoliticians[Math.floor(Math.random() * samplePoliticians.length)];
+                const color = partyColors[politician.party] || partyColors['기타'];
+                
+                // 육각형 생성
+                const hexGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                hexGroup.setAttribute('class', 'hex-district');
+                hexGroup.setAttribute('data-district', hex.id);
+                hexGroup.setAttribute('data-politician', JSON.stringify(politician));
+                
+                // 육각형 패스
+                const hexPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const hexPathData = `M ${hex.x} ${hex.y-15} L ${hex.x+13} ${hex.y-7.5} L ${hex.x+13} ${hex.y+7.5} L ${hex.x} ${hex.y+15} L ${hex.x-13} ${hex.y+7.5} L ${hex.x-13} ${hex.y-7.5} Z`;
+                hexPath.setAttribute('d', hexPathData);
+                hexPath.setAttribute('fill', color);
+                hexPath.setAttribute('stroke', '#374151');
+                hexPath.setAttribute('stroke-width', '1.5');
+                hexPath.setAttribute('class', 'cursor-pointer transition-all duration-200 hover:opacity-80');
+                
+                // 텍스트 (선거구명)
+                const text1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text1.setAttribute('x', hex.x);
+                text1.setAttribute('y', hex.y - 2);
+                text1.setAttribute('text-anchor', 'middle');
+                text1.setAttribute('class', 'text-xs font-bold fill-white pointer-events-none');
+                text1.setAttribute('style', 'font-size: 8px;');
+                text1.textContent = hex.name.length > 6 ? hex.name.substring(0, 6) + '...' : hex.name;
+                
+                // 텍스트 (정치인명)
+                const text2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text2.setAttribute('x', hex.x);
+                text2.setAttribute('y', hex.y + 8);
+                text2.setAttribute('text-anchor', 'middle');
+                text2.setAttribute('class', 'text-xs fill-white pointer-events-none');
+                text2.setAttribute('style', 'font-size: 7px;');
+                text2.textContent = politician.name;
+                
+                hexGroup.appendChild(hexPath);
+                hexGroup.appendChild(text1);
+                hexGroup.appendChild(text2);
+                
+                // 이벤트 리스너
+                hexGroup.addEventListener('click', () => selectDistrict(hex, politician));
+                hexGroup.addEventListener('mouseenter', (e) => showTooltip(e, hex, politician));
+                hexGroup.addEventListener('mouseleave', hideTooltip);
+                
+                svg.appendChild(hexGroup);
+            });
+        }
+
+        function selectDistrict(hex, politician) {
+            // 선택된 선거구 정보 표시
+            const infoDiv = document.getElementById('selectedDistrictInfo');
+            const detailsDiv = document.getElementById('districtDetails');
+            
+            detailsDiv.innerHTML = `
+                <div class="space-y-3">
+                    <div><strong>선거구:</strong> ${hex.name}</div>
+                    <div><strong>지역:</strong> ${hex.region}</div>
+                    <div><strong>의원:</strong> ${politician.name}</div>
+                    <div><strong>정당:</strong> ${politician.party}</div>
+                    <button onclick="showPoliticianDetail('${politician.name}')" 
+                            class="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                        상세 정보 보기
+                    </button>
+                </div>
+            `;
+            
+            infoDiv.classList.remove('hidden');
+            
+            // 선택된 개수 업데이트
+            document.getElementById('selectedCount').textContent = '1';
+        }
+
+        function showTooltip(e, hex, politician) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = `
+                <div><strong>${hex.name}</strong></div>
+                <div>${politician.name} (${politician.party})</div>
+            `;
+            tooltip.style.left = e.pageX + 10 + 'px';
+            tooltip.style.top = e.pageY - 10 + 'px';
+            tooltip.classList.remove('hidden');
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.add('hidden');
+        }
+
+        function showPoliticianDetail(name) {
+            const politician = samplePoliticians.find(p => p.name === name);
+            if (!politician) return;
+            
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="flex items-start space-x-4">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                        <span class="text-2xl font-bold text-white">${politician.name.charAt(0)}</span>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-xl font-bold mb-2">${politician.name}</h2>
+                        <div class="space-y-1 text-sm">
+                            <div>🏛️ ${politician.party}</div>
+                            <div>📍 ${politician.district}</div>
+                            <div>📞 ${politician.phone}</div>
+                            <div>✉️ ${politician.email}</div>
+                            <div>🏢 ${politician.office}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('politicianModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('politicianModal').classList.add('hidden');
+        }
+
+        function searchPoliticians() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if (!query.trim()) {
+                document.getElementById('searchResults').classList.add('hidden');
+                return;
+            }
+            
+            const results = samplePoliticians.filter(p => 
+                p.name.toLowerCase().includes(query) ||
+                p.party.toLowerCase().includes(query) ||
+                p.district.toLowerCase().includes(query)
+            );
+            
+            const resultsDiv = document.getElementById('searchResults');
+            if (results.length > 0) {
+                resultsDiv.innerHTML = results.map(p => `
+                    <div class="p-3 hover:bg-gray-50 cursor-pointer border-b last:border-b-0" 
+                         onclick="showPoliticianDetail('${p.name}')">
+                        <div class="font-medium">${p.name}</div>
+                        <div class="text-sm text-gray-500">${p.party} · ${p.district}</div>
+                    </div>
+                `).join('');
+                resultsDiv.classList.remove('hidden');
+            } else {
+                resultsDiv.innerHTML = '<div class="p-3 text-gray-500">검색 결과가 없습니다.</div>';
+                resultsDiv.classList.remove('hidden');
+            }
+        }
+
+        function updateLastUpdate() {
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString('ko-KR');
+        }
+
+        // 검색창 엔터키 처리
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchPoliticians();
+            }
+        });
+
+        // 모달 외부 클릭 시 닫기
+        document.getElementById('politicianModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
