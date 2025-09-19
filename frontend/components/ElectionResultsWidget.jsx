@@ -16,11 +16,11 @@ const ElectionResultsWidget = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [cacheStats, setCacheStats] = useState(null);
 
-  // 280MB 캐시 시스템 API 호출
-  const searchRegionElections = async (regionName) => {
+  // 실제 정치인/지명 스마트 검색 API 호출
+  const smartSearch = async (searchTerm) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/region/elections?name=${encodeURIComponent(regionName)}`);
+      const response = await fetch(`/api/smart/search?term=${encodeURIComponent(searchTerm)}`);
       const data = await response.json();
       
       if (data.success) {
@@ -30,7 +30,11 @@ const ElectionResultsWidget = () => {
         const statsData = await statsResponse.json();
         setCacheStats(statsData);
       } else {
-        setSearchResults({ error: data.error });
+        setSearchResults({ 
+          error: data.error,
+          suggestions: data.suggestions || [],
+          available_options: data.available_politicians || data.available_regions || []
+        });
       }
     } catch (error) {
       setSearchResults({ error: '검색 중 오류가 발생했습니다.' });
@@ -42,7 +46,7 @@ const ElectionResultsWidget = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      searchRegionElections(searchTerm.trim());
+      smartSearch(searchTerm.trim());
     }
   };
 
@@ -393,13 +397,13 @@ const ElectionResultsWidget = () => {
         <div className="flex items-center space-x-4">
           <div className="flex-1 relative">
             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="읍면동 이름을 입력하세요 (예: 읍면동_0001)"
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="정치인 이름 또는 동명을 입력하세요 (예: 이재명, 정자동, 강남동)"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
           </div>
           <button
             type="submit"

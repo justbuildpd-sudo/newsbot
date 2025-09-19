@@ -319,7 +319,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 <input
                   type="text"
-                  placeholder="읍면동 이름 (예: 읍면동_0001)"
+                  placeholder="정치인 이름 또는 동명 (예: 이재명, 정자동, 강남동)"
                   className="flex-1 px-4 py-3 rounded-lg text-gray-800 placeholder-gray-500"
                 />
                 <Link href="/election-search">
@@ -334,7 +334,7 @@ export default function HomePage() {
               </div>
               
               <div className="mt-4 text-sm opacity-75">
-                💡 예시: "읍면동_0001", "읍면동_0100", "읍면동_0500"
+                💡 예시: "이재명", "김기현", "정자동", "강남동", "해운대동"
               </div>
             </motion.div>
           </div>

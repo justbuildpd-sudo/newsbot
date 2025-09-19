@@ -17,12 +17,12 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 
-# 최종 캐시 시스템 임포트
-from final_280mb_cache_system import (
-    final_cache_system, 
-    initialize_final_cache_system, 
-    search_region_full_elections,
-    get_final_cache_stats
+# 실제 동명 기반 캐시 시스템 임포트
+from real_dong_name_cache_system import (
+    dong_cache_system,
+    initialize_dong_cache_system,
+    search_dong_or_politician,
+    get_dong_cache_stats
 )
 from render_process_manager import setup_render_process_management, get_render_status, shutdown_render_process
 
@@ -78,20 +78,20 @@ async def startup_event():
     else:
         logger.warning("⚠️ 렌더 프로세스 관리 시작 실패")
     
-    # 280MB 캐시 시스템 초기화
+    # 실제 동명 기반 캐시 시스템 초기화
     try:
-        cache_success = await initialize_final_cache_system()
+        cache_success = await initialize_dong_cache_system()
         if cache_success:
             cache_initialized = True
-            logger.info("✅ 280MB 캐시 시스템 초기화 완료")
+            logger.info("✅ 실제 동명 기반 캐시 시스템 초기화 완료")
             
             # 캐시 통계 업데이트
-            stats = get_final_cache_stats()
-            api_stats['cache_utilization'] = stats['final_cache_achievement']['utilization_percentage']
+            stats = get_dong_cache_stats()
+            api_stats['cache_utilization'] = stats['dong_cache_statistics']['utilization_percentage']
         else:
-            logger.error("❌ 280MB 캐시 시스템 초기화 실패")
+            logger.error("❌ 실제 동명 캐시 시스템 초기화 실패")
     except Exception as e:
-        logger.error(f"❌ 캐시 시스템 초기화 오류: {e}")
+        logger.error(f"❌ 실제 동명 캐시 시스템 초기화 오류: {e}")
 
 @app.get("/")
 async def root():
@@ -99,7 +99,7 @@ async def root():
     cache_stats = get_final_cache_stats() if cache_initialized else {}
     
     return {
-        "message": "NewsBot 최종 통합 API Server",
+            "message": "NewsBot 실제 동명 기반 API Server",
         "status": "running",
         "version": "3.0.0",
         "cache_system": {
@@ -121,12 +121,12 @@ async def root():
         ]
     }
 
-@app.get("/api/region/elections")
-async def get_region_elections(
-    name: str = Query(..., description="읍면동 이름"),
+@app.get("/api/smart/search")
+async def smart_search_api(
+    term: str = Query(..., description="정치인 이름 또는 지역명"),
     detail: str = Query("full", description="상세도 (basic/full)")
 ):
-    """읍면동별 선거결과 조회 API"""
+    """실제 정치인/지명 스마트 검색 API"""
     
     start_time = datetime.now()
     api_stats['total_requests'] += 1
@@ -136,11 +136,11 @@ async def get_region_elections(
             api_stats['failed_requests'] += 1
             raise HTTPException(
                 status_code=503, 
-                detail="280MB 캐시 시스템이 초기화되지 않았습니다"
+                detail="실제 정치인/지명 캐시 시스템이 초기화되지 않았습니다"
             )
         
-        # 280MB 캐시를 통한 검색
-        result = await search_region_full_elections(name)
+        # 실제 동명/정치인 스마트 검색
+        result = await search_dong_or_politician(term)
         
         # 응답 시간 계산
         response_time = (datetime.now() - start_time).total_seconds() * 1000
@@ -159,15 +159,12 @@ async def get_region_elections(
         if result['success']:
             return {
                 "success": True,
-                "region_info": result['region_info'],
-                "election_results": result['election_results'],
-                "candidate_details": result['candidate_details'],
-                "diversity_analysis": result['diversity_analysis'],
-                "additional_insights": result.get('additional_insights', {}),
+                "search_type": result['type'],
+                "data": result.get('politician_info') or result.get('region_info'),
                 "meta": {
-                    **result['meta'],
+                    **result.get('search_meta', {}),
                     "api_response_time_ms": round(response_time, 2),
-                    "cache_system": "280MB_FINAL",
+                    "cache_system": "REAL_DATA_280MB",
                     "search_timestamp": start_time.isoformat()
                 }
             }
@@ -177,11 +174,13 @@ async def get_region_elections(
                 content={
                     "success": False,
                     "error": result['error'],
+                    "suggestions": result.get('suggestions', []),
+                    "available_politicians": result.get('available_politicians', []),
                     "available_regions": result.get('available_regions', []),
-                    "total_cached_regions": result.get('total_cached_regions', 0),
                     "meta": {
                         "api_response_time_ms": round(response_time, 2),
-                        "search_timestamp": start_time.isoformat()
+                        "search_timestamp": start_time.isoformat(),
+                        "search_type": result.get('type', 'unknown')
                     }
                 }
             )

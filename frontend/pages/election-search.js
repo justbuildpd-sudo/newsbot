@@ -6,8 +6,8 @@ export default function ElectionSearchPage() {
   return (
     <>
       <Head>
-        <title>읍면동별 선거결과 검색 | NewsBot 정세분석</title>
-        <meta name="description" content="280MB 캐시 시스템으로 읍면동별 선거결과와 출마 후보 정보를 0.3ms 초고속 검색" />
+        <title>동명별 선거결과 검색 | NewsBot 정세분석</title>
+        <meta name="description" content="280MB 캐시 시스템으로 실제 동명 (정자동, 강남동 등) 검색 및 해당 국회의원 정보 제공" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
@@ -50,10 +50,10 @@ export default function ElectionSearchPage() {
               <div>
                 <h3 className="font-semibold mb-4">🗳️ 선거 정보 시스템</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>• 1,580개 읍면동 완전 지원</li>
-                  <li>• 6개 선거 유형 전체 결과</li>
-                  <li>• 출마 후보 상세 정보</li>
-                  <li>• 0.3ms 초고속 검색</li>
+                  <li>• 151개 실제 동명 지원</li>
+                  <li>• 298명 실제 정치인 지원</li>
+                  <li>• 동명 → 국회의원 매핑</li>
+                  <li>• 0.4-1.0ms 초고속 검색</li>
                 </ul>
               </div>
               
