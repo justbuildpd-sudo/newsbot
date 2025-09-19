@@ -17,12 +17,12 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 
-# 실제 동명 기반 캐시 시스템 임포트
-from real_dong_name_cache_system import (
-    dong_cache_system,
-    initialize_dong_cache_system,
-    search_dong_or_politician,
-    get_dong_cache_stats
+# 계층적 지명 캐시 시스템 임포트
+from hierarchical_location_cache_system import (
+    hierarchical_cache_system,
+    initialize_hierarchical_cache,
+    search_hierarchical,
+    get_hierarchical_cache_stats
 )
 from render_process_manager import setup_render_process_management, get_render_status, shutdown_render_process
 
@@ -78,20 +78,20 @@ async def startup_event():
     else:
         logger.warning("⚠️ 렌더 프로세스 관리 시작 실패")
     
-    # 실제 동명 기반 캐시 시스템 초기화
+    # 계층적 지명 캐시 시스템 초기화
     try:
-        cache_success = await initialize_dong_cache_system()
+        cache_success = await initialize_hierarchical_cache()
         if cache_success:
             cache_initialized = True
-            logger.info("✅ 실제 동명 기반 캐시 시스템 초기화 완료")
+            logger.info("✅ 계층적 지명 캐시 시스템 초기화 완료")
             
             # 캐시 통계 업데이트
-            stats = get_dong_cache_stats()
-            api_stats['cache_utilization'] = stats['dong_cache_statistics']['utilization_percentage']
+            stats = get_hierarchical_cache_stats()
+            api_stats['cache_utilization'] = stats['hierarchical_cache_statistics']['utilization_percentage']
         else:
-            logger.error("❌ 실제 동명 캐시 시스템 초기화 실패")
+            logger.error("❌ 계층적 지명 캐시 시스템 초기화 실패")
     except Exception as e:
-        logger.error(f"❌ 실제 동명 캐시 시스템 초기화 오류: {e}")
+        logger.error(f"❌ 계층적 지명 캐시 시스템 초기화 오류: {e}")
 
 @app.get("/")
 async def root():
@@ -99,7 +99,7 @@ async def root():
     cache_stats = get_final_cache_stats() if cache_initialized else {}
     
     return {
-            "message": "NewsBot 실제 동명 기반 API Server",
+            "message": "NewsBot 계층적 지명 검색 API Server",
         "status": "running",
         "version": "3.0.0",
         "cache_system": {
@@ -139,8 +139,8 @@ async def smart_search_api(
                 detail="실제 정치인/지명 캐시 시스템이 초기화되지 않았습니다"
             )
         
-        # 실제 동명/정치인 스마트 검색
-        result = await search_dong_or_politician(term)
+        # 계층적 지명/정치인 스마트 검색
+        result = await search_hierarchical(term)
         
         # 응답 시간 계산
         response_time = (datetime.now() - start_time).total_seconds() * 1000

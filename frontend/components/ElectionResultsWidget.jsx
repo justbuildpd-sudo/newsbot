@@ -8,6 +8,7 @@ import {
   InformationCircleIcon,
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
+import LocationSelectionModal from './LocationSelectionModal';
 
 const ElectionResultsWidget = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,6 +16,8 @@ const ElectionResultsWidget = () => {
   const [loading, setLoading] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [cacheStats, setCacheStats] = useState(null);
+  const [showLocationSelection, setShowLocationSelection] = useState(false);
+  const [locationOptions, setLocationOptions] = useState([]);
 
   // 실제 정치인/지명 스마트 검색 API 호출
   const smartSearch = async (searchTerm) => {
@@ -24,11 +27,19 @@ const ElectionResultsWidget = () => {
       const data = await response.json();
       
       if (data.success) {
-        setSearchResults(data);
-        // 캐시 통계도 함께 업데이트
-        const statsResponse = await fetch('/api/cache/stats');
-        const statsData = await statsResponse.json();
-        setCacheStats(statsData);
+        if (data.type === 'selection_required') {
+          // 중복 지명 - 선택 모달 표시
+          setLocationOptions(data.options);
+          setShowLocationSelection(true);
+          setSearchResults(null);
+        } else {
+          // 정상 검색 결과
+          setSearchResults(data);
+          // 캐시 통계도 함께 업데이트
+          const statsResponse = await fetch('/api/cache/stats');
+          const statsData = await statsResponse.json();
+          setCacheStats(statsData);
+        }
       } else {
         setSearchResults({ 
           error: data.error,
@@ -48,6 +59,14 @@ const ElectionResultsWidget = () => {
     if (searchTerm.trim()) {
       smartSearch(searchTerm.trim());
     }
+  };
+
+  const handleLocationSelect = (selectedOption) => {
+    // 선택된 지역으로 다시 검색
+    const selectedTerm = selectedOption.key || selectedOption.description;
+    setShowLocationSelection(false);
+    setLocationOptions([]);
+    smartSearch(selectedTerm);
   };
 
   const ElectionCard = ({ election, type }) => (
@@ -401,7 +420,7 @@ const ElectionResultsWidget = () => {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="정치인 이름 또는 동명을 입력하세요 (예: 이재명, 정자동, 강남동)"
+                  placeholder="정치인 이름 또는 지명을 입력하세요 (예: 이재명, 정자, 강남, 서울)"
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
           </div>
@@ -560,6 +579,15 @@ const ElectionResultsWidget = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 지역 선택 모달 */}
+      <LocationSelectionModal
+        isOpen={showLocationSelection}
+        onClose={() => setShowLocationSelection(false)}
+        searchTerm={searchTerm}
+        options={locationOptions}
+        onSelect={handleLocationSelect}
+      />
 
       {/* 후보자 상세 모달 */}
       <AnimatePresence>
