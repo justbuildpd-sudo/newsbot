@@ -136,3 +136,4 @@ export const FALLBACK_TRENDS = {
     { politician: "정청래", trend_score: 68 }
   ]
 }
+

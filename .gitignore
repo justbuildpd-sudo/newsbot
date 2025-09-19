@@ -81,3 +81,32 @@ venv.bak/
 # Temporary files
 tmp/
 temp/
+
+# 대용량 데이터 파일 제외 (GitHub 용량 제한 대응)
+backups/
+*.json
+*.csv
+!web_service/**/*.json
+!backend/politicians_data_with_party.json
+!backend/data/politicians.json
+!package.json
+!vercel.json
+!frontend/package.json
+
+# 이미지 파일 (필요한 것만 선택적 포함)
+*.png
+*.jpg
+*.jpeg
+*.gif
+!favicon.ico
+!logo.png
+
+# 위젯 폴더들 (대용량)
+backend/id_card_widgets/
+backend/mac_family_tree_widgets/
+backend/sophisticated_panels/
+backend/stable_network_widgets/
+
+# 회의록 원본 파일들
+data/meeting_records/
+data/speaker_records/

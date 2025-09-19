@@ -126,3 +126,4 @@ backend/20th_local_election_full.json   (52KB) - 기타 선거 데이터
 
 *"세계에서 가장 큰 정치인 데이터베이스, NewsBot-KR"*  
 *42,290명의 정치인 정보로 한국 민주주의 발전에 기여합니다.*
+

@@ -111,3 +111,4 @@ def extract_22nd_assembly_from_csv():
 
 if __name__ == "__main__":
     extract_22nd_assembly_from_csv()
+

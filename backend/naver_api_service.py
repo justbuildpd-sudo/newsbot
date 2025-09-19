@@ -212,3 +212,4 @@ if __name__ == "__main__":
     if chart['success']:
         chart_data = chart['data']
         print(f"\\n트렌드 차트: {len(chart_data.get('labels', []))}일, {len(chart_data.get('datasets', []))}명")
+

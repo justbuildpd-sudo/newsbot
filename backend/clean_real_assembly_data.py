@@ -82,3 +82,4 @@ def clean_assembly_data():
 
 if __name__ == "__main__":
     clean_assembly_data()
+

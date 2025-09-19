@@ -516,3 +516,4 @@ if __name__ == "__main__":
         logger.info("✅ 초대형 통합 시스템 실행 완료")
     else:
         logger.error("❌ 초대형 통합 시스템 실행 실패")
+

@@ -606,3 +606,4 @@ if __name__ == "__main__":
         logger.info("✅ 대규모 통합 시스템 실행 완료")
     else:
         logger.error("❌ 대규모 통합 시스템 실행 실패")
+

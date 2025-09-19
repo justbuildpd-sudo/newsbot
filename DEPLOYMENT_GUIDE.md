@@ -147,3 +147,4 @@ curl https://newsbot.kr/api/health
 ---
 *배포 가이드 작성일: 2025-09-17*
 *배포 대상: newsbot.kr*
+

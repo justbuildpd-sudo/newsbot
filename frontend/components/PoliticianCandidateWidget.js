@@ -417,3 +417,4 @@ const PoliticianCandidateWidget = ({ candidateName, onClose }) => {
 };
 
 export default PoliticianCandidateWidget;
+

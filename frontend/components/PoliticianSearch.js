@@ -248,3 +248,4 @@ const PoliticianSearch = ({ onSelectPolitician }) => {
 }
 
 export default PoliticianSearch
+

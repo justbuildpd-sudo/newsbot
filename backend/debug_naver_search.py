@@ -173,3 +173,4 @@ if __name__ == "__main__":
     
     # 3. 최근 정치 뉴스 테스트
     debugger.test_recent_political_news()
+

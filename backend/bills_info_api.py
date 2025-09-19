@@ -195,3 +195,4 @@ if __name__ == "__main__":
         print(f"  대표발의: {scores['main_proposals']}건")
         print(f"  공동발의: {scores['co_proposals']}건")
         print(f"  성공률: {scores['success_rate']}%")
+
