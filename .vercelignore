@@ -1,39 +1,56 @@
-# 대용량 데이터 파일들 제외
-*.json
-!web_service/**/*.json
-!backend/politicians_data_with_party.json
-!backend/data/politicians.json
-!package.json
-!vercel.json
+# Vercel 배포 제외 파일들
 
-# 백업 및 캐시 파일들 제외
-backups/
-__pycache__/
-.next/
-node_modules/
-*.log
+# 대용량 데이터 파일들
+backend/data/
+backend/manifesto_analysis/
+backend/manifesto_verification/
+backend/detailed_local_government_analysis/
+backend/comprehensive_policy_analysis/
+backend/enhanced_policy_analysis/
+backend/election_data/
+political_analysis_archive/
+
+# 데이터베이스 파일들
 *.db
-*.csv
+*.sqlite
+*.sqlite3
 
-# 개발 파일들 제외
-.DS_Store
-.git/
+# 로그 파일들
+*.log
+/tmp/
+
+# 캐시 파일들
+__pycache__/
 *.pyc
 *.pyo
+.DS_Store
 
-# 대용량 위젯 파일들 제외 (필요한 것만 포함)
-backend/id_card_widgets/
-backend/mac_family_tree_widgets/
-backend/sophisticated_panels/
-backend/stable_network_widgets/
+# 개발 전용 파일들
+backend/*_test.py
+backend/*_sample.py
+backend/*_explorer.py
+backend/two_stage_*
+backend/enhanced_*
+backend/comprehensive_*
+backend/detailed_*
 
-# 불필요한 이미지 파일들
-*.png
-*.jpg
-*.jpeg
-*.gif
+# 텍스트마이닝 결과 파일들
+backend/policy_election_culture_*
+backend/manifesto_*
 
-# 회의록 원본 파일들
-data/meeting_records/
-data/speaker_records/
+# 백업 파일들
+*_backup_*
+*_archive_*
 
+# 임시 파일들
+*.tmp
+*.temp
+
+# 개발 도구들
+backend/PROJECT_COMPLETE_BACKUP.py
+backend/render_deployment_fix.py
+simple_test_server.py
+
+# 용량이 큰 JSON 파일들 (5MB 이상)
+backend/*.json
+backend/**/*.json

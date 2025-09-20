@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsBot 정세분석 | 매니페스토 검증 서비스</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 헤더 -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-xl font-bold text-gray-800">
+                        🗳️ NewsBot 매니페스토 검증 서비스
+                    </h1>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                        8회 지방선거
+                    </span>
+                </div>
+                <div class="text-sm text-gray-500">
+                    7명 후보자 · 14개 공약 검증
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 서비스 소개 -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">
+                매니페스토 검증 서비스
+            </h1>
+            <p class="text-lg text-gray-600 mb-6 max-w-3xl mx-auto">
+                8회 전국동시지방선거 출마자들의 공약을 텍스트마이닝 기술로 분석하여 
+                객관적이고 투명한 검증 결과를 제공합니다.
+            </p>
+        </div>
+
+        <!-- 검증 결과 요약 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">📊 검증 결과 요약</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-blue-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-blue-600">7명</div>
+                    <div class="text-sm text-blue-800">검증 완료 후보자</div>
+                </div>
+                <div class="bg-green-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-600">71.4%</div>
+                    <div class="text-sm text-green-800">평균 검증률</div>
+                </div>
+                <div class="bg-purple-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-purple-600">85.4점</div>
+                    <div class="text-sm text-purple-800">평균 신뢰도</div>
+                </div>
+                <div class="bg-orange-50 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-orange-600">32.1%</div>
+                    <div class="text-sm text-orange-800">평균 실현확률</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 국회의원 검색 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">🔍 국회의원 검색</h2>
+            <div class="flex space-x-4 mb-4">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="국회의원 이름을 입력하세요 (예: 이재명, 김기현)"
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <button 
+                    onclick="searchPolitician()" 
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                    검색
+                </button>
+            </div>
+            <div id="searchResults" class="mt-4"></div>
+        </div>
+
+        <!-- 후보자별 검증 결과 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">🏆 후보자별 검증 결과</h2>
+            <div id="candidateResults" class="space-y-4">
+                <!-- 동적으로 로드됨 -->
+            </div>
+        </div>
+
+        <!-- 검증 기준 설명 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">⚖️ 검증 기준</h3>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li>• <strong>구체성 (30%):</strong> 예산, 일정, 방법 명시</li>
+                    <li>• <strong>실현가능성 (40%):</strong> 권한 범위, 예산 현실성</li>
+                    <li>• <strong>일관성 (30%):</strong> 공약 간 모순 여부</li>
+                    <li>• <strong>신뢰도:</strong> 위 3요소의 가중평균</li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">📈 등급 체계</h3>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li>• <strong>A+ (90점 이상):</strong> 매우 우수</li>
+                    <li>• <strong>A (85-89점):</strong> 우수</li>
+                    <li>• <strong>A- (80-84점):</strong> 양호</li>
+                    <li>• <strong>B+ (75-79점):</strong> 보통</li>
+                    <li>• <strong>B 이하:</strong> 개선 필요</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-sm text-gray-500">
+                <p>© 2024 NewsBot 매니페스토 검증 서비스. 투명하고 객관적인 정치 공약 분석 플랫폼.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 샘플 검증 결과 데이터
+        const verificationResults = [
+            {
+                name: "오세훈",
+                party: "국민의힘",
+                region: "서울특별시",
+                position: "광역단체장",
+                grade: "A+",
+                credibility_score: 88.5,
+                pledges: [
+                    {
+                        title: "청년주택 10만호 공급",
+                        category: "주거정책",
+                        specificity: 85,
+                        feasibility: 80,
+                        status: "검증완료"
+                    },
+                    {
+                        title: "심야 대중교통 확대", 
+                        category: "교통정책",
+                        specificity: 75,
+                        feasibility: 90,
+                        status: "검증완료"
+                    }
+                ]
+            },
+            {
+                name: "김병관",
+                party: "더불어민주당", 
+                region: "성남시",
+                position: "기초단체장",
+                grade: "A+",
+                credibility_score: 87.2,
+                pledges: [
+                    {
+                        title: "성남시민 기본소득 확대",
+                        category: "복지정책",
+                        specificity: 90,
+                        feasibility: 60,
+                        status: "부분검증"
+                    }
+                ]
+            },
+            {
+                name: "김동연",
+                party: "더불어민주당",
+                region: "경기도", 
+                position: "광역단체장",
+                grade: "A",
+                credibility_score: 85.1,
+                pledges: [
+                    {
+                        title: "기본주택 100만호 공급",
+                        category: "주거정책",
+                        specificity: 80,
+                        feasibility: 70,
+                        status: "검증완료"
+                    }
+                ]
+            }
+        ];
+
+        // 국회의원 검색 함수
+        async function searchPolitician() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (!searchTerm.trim()) {
+                resultsDiv.innerHTML = '<p class="text-gray-500">검색어를 입력해주세요.</p>';
+                return;
+            }
+            
+            resultsDiv.innerHTML = '<div class="loading w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full"></div>';
+            
+            try {
+                const response = await fetch(`http://localhost:8000/api/assembly/members/${encodeURIComponent(searchTerm)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultsDiv.innerHTML = `
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-900">${data.data.name}</h4>
+                            <p class="text-sm text-blue-700">정당: ${data.data.party}</p>
+                            <p class="text-sm text-blue-700">지역구: ${data.data.district}</p>
+                            <p class="text-sm text-blue-700">위원회: ${data.data.committee}</p>
+                        </div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = '<p class="text-red-500">검색 결과가 없습니다.</p>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = '<p class="text-red-500">검색 중 오류가 발생했습니다.</p>';
+                console.error('검색 오류:', error);
+            }
+        }
+
+        // 검증 결과 렌더링
+        function renderVerificationResults() {
+            const container = document.getElementById('candidateResults');
+            
+            const gradeColors = {
+                'A+': 'bg-green-100 text-green-800',
+                'A': 'bg-blue-100 text-blue-800', 
+                'A-': 'bg-purple-100 text-purple-800',
+                'B+': 'bg-yellow-100 text-yellow-800',
+                'B': 'bg-orange-100 text-orange-800'
+            };
+
+            const statusColors = {
+                '검증완료': 'bg-green-100 text-green-800',
+                '부분검증': 'bg-yellow-100 text-yellow-800',
+                '미검증': 'bg-red-100 text-red-800'
+            };
+            
+            container.innerHTML = verificationResults.map(candidate => `
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center space-x-3">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">${candidate.name}</h3>
+                                <p class="text-sm text-gray-500">${candidate.party} · ${candidate.region} · ${candidate.position}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-3 py-1 rounded-full text-sm font-medium ${gradeColors[candidate.grade] || 'bg-gray-100 text-gray-800'}">
+                                ${candidate.grade}
+                            </span>
+                            <span class="text-sm text-gray-600">${candidate.credibility_score}점</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        ${candidate.pledges.map(pledge => `
+                            <div class="bg-gray-50 rounded p-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-medium text-gray-900 text-sm">${pledge.title}</h4>
+                                    <span class="px-2 py-1 rounded text-xs font-medium ${statusColors[pledge.status] || 'bg-gray-100 text-gray-800'}">
+                                        ${pledge.status}
+                                    </span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-xs">
+                                    <div class="text-center">
+                                        <div class="font-semibold text-blue-600">${pledge.specificity}점</div>
+                                        <div class="text-gray-500">구체성</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold text-green-600">${pledge.feasibility}점</div>
+                                        <div class="text-gray-500">실현가능성</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="font-semibold text-purple-600">${pledge.category}</div>
+                                        <div class="text-gray-500">분야</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 전체 국회의원 목록 로드
+        async function loadAllMembers() {
+            try {
+                const response = await fetch('http://localhost:8000/api/assembly/members');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const membersContainer = document.createElement('div');
+                    membersContainer.className = 'mt-8';
+                    membersContainer.innerHTML = `
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">📋 국회의원 목록 (${data.total_count}명)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                ${data.data.map(member => `
+                                    <div class="border border-gray-200 rounded p-3 hover:bg-gray-50 cursor-pointer" onclick="selectMember('${member.name}')">
+                                        <div class="font-medium text-gray-900">${member.name}</div>
+                                        <div class="text-sm text-gray-500">${member.party}</div>
+                                        <div class="text-xs text-gray-400">${member.district}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.querySelector('main').appendChild(membersContainer);
+                }
+            } catch (error) {
+                console.error('국회의원 목록 로드 실패:', error);
+            }
+        }
+
+        // 의원 선택 함수
+        function selectMember(memberName) {
+            document.getElementById('searchInput').value = memberName;
+            searchPolitician();
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            renderVerificationResults();
+            loadAllMembers();
+        });
+
+        // Enter 키 검색
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && document.activeElement.id === 'searchInput') {
+                searchPolitician();
+            }
+        });
+    </script>
+</body>
+</html>
